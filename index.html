@@ -1485,6 +1485,10 @@ summary.fsum{cursor:pointer;font-weight:600;font-size:17px;padding:4px 0;list-st
 .savebar.old b{color:var(--l-gold)}
 .savebar .sbb{flex:none;padding:5px 10px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap}
 .savebar i{font-style:normal}
+.savebar .sba.bad{color:var(--l-gold)}
+.autoerr{display:flex;align-items:center;gap:8px;margin:6px 0 0;padding:7px 6px 7px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--l-gold);font-size:13.5px;line-height:1.35;color:var(--ink)}
+.autoerr span{flex:1;min-width:0}
+.autoerr .sbb{flex:none;padding:5px 10px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap}
 @media (max-width:440px){.savebar .sbo,.savebar.two .sbw{display:none}}
 .savebar .sbb:disabled{opacity:.6}
 .dbinfo p{margin:0 0 6px;font-size:15px}
@@ -4203,6 +4207,188 @@ async function flushSaves(){
   Object.keys(timers).forEach(id=>{if(S.sessions[id])saveSession(id,true);else if(S.kids[id]&&S.pending.has(id))saveKid(id,true);});
   await Promise.all(Object.values(queues)).catch(()=>{});
 }
+async function buildBackup(now){
+  await flushSaves();
+  const j=await jRef().get();
+  const out={app:"Журнал группы",format:DATA_FORMAT,created:now.toISOString(),from:window.JOURNAL_OFFLINE?"offline":"claude",journal:j.exists?j.data():null};
+  for(const c of BACKUP_COLS)out[c]=await grabCol(c,c==="sessions");
+  out.counts={kids:Object.keys(out.kids).length,sessions:Object.keys(out.sessions).length};
+  return out;
+}
+function backupName(now){return "zhurnal-kopiya-"+stampName(now)+(window.JOURNAL_OFFLINE?"-offline":"")+".json";}
+
+/* ---- автосохранение на Google Диск (только основной журнал) ----
+   Каждый вечер после 22:00 журнал кладёт базу в папку «Журнал — копии», если открыт
+   (или при первом открытии после 22:00; если вечером не открывали — при следующем открытии).
+   Обычно копия — тот же .json, что при ручном сохранении; если окно не умеет передавать большие файлы,
+   небольшая база уходит сжатой (.json.gz) — оба журнала её открывают.
+   Раз в месяц убирает в корзину Диска копии старше 30 дней. Время последней копии хранится
+   в хранилище журнала (meta/autosave), поэтому с телефона и iPad копия делается один раз. */
+const GD="Google Drive",GD_FOLDER="Журнал — копии",KEEP_DAYS=30,SAVE_HOUR=22;
+const AUTO={state:"",msg:""};
+let autoTimer=null;
+function metaRef(){return jRef().collection("meta").doc("autosave");}
+function autoSlot(now){const s=new Date(now);s.setHours(SAVE_HOUR,0,0,0);if(now<s)s.setDate(s.getDate()-1);return s;}
+function autoErrText(e){
+  const c=e&&e.code;
+  if(c==="server_not_connected"||c==="selection_required")return "Google Диск не подключён к Claude. Подключи его в настройках Claude → Подключения.";
+  if(c==="needs_reauth")return "Google Диск отключился. Переподключи его в настройках Claude → Подключения.";
+  if(c==="not_in_manifest"||c==="not_granted"||c==="consent_required")return "Журналу не дали доступ к Google Диску. Нажми «Повторить» и разреши доступ.";
+  if(c==="no_folder")return "На Google Диске нет папки «"+GD_FOLDER+"».";
+  if(c==="bad_request"||c==="tool_error")return "Google Диск не принял файл. Сохраняй вручную кнопкой «Сохранить» и напиши Claude.";
+  if(c==="too_big")return "База больше 1 МБ, а это окно Claude не умеет передавать большие файлы на Диск. Сохраняй вручную кнопкой «Сохранить».";
+  if(c==="no_mcp")return "В этом окне автосохранение недоступно. Открой журнал на claude.ai.";
+  return "Не получилось связаться с Google Диском. Нажми «Повторить» или сохрани вручную.";
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+/* чтение можно один раз повторить, если подключение само так советует (например, окно разрешения не успело открыться) */
+async function gdRead(mcp,tool,input){
+  try{return await mcp.callTool(GD,tool,input,{cache:false});}
+  catch(e){if(e&&e.retryable){await wait(Math.min(e.retryAfterMs||1500,15000)+Math.random()*500);return mcp.callTool(GD,tool,input,{cache:false});}throw e;}
+}
+async function gdFolder(mcp,meta){
+  if(meta.folderId)return meta.folderId;
+  const r=await gdRead(mcp,"search_files",{query:"title = '"+GD_FOLDER+"' and mimeType = 'application/vnd.google-apps.folder' and trashed = false",excludeContentSnippets:true,pageSize:5});
+  const f=((r.payload&&r.payload.files)||[]).find(x=>x&&x.id&&x.title===GD_FOLDER);
+  if(!f)throw {code:"no_folder"};
+  return f.id;
+}
+async function gzipB64(str){
+  const s=new Blob([str]).stream().pipeThrough(new CompressionStream("gzip"));
+  const buf=new Uint8Array(await new Response(s).arrayBuffer());
+  let bin="";for(let i=0;i<buf.length;i+=0x8000)bin+=String.fromCharCode.apply(null,buf.subarray(i,i+0x8000));
+  return btoa(bin);
+}
+/* ---- база внутри документа Word ----
+   Подключение к Google Диску передаёт большие файлы (до 16 МБ) только как .docx/.xlsx/.pptx.
+   Поэтому автокопия — настоящий .docx: внутри записка для человека и сама база (zhurnal/base.json).
+   Кнопка «Загрузить» в обоих журналах достаёт базу из такого файла. */
+const DOCX_MIME="application/vnd.openxmlformats-officedocument.wordprocessingml.document",DOCX_PART="zhurnal/base.json";
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zipStore(files,type){
+  const enc=new TextEncoder(),parts=[],central=[];let off=0;
+  for(const f of files){
+    const nm=enc.encode(f.name),d=typeof f.data==="string"?enc.encode(f.data):f.data,crc=crc32(d);
+    const h=new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(12,0x21,true);
+    h.setUint32(14,crc,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,nm.length,true);
+    parts.push(new Uint8Array(h.buffer),nm,d);
+    const c=new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(14,0x21,true);
+    c.setUint32(16,crc,true);c.setUint32(20,d.length,true);c.setUint32(24,d.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    central.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+d.length;
+  }
+  const cs=central.reduce((n,x)=>n+x.length,0),e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+  return new Blob(parts.concat(central,[new Uint8Array(e.buffer)]),{type});
+}
+function xmlEsc(s){return String(s).replace(/[<>&"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));}
+function backupDocx(out,json){
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  const p=t=>'<w:p><w:r><w:t xml:space="preserve">'+xmlEsc(t)+"</w:t></w:r></w:p>";
+  const d=new Date(out.created);
+  return zipStore([
+    {name:"[Content_Types].xml",data:X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="json" ContentType="application/json"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'},
+    {name:"_rels/.rels",data:X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'},
+    {name:"word/document.xml",data:X+'<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+
+      p("Автокопия журнала группы от "+fmtDT(d)+".")+p("Учеников: "+out.counts.kids+", тренировок: "+out.counts.sessions+".")+
+      p("Чтобы вернуть данные, открой журнал → «Загрузить базу из файла» и выбери этот файл. Сам документ не меняй и не пересохраняй.")+
+      "</w:body></w:document>"},
+    {name:DOCX_PART,data:json}
+  ],DOCX_MIME);
+}
+async function unzipEntry(buf,name){
+  const dv=new DataView(buf.buffer,buf.byteOffset,buf.byteLength),dec=new TextDecoder("utf-8");
+  let e=-1;for(let i=buf.length-22;i>=Math.max(0,buf.length-65557);i--)if(dv.getUint32(i,true)===0x06054b50){e=i;break;}
+  if(e<0)throw {code:"bad"};
+  const n=dv.getUint16(e+10,true);let q=dv.getUint32(e+16,true);
+  for(let k=0;k<n;k++){
+    if(dv.getUint32(q,true)!==0x02014b50)break;
+    const method=dv.getUint16(q+10,true),csize=dv.getUint32(q+20,true),nl=dv.getUint16(q+28,true),xl=dv.getUint16(q+30,true),cl=dv.getUint16(q+32,true),lo=dv.getUint32(q+42,true);
+    if(dec.decode(buf.subarray(q+46,q+46+nl))===name){
+      const st=lo+30+dv.getUint16(lo+26,true)+dv.getUint16(lo+28,true),data=buf.subarray(st,st+csize);
+      if(method===0)return dec.decode(data);
+      if(method===8){if(typeof DecompressionStream!=="function")throw {code:"no_gzip"};return await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text();}
+      throw {code:"bad"};
+    }
+    q+=46+nl+xl+cl;
+  }
+  throw {code:"bad"};
+}
+/* большой файл идёт отдельным каналом ($file, до 16 МБ, только .docx) — база внутри документа Word;
+   если окно его не умеет — сжатая копия, если влезает в 1 МБ */
+async function gdUpload(mcp,folderId,name,json,out){
+  const base={parentId:folderId,disableConversionToGoogleType:true};
+  let fileArgs=false;try{fileArgs=!!(await mcp.listTools()).fileArgs;}catch(e){}
+  AUTO.fileArgs=fileArgs;
+  if(fileArgs){
+    const dn=name.replace(/\.json$/,".docx");
+    await mcp.callTool(GD,"create_file",Object.assign({},base,{title:dn,contentMimeType:DOCX_MIME,base64Content:{$file:{data:backupDocx(out,json),name:dn,type:DOCX_MIME}}}),{cache:false});
+    return dn;
+  }
+  if(typeof CompressionStream==="function"){
+    const b64=await gzipB64(json);
+    if(b64.length<950000){await mcp.callTool(GD,"create_file",Object.assign({},base,{title:name+".gz",contentMimeType:"application/gzip",base64Content:b64}),{cache:false});return name+".gz";}
+  }
+  if(new Blob([json]).size<950000){await mcp.callTool(GD,"create_file",Object.assign({},base,{title:name,contentMimeType:"application/json",textContent:json}),{cache:false});return name;}
+  throw {code:"too_big"};
+}async function gdCleanup(mcp,folderId){
+  const before=new Date(Date.now()-KEEP_DAYS*86400000).toISOString();
+  const r=await gdRead(mcp,"search_files",{query:"parentId = '"+folderId+"' and title contains 'zhurnal-kopiya' and createdTime < '"+before+"' and trashed = false",excludeContentSnippets:true,pageSize:100});
+  const old=((r.payload&&r.payload.files)||[]).filter(f=>f&&f.id&&/^zhurnal-kopiya-.*\.(json(\.gz)?|docx)$/.test(f.title||"")&&f.parentId===folderId);
+  for(const f of old)await mcp.callTool(GD,"trash_file",{fileId:f.id},{cache:false});
+  return old.length;
+}
+function autoPlan(){
+  /* если журнал открыт в 22:00 — сохранить сразу, не дожидаясь следующего открытия */
+  clearTimeout(autoTimer);
+  const now=new Date(),next=new Date(now);next.setHours(SAVE_HOUR,0,5,0);if(next<=now)next.setDate(next.getDate()+1);
+  autoTimer=setTimeout(()=>{autoSave();autoPlan();},next-now);
+}
+async function autoSave(force){
+  if(window.JOURNAL_OFFLINE||!S.live||!S.db||AUTO.state==="run")return;
+  let meta={};
+  try{const snap=await metaRef().get();meta=snap.exists?(snap.data()||{}):{};}catch(e){return;}
+  if(meta.at){const d=new Date(meta.at),le=lastExport();if(!isNaN(d)&&(!le||d>le)){lsSet("journal-last-export",meta.at);lsSet("journal-last-export-auto","1");refreshSaveBars();}}
+  const now=new Date(),slot=autoSlot(now);
+  const doneAt=meta.at?new Date(meta.at):null;
+  if(!force&&doneAt&&doneAt>=slot){if(AUTO.state==="err"){AUTO.state="";refreshSaveBars();}return;}
+  /* после неудачи не повторяем сами чаще раза в час — для этого есть кнопка «Повторить» */
+  if(!force&&meta.failAt&&now-new Date(meta.failAt)<3600000){AUTO.state="err";AUTO.msg=meta.errText||autoErrText({});refreshSaveBars();return;}
+  let mcp=null;try{mcp=await window.claude.use("mcp");}catch(e){}
+  AUTO.state="run";refreshSaveBars();
+  let step="подключение";
+  try{
+    if(!mcp)throw {code:"no_mcp"};
+    step="папка";const folderId=await gdFolder(mcp,meta);
+    step="сбор данных";const out=await buildBackup(now);out.auto=true;
+    const name=backupName(now).replace(/\.json$/,"-avto.json");
+    step="загрузка файла";const saved=await gdUpload(mcp,folderId,name,JSON.stringify(out),out);
+    const m2={at:now.toISOString(),ok:true,file:saved,folderId,lastClean:meta.lastClean||""};
+    if(!meta.lastClean||now-new Date(meta.lastClean)>KEEP_DAYS*86400000){
+      try{m2.cleaned=await gdCleanup(mcp,folderId);m2.lastClean=now.toISOString();}catch(e){}
+    }
+    await metaRef().set(m2);
+    lsSet("journal-last-export",now.toISOString());lsSet("journal-last-export-auto","1");
+    AUTO.state="ok";AUTO.msg="";
+  }catch(e){
+    AUTO.state="err";AUTO.msg=autoErrText(e);
+    const m3=Object.assign({},meta,{ok:false,failAt:now.toISOString(),err:String((e&&e.code)||"error"),errStep:step,errText:AUTO.msg,errMsg:String((e&&e.message)||"").slice(0,300),fileArgs:AUTO.fileArgs===undefined?null:AUTO.fileArgs});
+    try{await metaRef().set(m3);}catch(_){}
+  }
+  refreshSaveBars();
+}
+async function autoSaveStart(){
+  if(window.JOURNAL_OFFLINE)return;
+  for(let i=0;i<60&&!S.ready;i++)await wait(500);
+  if(!(S.ready&&S.live))return;
+  setTimeout(()=>autoSave(),3000);
+  autoPlan();
+  /* iPad усыпляет страницу: при возвращении в журнал проверяем, не пора ли сохранить */
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden){autoSave();autoPlan();}});
+}
+
 async function doBackup(btn){
   if(backupBusy||restoreBusy)return;
   if(!S.live||!S.db){toast("Сохранение доступно, когда журнал подключён к хранилищу");return;}
@@ -4211,15 +4397,11 @@ async function doBackup(btn){
   const label=btn?btn.textContent:"";
   backupBusy=true;if(btn){btn.disabled=true;btn.textContent="Собираю данные…";}
   try{
-    await flushSaves();
     const now=new Date();
-    const j=await jRef().get();
-    const out={app:"Журнал группы",format:DATA_FORMAT,created:now.toISOString(),from:window.JOURNAL_OFFLINE?"offline":"claude",journal:j.exists?j.data():null};
-    for(const c of BACKUP_COLS)out[c]=await grabCol(c,c==="sessions");
-    const nk=Object.keys(out.kids).length,ns=Object.keys(out.sessions).length;
-    out.counts={kids:nk,sessions:ns};
-    await DL.save({filename:"zhurnal-kopiya-"+stampName(now)+(window.JOURNAL_OFFLINE?"-offline":"")+".json",data:JSON.stringify(out,null,1),mimeType:"application/json"});
-    lsSet("journal-last-export",now.toISOString());refreshSaveBars();
+    const out=await buildBackup(now);
+    const nk=out.counts.kids,ns=out.counts.sessions;
+    await DL.save({filename:backupName(now),data:JSON.stringify(out,null,1),mimeType:"application/json"});
+    lsSet("journal-last-export",now.toISOString());lsSet("journal-last-export-auto","");refreshSaveBars();
     toast("База сохранена в файл: учеников "+nk+", тренировок "+ns);
   }catch(e){
     const c=e&&e.code;
@@ -4233,18 +4415,27 @@ async function doBackup(btn){
 }
 
 /* ---- загрузка из файла ---- */
+/* читает обычную копию .json, автокопию .docx (база внутри документа Word) и сжатую .json.gz */
+async function readBackupFile(f){
+  const buf=new Uint8Array(await f.arrayBuffer());
+  if(buf[0]===0x1f&&buf[1]===0x8b){
+    if(typeof DecompressionStream!=="function")throw {code:"no_gzip"};
+    const s=new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"));
+    return await new Response(s).text();
+  }
+  if(buf[0]===0x50&&buf[1]===0x4b)return await unzipEntry(buf,DOCX_PART);
+  return new TextDecoder("utf-8").decode(buf);
+}
 function doRestore(){
   if(backupBusy||restoreBusy)return;
   if(!S.live||!S.db){toast("Загрузка доступна, когда журнал подключён к хранилищу");return;}
   const inp=document.createElement("input");inp.type="file";
   inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;
-    const r=new FileReader();
-    r.onload=()=>{let o;
-      try{o=migrateBackup(JSON.parse(String(r.result||"").replace(/^﻿/,"")));}
+    readBackupFile(f).then(txt=>{let o;
+      try{o=migrateBackup(JSON.parse(String(txt||"").replace(/^﻿/,"")));}
       catch(e){toast(e&&e.code==="newer"?"Файл из более новой версии журнала. Сначала обнови программу.":"Это не файл базы журнала. Выбери файл zhurnal-kopiya-….json");return;}
-      restoreAsk(o,f);};
-    r.onerror=()=>toast("Не получилось прочитать файл");
-    r.readAsText(f);};
+      restoreAsk(o,f);
+    },e=>toast(e&&e.code==="no_gzip"?"Это сжатая копия, а браузер не умеет её открыть. Обнови iPadOS или выбери копию .json":"Не получилось прочитать файл"));};
   inp.click();
 }
 function rsEl(){let el=$("#rsDlg");if(!el){el=document.createElement("div");el.id="rsDlg";el.className="kai";el.hidden=true;document.body.appendChild(el);
@@ -4309,19 +4500,22 @@ function saveBarHTML(){
   const empty=!Object.keys(S.kids).length;
   const when=d?pad(d.getDate())+"."+pad(d.getMonth()+1)+", "+pad(d.getHours())+":"+pad(d.getMinutes()):"ещё не было";
   const two=empty||window.JOURNAL_OFFLINE;
-  let h='<div class="savebar'+(old?" old":"")+(two?" two":"")+'"><span>'+(window.JOURNAL_OFFLINE?'<i class="sbo">Офлайн · </i>':"")+'<i class="sbw">Сохранено<i class="sbo"> в файл</i>: </i><b>'+when+"</b></span>";
+  const auto=AUTO.state==="run"?' <i class="sba">· сохраняю на Диск…</i>':AUTO.state==="err"?' <i class="sba bad">· автосохранение не прошло</i>':(d&&lsGet("journal-last-export-auto")==="1"?' <i class="sba">· авто</i>':"");
+  let h='<div class="savewrap"><div class="savebar'+(old&&AUTO.state!=="run"?" old":"")+(two?" two":"")+'"><span>'+(window.JOURNAL_OFFLINE?'<i class="sbo">Офлайн · </i>':"")+'<i class="sbw">Сохранено<i class="sbo"> в файл</i>: </i><b>'+when+"</b>"+auto+"</span>";
   h+='<button class="sbb" data-act="backup">Сохранить</button>';
   if(two)h+='<button class="sbb" data-act="restore">Загрузить</button>';
   h+="</div>";
+  if(AUTO.state==="err")h+='<div class="autoerr"><span>'+esc(AUTO.msg)+'</span><button class="sbb" data-act="autoretry">Повторить</button></div>';
   if(empty)h+='<div class="banner">Журнал пока пустой. Нажми «Загрузить базу из файла» и выбери последний файл из папки «Журнал — копии» на Google Диске.</div>';
-  return h;
+  return h+"</div>";
 }
-function refreshSaveBars(){document.querySelectorAll(".savebar").forEach(el=>{const w=document.createElement("div");w.innerHTML=saveBarHTML();const n=w.querySelector(".savebar");if(n)el.replaceWith(n);});const s=$("#dbfileInfo");if(s)s.innerHTML=dbFileInfo();}
+function refreshSaveBars(){document.querySelectorAll(".savewrap").forEach(el=>{const w=document.createElement("div");w.innerHTML=saveBarHTML();const n=w.querySelector(".savewrap");if(n)el.replaceWith(n);else el.remove();});const s=$("#dbfileInfo");if(s)s.innerHTML=dbFileInfo();}
 function dbFileInfo(){
   const d=lastExport(),li=lastImport();
   let h="<p>Последнее сохранение в файл: <b>"+(d?fmtDT(d)+"</b> ("+agoText(d)+")":"ещё ни разу</b>")+"</p>";
   if(li&&li.at){const a=new Date(li.at),fd=li.file?new Date(li.file):null;h+="<p>Последняя загрузка из файла: <b>"+fmtDT(a)+"</b>"+(fd&&!isNaN(fd)?" (файл от "+fmtDT(fd)+")":"")+"</p>";}
   if(window.JOURNAL_OFFLINE&&window.JOURNAL_PERSIST)h+="<p>Хранение на устройстве: "+window.JOURNAL_PERSIST()+"</p>";
+  if(!window.JOURNAL_OFFLINE)h+="<p>Автосохранение: каждый вечер после "+SAVE_HOUR+":00 журнал сам кладёт базу в папку «"+GD_FOLDER+"» на Google Диске (если журнал открыт или когда его откроют). Раз в месяц копии старше "+KEEP_DAYS+" дней уходят в корзину Диска."+(AUTO.state==="err"?" <b>Последний раз не получилось: "+esc(AUTO.msg)+"</b>":"")+"</p>";
   return h;
 }
 function dbFileSection(){
@@ -4602,6 +4796,7 @@ document.addEventListener("click",e=>{
     case "gadd": addGroup(); break;
     case "backup": doBackup(t); break;
     case "restore": doRestore(); break;
+    case "autoretry": autoSave(true); break;
     case "ggame": {const g=S.journal.groups.find(x=>x.id===id);if(g){g.gameOld=!gOldGroup(g);saveJournal();render();}} break;
     case "glg": {const g=S.journal.groups.find(x=>x.id===id);if(g){if(g.noLeagues)delete g.noLeagues;else g.noLeagues=true;saveJournal();render();}} break;
     case "gdel": {
@@ -4684,6 +4879,7 @@ document.addEventListener("keydown",e=>{
 
 render();
 init();
+autoSaveStart();
 })();
 </script>
 </body>
