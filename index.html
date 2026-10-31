@@ -4515,7 +4515,6 @@ function dbFileInfo(){
   let h="<p>Последнее сохранение в файл: <b>"+(d?fmtDT(d)+"</b> ("+agoText(d)+")":"ещё ни разу</b>")+"</p>";
   if(li&&li.at){const a=new Date(li.at),fd=li.file?new Date(li.file):null;h+="<p>Последняя загрузка из файла: <b>"+fmtDT(a)+"</b>"+(fd&&!isNaN(fd)?" (файл от "+fmtDT(fd)+")":"")+"</p>";}
   if(window.JOURNAL_OFFLINE&&window.JOURNAL_PERSIST)h+="<p>Хранение на устройстве: "+window.JOURNAL_PERSIST()+"</p>";
-  if(!window.JOURNAL_OFFLINE)h+="<p>Автосохранение: каждый вечер после "+SAVE_HOUR+":00 журнал сам кладёт базу в папку «"+GD_FOLDER+"» на Google Диске (если журнал открыт или когда его откроют). Раз в месяц копии старше "+KEEP_DAYS+" дней уходят в корзину Диска."+(AUTO.state==="err"?" <b>Последний раз не получилось: "+esc(AUTO.msg)+"</b>":"")+"</p>";
   return h;
 }
 function dbFileSection(){
@@ -4879,7 +4878,6 @@ document.addEventListener("keydown",e=>{
 
 render();
 init();
-autoSaveStart();
 })();
 </script>
 </body>
