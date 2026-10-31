@@ -1479,11 +1479,14 @@ summary.fsum{cursor:pointer;font-weight:600;font-size:17px;padding:4px 0;list-st
 .g-th .g-task,.g-th .g-edit,.g-th .g-plq{color:#16213A}
 /* база в файле */
 .kai[hidden]{display:none}
-.savebar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin:12px 0 0;padding:9px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14.5px}
-.savebar span{flex:1 1 200px;min-width:0}
-.savebar .btn{flex:none}
-.savebar.old{border-color:var(--accent)}
-.savebar.old span b{color:var(--accent)}
+.savebar{display:flex;align-items:center;gap:6px;margin:10px 0 0;padding:5px 5px 5px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.savebar span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.savebar b{color:var(--ink);font-weight:600}
+.savebar.old b{color:var(--l-gold)}
+.savebar .sbb{flex:none;padding:5px 10px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap}
+.savebar i{font-style:normal}
+@media (max-width:440px){.savebar .sbo,.savebar.two .sbw{display:none}}
+.savebar .sbb:disabled{opacity:.6}
 .dbinfo p{margin:0 0 6px;font-size:15px}
 .rs h2{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 12px}
 .rs-file{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:12px;background:var(--surface2);border:1px solid var(--line);font-size:15px;margin-bottom:12px;overflow-wrap:anywhere}
@@ -4304,9 +4307,11 @@ function saveBarHTML(){
   if(!S.live||S.view!=="home"||S.gKids)return "";
   const d=lastExport(),old=!d||Date.now()-d>20*3600000;
   const empty=!Object.keys(S.kids).length;
-  let h='<div class="savebar'+(old?" old":"")+'"><span>'+(window.JOURNAL_OFFLINE?"<b>Офлайн-журнал</b> · ":"")+"Сохранено в файл: "+(d?"<b>"+fmtDT(d)+"</b>":"<b>ещё ни разу</b>")+"</span>";
-  h+='<button class="btn small'+(empty?" ghost":"")+'" data-act="backup">Сохранить базу в файл</button>';
-  if(empty||window.JOURNAL_OFFLINE)h+='<button class="btn small'+(empty?"":" ghost")+'" data-act="restore">Загрузить базу из файла</button>';
+  const when=d?pad(d.getDate())+"."+pad(d.getMonth()+1)+", "+pad(d.getHours())+":"+pad(d.getMinutes()):"ещё не было";
+  const two=empty||window.JOURNAL_OFFLINE;
+  let h='<div class="savebar'+(old?" old":"")+(two?" two":"")+'"><span>'+(window.JOURNAL_OFFLINE?'<i class="sbo">Офлайн · </i>':"")+'<i class="sbw">Сохранено<i class="sbo"> в файл</i>: </i><b>'+when+"</b></span>";
+  h+='<button class="sbb" data-act="backup">Сохранить</button>';
+  if(two)h+='<button class="sbb" data-act="restore">Загрузить</button>';
   h+="</div>";
   if(empty)h+='<div class="banner">Журнал пока пустой. Нажми «Загрузить базу из файла» и выбери последний файл из папки «Журнал — копии» на Google Диске.</div>';
   return h;

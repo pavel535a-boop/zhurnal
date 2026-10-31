@@ -1,6 +1,6 @@
 /* Офлайн-журнал: программа целиком сохраняется на устройстве и открывается без интернета.
    Данные учеников сюда не попадают — они лежат в IndexedDB. При каждом обновлении файлов увеличь номер версии. */
-const VERSION="zhurnal-offline-v1";
+const VERSION="zhurnal-offline-v2";
 const FILES=["./","./index.html","./manifest.webmanifest","./icon-180.png","./icon-192.png","./icon-512.png"];
 
 self.addEventListener("install",e=>{
