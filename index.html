@@ -1809,14 +1809,15 @@ html:not(.kt-ready) .kt-floor{background:linear-gradient(180deg,rgba(39,33,37,.9
 .g-bat-hd{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 16px;margin-bottom:-22px;pointer-events:none}
 .g-bat-hd b,.g-bat-hd i{font:700 clamp(30px,4.8vw,54px)/1 var(--display);font-style:normal;text-transform:uppercase;letter-spacing:.02em;font-family:var(--body);font-weight:600;letter-spacing:.01em;background:linear-gradient(180deg,#fff 0%,var(--b1) 35%,var(--b2) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.6)) drop-shadow(0 0 2px rgba(0,0,0,.75)) drop-shadow(0 3px 6px rgba(0,0,0,.45)) drop-shadow(0 0 14px color-mix(in srgb,var(--b2) 55%,transparent))}
 .g-bat-hd i{font-size:clamp(26px,4vw,44px)}
-.g-bat-bar{position:relative;display:flex;gap:6px;height:110px;padding:30px 12px 12px;border-radius:20px;background:radial-gradient(120% 150% at 50% 0%,color-mix(in srgb,var(--b2) 24%,#0b0b12),#06060a 72%);border:3px solid var(--bf);box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 8px 16px rgba(0,0,0,.6),0 6px 16px rgba(0,0,0,.35),0 0 24px color-mix(in srgb,var(--b2) 50%,transparent)}
+.g-bat-bar{position:relative;display:flex;gap:6px;height:116px;padding:30px 12px 18px;border-radius:20px;background:radial-gradient(120% 150% at 50% 0%,color-mix(in srgb,var(--b2) 24%,#0b0b12),#06060a 72%);border:3px solid var(--bf);box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 8px 16px rgba(0,0,0,.6),0 6px 16px rgba(0,0,0,.35),0 0 24px color-mix(in srgb,var(--b2) 50%,transparent)}
 .g-bat-bar::after{content:"";position:absolute;right:-13px;top:32%;bottom:32%;width:10px;border-radius:0 6px 6px 0;background:linear-gradient(90deg,var(--bf),var(--b3));box-shadow:0 0 10px color-mix(in srgb,var(--b2) 50%,transparent)}
 .g-bat-cell{flex:1;min-width:0;position:relative;overflow:hidden;border-radius:9px;background:linear-gradient(180deg,color-mix(in srgb,var(--b3) 30%,#000),var(--be));box-shadow:inset 0 3px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.06)}
 .g-bat-cell.on{background:linear-gradient(180deg,var(--b1) 0,var(--b2) 48%,var(--b3) 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4),inset 0 -4px 8px rgba(0,0,0,.25),0 0 12px color-mix(in srgb,var(--b2) 70%,transparent)}
 .g-bat-cell.on::after{content:"";position:absolute;left:3px;right:3px;top:3px;height:32%;border-radius:6px;background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0))}
 .g-bat-cell.lit{animation:gBatLit 1.6s ease-out}
 @keyframes gBatLit{0%{filter:brightness(2.6);box-shadow:0 0 28px 10px var(--b1)}60%{filter:brightness(1.4);box-shadow:0 0 14px 4px var(--b2)}100%{filter:none}}
-.g-bat-ft{margin-top:6px;padding:0 16px;text-align:right;font-size:14px;font-weight:600;color:#5A5560}
+.g-bat-ft{position:relative;z-index:2;display:table;margin:-16px 22px 0 auto;padding:7px 18px;border-radius:999px;background:#16213A;border:2px solid var(--bf);box-shadow:0 3px 10px rgba(0,0,0,.35),0 0 12px color-mix(in srgb,var(--b2) 45%,transparent);color:#fff;font:600 clamp(17px,2.2vw,21px)/1.1 var(--body)}
+.g-bat-ft b{font-weight:800;font-size:1.2em;color:var(--b1);text-shadow:0 0 8px color-mix(in srgb,var(--b2) 70%,transparent)}
 @media (prefers-reduced-motion:reduce){.g-bat-cell.lit{animation:none}}
 /* КМБ: шкалы «Ступень» и «Путь бойца» свободнее, квадратики ступени аккуратнее */
 .kt-one .kt-foot{margin-top:18px}
@@ -1847,6 +1848,16 @@ html:not(.kt-ready) .kt-floor{background:linear-gradient(180deg,rgba(39,33,37,.9
 .kt .kt-one .kt-pp{min-width:120px;padding:13px 15px;gap:8px}
 .kt .kt-one .kt-pp .kt-av{width:83px;height:83px;font-size:31px}
 .kt .kt-one .kt-pp span{font-size:16px;max-width:140px}
+.kt .kt-one .kt-pp .kt-ring{display:grid;place-items:center;padding:9px;border-radius:50%;max-width:none;overflow:visible;background:conic-gradient(#ff6a1a 0,#ffb13d calc(var(--p) * .6%),#ffe08a calc(var(--p) * 1%),#4a2a20 calc(var(--p) * 1%));box-shadow:0 0 0 2px #1a0f0c,0 0 12px rgba(255,120,40,.35)}
+.kt .kt-one .kt-pp .kt-ring.full{background:conic-gradient(#ffd23f,#fff3b0,#ffb13d,#ffd23f);box-shadow:0 0 0 2px #1a0f0c,0 0 18px rgba(255,200,60,.8)}
+.kt .kt-one .kt-pp .kt-ring .kt-av{box-shadow:0 0 0 3px #1a0f0c}
+.kt .kt-one .kt-sbar.kt-head{display:grid;grid-template-columns:auto auto 1fr auto;grid-template-areas:"av card . home" "av nm nm nm";gap:12px 22px;align-items:center}
+.kt .kt-one .kt-head .kt-home{grid-area:home;margin:0}
+.kt .kt-one .kt-head>.kt-back:not(.kt-home){grid-area:card;justify-self:start}
+.kt .kt-one .kt-head .kt-brk{display:none}
+.kt .kt-one .kt-head .kt-hero{display:contents}
+.kt .kt-one .kt-head .kt-hero>.kt-av{grid-area:av;width:clamp(110px,15vw,150px);height:clamp(110px,15vw,150px);font-size:clamp(40px,6vw,58px);box-shadow:0 0 0 3px #1a0f0c,0 0 0 6px var(--kt-fire),0 0 22px rgba(232,105,46,.45)}
+.kt .kt-one .kt-head .kt-hero>div{grid-area:nm;align-self:start;min-width:0}
 .kt-hp-row .kt-hp-bar{height:84px;padding:6px 7px;border-radius:10px;gap:5px;border-width:3px}
 .kt-hp-cell,.kt-hp-seg{border-radius:5px}
 .kt-hp-cell.boss{width:56px;font-size:24px}
@@ -3400,7 +3411,9 @@ let ktIdleT=null,ktCeleT=null,ktCeleAfter=null,ktHoldT=null,ktHoldEl=null,ktHold
 function ktOnList(){return Object.values(S.kids).filter(onKmb);}
 function ktNames(){return gNames(Object.values(S.kids).filter(k=>k.kmb&&!k.archived));}
 function ktAv(k,nm){const col=G_COL[gHash(k.id)%G_COL.length];return '<i class="kt-av" style="--c:'+col+'">'+(k.photo?'<img src="'+esc(k.photo)+'" alt="">':esc((nm||firstName(k)||"?").charAt(0)))+"</i>";}
-function ktPP(k,nm){return '<button class="kt-pp" data-kt="me" data-id="'+esc(k.id)+'">'+ktAv(k,nm)+"<span>"+esc(nm)+"</span></button>";}
+/* лицо на экране ступени: кольцо вокруг фото заполняется по тому, сколько сдано на его ступени */
+function ktPP(k,nm){const I=kmbInfo(k),l=I.cur,n=l?l.items.length:0,d=l?l.items.filter(it=>I.done[it.id]).length:0,p=n?Math.round(d/n*100):0;
+  return '<button class="kt-pp" data-kt="me" data-id="'+esc(k.id)+'"><span class="kt-ring'+(p>=100?" full":"")+'" style="--p:'+p+'" title="Сдано '+d+" из "+n+'">'+ktAv(k,nm)+"</span><span>"+esc(nm)+"</span></button>";}
 function ktTier(i){return Math.floor(i/2);}
 function ktKh(kid){if(kid)return window.innerHeight;const t=document.querySelector(".top");return Math.max(420,window.innerHeight-84-(t?t.offsetHeight:110));}
 
@@ -3966,7 +3979,7 @@ function gSceneHTML(kid){
 function gBatHTML(k,vpr,vl,VL){
   const n=vpr.list.length,d=vpr.dn,pc=n?Math.round(d/n*100):0;let cells="";
   for(let j=0;j<n;j++)cells+='<i class="g-bat-cell'+(j<d?" on":"")+'"></i>';
-  return '<div class="g-bat" data-lg="'+esc(vl)+'"><div class="g-bat-hd"><b>'+esc(VL.name)+"</b><i>"+pc+'%</i></div><div class="g-bat-bar" data-gbat="1" data-id="'+esc(k.id)+'" data-lg="'+esc(vl)+'" data-d="'+d+'">'+cells+'</div><div class="g-bat-ft">сдано '+d+" из "+n+"</div></div>";
+  return '<div class="g-bat" data-lg="'+esc(vl)+'"><div class="g-bat-hd"><b>'+esc(VL.name)+"</b><i>"+pc+'%</i></div><div class="g-bat-bar" data-gbat="1" data-id="'+esc(k.id)+'" data-lg="'+esc(vl)+'" data-d="'+d+'">'+cells+'</div><div class="g-bat-ft">Сдано <b>'+d+"</b> из <b>"+n+"</b></div></div>";
 }
 let gBatPrev=null;
 function gBatFx(root){
@@ -3979,8 +3992,7 @@ function gKidHTML(k,kid){
   const L=league(k.league);const pr=gProg(k);const q=gQuest(k);const nm=gName(k);
   const idx=LEAGUES.findIndex(l=>l.id===k.league);const nx=LEAGUES[idx+1];
   let h='<div class="g-page'+(G_TH[k.league]?" g-th g-th-"+k.league:"")+'" style="--lc:'+L.c+'"><aside class="g-side">'+gAvatar(k,nm,"clamp(140px,min(25vw,34vh),270px)","big");
-  h+="<h2>"+esc(nm)+"</h2><p>Лига: "+esc(L.name)+'</p><p class="g-cnt">Закрыто '+pr.dn+" из "+pr.list.length+(nx&&pr.list.length?"<br>до лиги «"+esc(nx.name)+"» осталось "+(pr.list.length-pr.dn):"")+"</p>";
-  if(Number(k.questTotal))h+='<p class="g-cnt">Всего выполнено заданий: '+Number(k.questTotal)+"</p>";
+  h+="<h2>"+esc(nm)+"</h2>";/* под именем больше ничего: лига и счёт видны на батарее */
   if(!kid)h+='<button class="g-sbtn g-phbtn" data-act="gPhoto" data-id="'+esc(k.id)+'" title="'+(k.photo?"Заменить фото":"Поставить фото")+'">📷 '+(k.photo?"Заменить":"Фото")+"</button>";
   h+='<button class="g-back'+(kid?" g-back-top":"")+'" data-act="gBack">← К группе</button></aside><div class="g-mainp">';
   if(S.gPromo&&S.gPromo.id===k.id&&S.gPromo.to===k.league)h+='<div class="g-win pop">'+(kid?"Ура! ":"")+'Новая лига: «'+esc(league(S.gPromo.to).name)+'»! Все нормативы '+LEAGUES.slice(LEAGUES.findIndex(l=>l.id===S.gPromo.from),LEAGUES.findIndex(l=>l.id===S.gPromo.to)).map(l=>"«"+esc(l.name)+"»").join(" и ")+' сданы.'+(kid?"":'<br><button class="g-undo" data-act="gPromoUndo">Отменить перевод</button>')+'</div>';
