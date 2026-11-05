@@ -475,6 +475,11 @@ textarea::placeholder,input::placeholder{color:var(--muted);opacity:.75}
 .shead .nm:focus{outline:none;border-bottom:2px solid var(--accent)}
 .sbody{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
 .meta{color:var(--muted);font-size:15px;margin:12px 2px 4px}
+.kmbjoinbig{margin:10px 0 4px}
+h2.foldh{cursor:pointer;margin-bottom:0;-webkit-user-select:none;user-select:none}
+h2.foldh.open{margin-bottom:10px}
+h2.foldh::after{content:"";display:inline-block;width:8px;height:8px;margin-left:10px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-3px) rotate(45deg);opacity:.6;transition:transform .2s}
+h2.foldh.open::after{transform:translateY(1px) rotate(-135deg)}
 .leagues{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
 .lg{display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;font-weight:500}
 .lg i{width:12px;height:12px;border-radius:50%;background:var(--lc)}
@@ -1083,6 +1088,7 @@ textarea::placeholder,input::placeholder{color:var(--muted);opacity:.75}
 .g-nchips{display:flex;flex-wrap:wrap;gap:6px}
 .g-nchips button{background:#fff;border:1px solid #D7CBBB;border-radius:999px;padding:7px 12px;font-size:14px;color:#16213A;text-align:left}
 .g-plq{margin-top:0}
+.g-kidp .g-mainp>.g-plq{margin-top:56px}
 .g-plq .hd{display:flex;justify-content:space-between;align-items:baseline;gap:6px 10px;flex-wrap:wrap}
 .g-plq h4{font-family:var(--display);font-weight:700;font-size:clamp(17px,2.2vw,24px);margin:0;color:#16213A}
 .g-plq small{color:#7A7262;font-size:13px}
@@ -3375,16 +3381,26 @@ function kmbPickHTML(){
   h+='<button class="btn ghost wide" style="margin-top:10px" data-act="kmbnew">Новый человек, анкеты ещё нет</button>';
   let list=Object.values(S.kids).filter(k=>!k.archived&&!kmbGrad(k));
   if(q)list=list.filter(k=>(k.name||"").toLowerCase().indexOf(q)>=0);
-  else list=list.filter(k=>onKmb(k)||kmbEligible(k));
   list.sort((a,b)=>{const x=createdISO(a)||"",y=createdISO(b)||"";return x<y?1:x>y?-1:(a.name||"").localeCompare(b.name||"","ru");});
+  const rest=q?[]:list.filter(k=>!onKmb(k)&&!kmbEligible(k));if(!q)list=list.filter(k=>onKmb(k)||kmbEligible(k));
+  const row=k=>{const on=onKmb(k);const a=age(k.birth);const sub=[kidGroups(k).map(groupName).join(", ")||"без группы",a!==null?a+" "+plural(a,["год","года","лет"]):"",k.since?"в зале с "+fmtShort(k.since):""].filter(Boolean).join(" · ");
+    return '<div class="kpick"><span class="nm2">'+esc(k.name||"Без имени")+"<small>"+esc(sub)+'</small></span><button class="'+(on?"on":"")+'" data-act="kmbtog" data-id="'+k.id+'" aria-pressed="'+on+'">'+(on?"В курсе ✓":"+ В курс")+"</button></div>";};
   h+='<div class="grouptitle">'+(q?"Найдено · "+list.length:"Из анкет · с 8 лет, сначала новые")+"</div>";
-  if(!list.length)h+='<p class="hint">Никого не нашёл. Добавь нового человека кнопкой выше.</p>';
-  h+='<div class="list">'+list.map(k=>{const on=onKmb(k);const a=age(k.birth);const sub=[kidGroups(k).map(groupName).join(", ")||"без группы",a!==null?a+" "+plural(a,["год","года","лет"]):"",k.since?"в зале с "+fmtShort(k.since):""].filter(Boolean).join(" · ");
-    return '<div class="kpick"><span class="nm2">'+esc(k.name||"Без имени")+"<small>"+esc(sub)+'</small></span><button class="'+(on?"on":"")+'" data-act="kmbtog" data-id="'+k.id+'" aria-pressed="'+on+'">'+(on?"В курсе ✓":"+ В курс")+"</button></div>";}).join("")+"</div></div>";
-  return h;
+  if(!list.length&&!rest.length)h+='<p class="hint">Никого не нашёл. Добавь нового человека кнопкой выше.</p>';
+  h+='<div class="list">'+list.map(row).join("")+"</div>";
+  if(rest.length)h+='<div class="grouptitle">Остальные анкеты · младше 8 лет или из младших групп</div><div class="list">'+rest.map(row).join("")+"</div>";
+  return h+"</div>";
 }
 function openKmbPick(){S.kmbPick=true;const sh=$("#sheet");sh.hidden=false;document.body.classList.add("locked");renderKmbPick();sh.scrollTop=0;}
 function renderKmbPick(focus){const sh=$("#sheet");const st=sh.scrollTop;sh.innerHTML=kmbPickHTML();sh.scrollTop=st;if(focus){const el=$("#kmbq");if(el){el.focus({preventScroll:true});const n=el.value.length;try{el.setSelectionRange(n,n);}catch(_){}}}}
+/* разделы анкеты «Нормативы» и «Курс молодого бойца» свёрнуты, пока на заголовок не нажали */
+let secOpen={};
+function secFold(key,html){
+  if(!html)return html;const i=html.indexOf("<h2>"),j=html.indexOf("</h2>");if(i<0||j<0)return html;
+  const open=!!secOpen[key];
+  const top=html.slice(0,i)+'<h2 class="foldh'+(open?" open":"")+'" data-act="secfold" data-v="'+key+'" role="button" aria-expanded="'+open+'">'+html.slice(i+4,j)+"</h2>";
+  return open?top+html.slice(j+5):top+"</section>";
+}
 let kmbArm=null,kmbArmT=null;
 function kmbArmSet(key,redraw){kmbArm=key;clearTimeout(kmbArmT);kmbArmT=setTimeout(()=>{if(kmbArm===key){kmbArm=null;redraw();}},3500);redraw();}
 function kmbFind(lid,iid){const P=S.journal.kmb;if(!P)return {};const l=P.lessons.find(x=>x.id===lid);return {l,it:l&&iid?l.items.find(x=>x.id===iid):null};}
@@ -3398,7 +3414,7 @@ function kmbEditInput(el,save){
   else return;
   if(save)saveJournal();
 }
-function kmbScroll(){const sh=$("#sheet"),el=sh&&sh.querySelector("#sec-kmb"),hd=sh&&sh.querySelector(".shead");if(el){sh.scrollTop=Math.max(0,el.offsetTop-(hd?hd.offsetHeight:0)-10);el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1400);}}
+function kmbScroll(){if(!secOpen.kmb){secOpen.kmb=true;renderSheet();}const sh=$("#sheet"),el=sh&&sh.querySelector("#sec-kmb"),hd=sh&&sh.querySelector(".shead");if(el){sh.scrollTop=Math.max(0,el.offsetTop-(hd?hd.offsetHeight:0)-10);el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1400);}}
 /* ---------- КМБ: башня (вкладка «КМБ» и кнопка «КМБ» в игре для детей) ----------
    Ступеньи — занятия программы journal.kmb (по два ступени на блок), люди — ученики с kmb.on.
    Ученик отмечает задание сам: зажать и держать 2 секунды. Сдал весь ступень — поднимается выше. */
@@ -3495,14 +3511,14 @@ function ktBtnFire(b){
 /* две шкалы в духе полосы жизни из файтинга: текущая ступень (по квадратику на упражнение, экзамен — последний) и весь путь (6 ступеней) */
 function ktHpHTML(P,done,ci,vi,tap){
   /* «Путь бойца» — та же лесенка «Блок 1/2/3»: медаль блока загорается после экзамена, каждая ступень заливается и показывает проценты; тренер нажимает ступень, чтобы её открыть */
-  const cur=P[vi];let tot=0,dn=0;const nT=Math.ceil(P.length/2);
+  const cur=P[vi],tp=i=>tap===true||(typeof tap==="function"&&tap(i));let tot=0,dn=0;const nT=Math.ceil(P.length/2);
   let seg='<div class="kt-hp-lad" data-hp="all" style="grid-template-columns:repeat('+nT+',minmax(0,1fr))">';
   for(let t=0;t<nT;t++){
     const ids=[t*2,t*2+1].filter(i=>i<P.length),won=ids.some(i=>{const b=P[i].items.find(it=>it.boss);return b&&done[b.id];});
     seg+='<div class="kt-tg'+(won?" won":"")+'">'+(t<3?'<i class="kt-med" style="--b:var(--kt-med'+t+')" title="Блок '+(t+1)+'"></i>':"<small>Блок "+(t+1)+"</small>")+'<div class="kt-cells">';
     ids.forEach(i=>{const l=P[i],n=l.items.length,d=l.items.filter(it=>done[it.id]).length,pc=n?Math.round(d/n*100):0;tot+=n;dn+=d;
-      const cl="kt-cell kt-hp-seg "+(i<ci?"done":i===ci?"cur":"")+(tap&&i===vi?" view":""),inn='<i style="width:'+pc+'%"></i><small>'+(pc>=100?"✓":i+1)+"</small>";
-      seg+=tap?'<button class="'+cl+'" data-kt="view" data-i="'+i+'" data-d="'+d+'" data-n="'+n+'" aria-label="Ступень '+(i+1)+'">'+inn+"</button>":'<span class="'+cl+'" data-d="'+d+'" data-n="'+n+'">'+inn+"</span>";});
+      const cl="kt-cell kt-hp-seg "+(i<ci?"done":i===ci?"cur":"")+(tp(i)&&i===vi?" view":""),inn='<i style="width:'+pc+'%"></i><small>'+(pc>=100?"✓":i+1)+"</small>";
+      seg+=tp(i)?'<button class="'+cl+'" data-kt="view" data-i="'+i+'" data-d="'+d+'" data-n="'+n+'" aria-label="Ступень '+(i+1)+'">'+inn+"</button>":'<span class="'+cl+'" data-d="'+d+'" data-n="'+n+'">'+inn+"</span>";});
     seg+="</div></div>";
   }
   seg+="</div>";
@@ -3582,7 +3598,7 @@ function kmbRank(i){return KMB_RANKS[i]?KMB_RANKS[i][0]:"Ступень "+(i+1);
 function kmbPill(it){return "<em>"+(it.boss?"★ Экзамен":esc(it.b||"Задание"))+"</em>";}
 function ktMeHTML(k){
   const nm=ktNames()[k.id]||firstName(k)||"Без имени",I=kmbInfo(k),P=I.P,grad=kmbGrad(k),ci=grad?P.length:I.ci,done=I.done,coach=!KT.kid;
-  const vi=coach&&!grad&&KT.view!=null&&P[KT.view]?KT.view:ci,other=vi!==ci;
+  const kv=!grad&&KT.view!=null&&P[KT.view]?KT.view:null,vi=kv!=null&&(coach||ktTier(kv)===ktTier(ci))?kv:ci,other=vi!==ci;
   /* всё на одном экране iPad: шапка и лесенка в одну строку, задания — плотная сетка квадратиков */
   let h='<div class="kt-sw kt-one"><div class="kt-sbar kt-head"><button class="kt-back kt-home" data-kt="tower"><span>← К башне</span></button>'+(coach?'<button class="kt-back" data-kt="card" data-id="'+esc(k.id)+'">Карточка</button>':"");
   h+='<i class="kt-brk"></i><div class="kt-hero">'+ktAv(k,nm)+"<div><b>"+esc(nm)+"</b><span>"+(grad?"Прошёл курс · "+esc(fmtShort(k.kmb.end)):P.length?esc(kmbRank(ci))+" · ступень "+(ci+1):"")+"</span></div></div>";
@@ -3593,6 +3609,7 @@ function ktMeHTML(k){
   const n=cur.items.filter(it=>done[it.id]).length;
   h+='<section class="kt-sec'+(other?" kt-other":"")+'"><div class="kt-sh"><h2>Ступень '+(vi+1)+(cur.title?" · "+esc(cur.title):"")+'</h2><span class="kt-shh">'+(coach?"Нажми на задание — отметка поставится или снимется":"Сделал при тренере — зажми и держи 2 секунды")+"</span><small>Сдано "+n+" из "+cur.items.length+"</small></div>";
   if(coach&&other)h+='<div class="kt-away">Это не его ступень: сейчас '+esc(nm)+" на ступени "+(ci+1)+'.<div class="kt-mvrow">'+(vi>ci&&kmbGateBlock(P,done,vi)?'<span class="kt-gate">Сначала экзамен блока '+kmbGateBlock(P,done,vi)+'</span>':'<button class="kt-mv" data-kt="move" data-id="'+esc(k.id)+'" data-i="'+vi+'">Перевести на ступень '+(vi+1)+'</button>')+'<button class="kt-back" data-kt="view" data-i="'+ci+'">← Его ступень: '+(ci+1)+"</button></div></div>";
+  if(!coach&&other)h+='<div class="kt-away">'+(vi>ci?"Это ступень впереди. Ты ещё не на ней, но уже можешь сдавать — всё сданное засчитается.":"Это прошлая ступень — можно досдать то, что осталось.")+'<div class="kt-mvrow"><button class="kt-back" data-kt="view" data-i="'+ci+'">← Моя ступень: '+(ci+1)+"</button></div></div>";
   h+='<div class="kt-tasks">';
   /* босс — такой же квадратик последним, закрашивается так же */
   const items=cur.items.filter(it=>!it.boss).concat(cur.items.filter(it=>it.boss));
@@ -3608,7 +3625,9 @@ function ktMeHTML(k){
     if(ci<P.length-1&&!gb)mv+='<button class="kt-back" data-kt="move" data-id="'+esc(k.id)+'" data-i="'+(ci+1)+'">↑ На ступень '+(ci+2)+"</button>";
     if(mv)side+='<div class="kt-mvrow">'+mv+"</div>";
   }
-  h+='<div class="kt-foot">'+ktHpHTML(P,done,ci,vi,coach)+(side?'<div class="kt-foot-r">'+side+"</div>":"")+"</div>";
+  /* забежать вперёд можно только внутри блока: 1→2, 3→4, 5→6 */
+  if(!coach&&!other&&ci<P.length-1&&ktTier(ci+1)===ktTier(ci))side+='<div class="kt-mvrow"><button class="kt-mv" data-kt="view" data-i="'+(ci+1)+'">Забежать вперёд: ступень '+(ci+2)+" →</button></div>";
+  h+='<div class="kt-foot">'+ktHpHTML(P,done,ci,vi,coach?true:(i=>ktTier(i)===ktTier(ci)))+(side?'<div class="kt-foot-r">'+side+"</div>":"")+"</div>";
   return h+"</section></div>";
 }
 function ktFloorHTML(i){
@@ -3623,7 +3642,7 @@ function ktFloorHTML(i){
 }
 
 /* общий iPad в детском режиме: если свой экран забыли закрыть, через минуту он сам вернётся к башне */
-function ktBump(){clearTimeout(ktIdleT);ktIdleT=null;if(KT.kid&&(KT.me||KT.floor!=null))ktIdleT=setTimeout(ktClose,60000);}
+function ktBump(){clearTimeout(ktIdleT);ktIdleT=null;}
 
 /* ступень пройден: огненный взрыв вокруг карточки, когда она уходит — вспышка в квадратике этого ступени */
 function ktCeleDone(){clearTimeout(ktCeleT);ktCeleT=null;const w=document.getElementById("ktCele");if(w)w.innerHTML="";const f=ktCeleAfter;ktCeleAfter=null;if(f)f();}
@@ -3991,7 +4010,7 @@ function gBatFx(root){
 function gKidHTML(k,kid){
   const L=league(k.league);const pr=gProg(k);const q=gQuest(k);const nm=gName(k);
   const idx=LEAGUES.findIndex(l=>l.id===k.league);const nx=LEAGUES[idx+1];
-  let h='<div class="g-page'+(G_TH[k.league]?" g-th g-th-"+k.league:"")+'" style="--lc:'+L.c+'"><aside class="g-side">'+gAvatar(k,nm,"clamp(140px,min(25vw,34vh),270px)","big");
+  let h='<div class="g-page'+(kid?" g-kidp":"")+(G_TH[k.league]?" g-th g-th-"+k.league:"")+'" style="--lc:'+L.c+'"><aside class="g-side">'+gAvatar(k,nm,"clamp(140px,min(25vw,34vh),270px)","big");
   h+="<h2>"+esc(nm)+"</h2>";/* под именем больше ничего: лига и счёт видны на батарее */
   if(!kid)h+='<button class="g-sbtn g-phbtn" data-act="gPhoto" data-id="'+esc(k.id)+'" title="'+(k.photo?"Заменить фото":"Поставить фото")+'">📷 '+(k.photo?"Заменить":"Фото")+"</button>";
   h+='<button class="g-back'+(kid?" g-back-top":"")+'" data-act="gBack">← К группе</button></aside><div class="g-mainp">';
@@ -4545,12 +4564,13 @@ function sheetHTML(k){
   else if(leaguesByGroup(k))h+='<div class="leagues">'+LEAGUES.map(l=>'<button class="lg'+(l.id===k.league?" on":"")+'" style="--lc:'+l.c+'" data-act="league" data-v="'+l.id+'"><i></i>'+l.name+"</button>").join("")+'<button class="lg none'+(k.league==="none"?" on":"")+'" data-act="league" data-v="none"><i></i>Без лиги</button></div>';
   else if(!isAdult(k))h+='<p class="meta" style="margin-top:6px">В '+(kidGroups(k).length>1?"его группах":"группе «"+esc(groupName(kidGroups(k)[0]))+"»")+" лиг нет, поэтому нормативов в карточке нет.</p>";
   if(!hasLeague(k)){const g=goalOf(k);h+='<div class="goalrow"><span>Цель</span>'+GOALS.map(x=>'<button class="chip'+(g&&g.id===x.id?" on":"")+'" style="--gc:'+x.c+'" data-act="goal" data-v="'+x.id+'">'+x.ic+" "+esc(x.name)+"</button>").join("")+"</div>";}
-  if(onKmb(k))h+=kmbCardHTML(k);
+  if(!k.archived&&!onKmb(k)&&!kmbGrad(k))h+='<button class="btn wide kmbjoinbig" data-act="kmbjoin">+ В курс молодого бойца</button>';
+  if(onKmb(k))h+=secFold("kmb",kmbCardHTML(k));
   if((isAdult(k)||k.lifts.length)&&!hasLeague(k))h+=liftsHTML(k);
 
   if(hasLeague(k)){
   const list=S.journal.norms[k.league]||[];
-  const dn=list.filter(n=>k.norms[n.id]).length;
+  const dn=list.filter(n=>k.norms[n.id]).length;const nh0=h.length;
   h+='<section class="sec" id="sec-norms" style="--lc:'+L.c+'"><h2>Нормативы: '+L.name+(list.length?"<small>"+dn+" из "+list.length+"</small>":"")+"</h2>";
   if(!list.length)h+='<p class="hint">Для лиги «'+L.name+'» нормативов пока нет. <button class="link" data-act="view" data-v="setup">Задать нормативы</button></p>';
   else{
@@ -4559,7 +4579,7 @@ function sheetHTML(k){
     const idx=LEAGUES.findIndex(l=>l.id===k.league);
     if(dn===list.length&&idx<LEAGUES.length-1){const nx=LEAGUES[idx+1];h+='<button class="promote" style="--lc:'+nx.c+'" data-act="league" data-v="'+nx.id+'">Все сданы. Перевести в лигу «'+nx.name+"»</button>";}
   }
-  h+="</section>";}
+  h+="</section>";h=h.slice(0,nh0)+secFold("norms",h.slice(nh0));}
 
   if(hasLeague(k)&&(isAdult(k)||k.lifts.length))h+=liftsHTML(k);
   if((k.tasks||"").trim()){k.ptasks=(k.ptasks||[]).concat(k.tasks.split("\n").map(s=>s.trim()).filter(Boolean).map(s=>({id:newId("pt"),text:s,done:false})));k.tasks="";}
@@ -4626,7 +4646,7 @@ function renderSheet(focusSel){
   if(focusSel){const el=sh.querySelector(focusSel);if(el)el.focus({preventScroll:true});}
 }
 function openKid(id,focusName){
-  S.open=id;S.pay=null;S.pe=null;const sh=$("#sheet");sh.hidden=false;sh.scrollTop=0;document.body.classList.add("locked");
+  if(S.open!==id)secOpen={};S.open=id;S.pay=null;S.pe=null;const sh=$("#sheet");sh.hidden=false;sh.scrollTop=0;document.body.classList.add("locked");
   renderSheet();if(focusName){const n=sh.querySelector(".nm");if(n)n.focus();}
 }
 function closeKid(){
@@ -5100,7 +5120,7 @@ document.addEventListener("click",e=>{
     case "adatt": toggleAtt(id);render(); break;
     case "attS": toggleAtt(id); render(); renderSheet(); break;
     case "open": openKid(id); break;
-    case "jump": {e.stopPropagation();if(S.open!==id)openKid(id);const sh=$("#sheet");const el=sh.querySelector("#"+v);
+    case "jump": {e.stopPropagation();if(S.open!==id)openKid(id);{const fk=v==="sec-kmb"?"kmb":v==="sec-norms"?"norms":"";if(fk&&!secOpen[fk]){secOpen[fk]=true;renderSheet();}}const sh=$("#sheet");const el=sh.querySelector("#"+v);
       if(el){const head=sh.querySelector(".shead");sh.scrollTop=Math.max(0,el.offsetTop-(head?head.offsetHeight:0)-10);el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1400);}
       if(v==="sec-talks"){const i=sh.querySelector("#talkIn");}
     } break;
@@ -5161,6 +5181,7 @@ document.addEventListener("click",e=>{
     case "kmbnew": {S.kmbPick=false;S.kmbQ="";kmbEnsure();const nid=newId("k");
       S.kids[nid]=normKid(nid,{groups:[],since:todayISO(),created:Date.now(),newbie:{on:true,s2:"",s3:""},kmb:{on:true,start:todayISO(),end:"",cur:"",done:{}}});
       openKid(nid,true);} break;
+    case "secfold": secOpen[v]=!secOpen[v]; renderSheet(); break;
     case "kmbjoin": if(k){kmbJoin(k);toast("Теперь на курсе молодого бойца");renderSheet();kmbScroll();} break;
     case "kmbback": if(k&&k.kmb){k.kmb.on=true;k.kmb.end="";saveKid(k.id,true);toast("Снова на курсе");renderSheet();kmbScroll();} break;
     case "kmbtick": if(k&&k.kmb){const I0=kmbInfo(k);if(I0.cur)k.kmb.cur=I0.cur.id;const d=k.kmb.done;if(d[id])delete d[id];else d[id]=todayISO();saveKid(k.id,true);renderSheet();} break;
