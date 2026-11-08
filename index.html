@@ -1864,6 +1864,12 @@ html:not(.kt-ready) .kt-floor{background:linear-gradient(180deg,rgba(39,33,37,.9
 .kt .kt-one .kt-head .kt-hero{display:contents}
 .kt .kt-one .kt-head .kt-hero>.kt-av{grid-area:av;width:clamp(110px,15vw,150px);height:clamp(110px,15vw,150px);font-size:clamp(40px,6vw,58px);box-shadow:0 0 0 3px #1a0f0c,0 0 0 6px var(--kt-fire),0 0 22px rgba(232,105,46,.45)}
 .kt .kt-one .kt-head .kt-hero>div{grid-area:nm;align-self:start;min-width:0}
+/* «Сейчас здесь»: размер лиц подбирается под число людей, чтобы все помещались на один экран без прокрутки */
+.kt .kt-one .kt-who.fit{gap:8px}
+.kt .kt-one .kt-who.fit .kt-pp{min-width:0;width:var(--tw);padding:6px 4px;gap:4px;border-radius:12px}
+.kt .kt-one .kt-who.fit .kt-pp .kt-ring{padding:var(--rp)}
+.kt .kt-one .kt-who.fit .kt-pp .kt-av{width:var(--av);height:var(--av);font-size:calc(var(--av) * .38)}
+.kt .kt-one .kt-who.fit .kt-pp>span:last-child{font-size:var(--fs);max-width:100%}
 .kt-hp-row .kt-hp-bar{height:84px;padding:6px 7px;border-radius:10px;gap:5px;border-width:3px}
 .kt-hp-cell,.kt-hp-seg{border-radius:5px}
 .kt-hp-cell.boss{width:56px;font-size:24px}
@@ -3630,12 +3636,23 @@ function ktMeHTML(k){
   h+='<div class="kt-foot">'+ktHpHTML(P,done,ci,vi,coach?true:(i=>ktTier(i)===ktTier(ci)))+(side?'<div class="kt-foot-r">'+side+"</div>":"")+"</div>";
   return h+"</section></div>";
 }
+/* подбор размера лиц: самый крупный кружок, при котором все люди ступени влезают в экран под шапкой */
+function ktFit(n){
+  const W=Math.min(1040,window.innerWidth)-28-24-2,H=Math.max(150,window.innerHeight-270);
+  let r=null;
+  for(let a=83;a>=30;a--){
+    const rp=Math.max(3,Math.round(a*.11)),fs=Math.max(11,Math.min(16,Math.round(a*.2))),tw=Math.max(a+rp*2+8,62);
+    const cols=Math.max(1,Math.floor((W+8)/(tw+8))),rows=Math.ceil(n/cols),th=a+rp*2+4+Math.round(fs*1.3)+12;
+    r={a,rp,fs,tw};if(rows*th+(rows-1)*8<=H)break;
+  }
+  return "--av:"+r.a+"px;--rp:"+r.rp+"px;--fs:"+r.fs+"px;--tw:"+r.tw+"px";
+}
 function ktFloorHTML(i){
   const l=kmbLessons()[i],nm=ktNames(),here=ktOnList().filter(k=>kmbInfo(k).ci===i).sort((a,b)=>(nm[a.id]||"").localeCompare(nm[b.id]||"","ru"));
   /* сначала люди на ступени — чтобы каждый нашёл себя без прокрутки, упражнения ниже мелко */
   let h='<div class="kt-sw kt-one"><div class="kt-sbar"><button class="kt-back kt-home" data-kt="tower"><span>← К башне</span></button><small>Блок '+(ktTier(i)+1)+"</small></div>";
   h+='<div class="kt-hero"><i class="kt-num">'+(i+1)+"</i><div><b>"+esc(kmbRank(i))+"</b><span>Ступень "+(i+1)+(l.title?" · "+esc(l.title):"")+(KMB_RANKS[i]?" — "+KMB_RANKS[i][1]:"")+"</span></div></div>";
-  h+='<section class="kt-sec"><div class="kt-sh"><h2>Сейчас здесь</h2>'+(here.length?"<small>Нажми на себя</small>":"")+"</div>"+(here.length?'<div class="kt-who">'+here.map(k=>ktPP(k,nm[k.id]||firstName(k))).join("")+"</div>":'<p class="kt-hint" style="margin:0">Пока никого.</p>')+"</section>";
+  h+='<section class="kt-sec"><div class="kt-sh"><h2>Сейчас здесь</h2>'+(here.length?"<small>Нажми на себя</small>":"")+"</div>"+(here.length?'<div class="kt-who fit" style="'+ktFit(here.length)+'">'+here.map(k=>ktPP(k,nm[k.id]||firstName(k))).join("")+"</div>":'<p class="kt-hint" style="margin:0">Пока никого.</p>')+"</section>";
   const items=l.items.filter(it=>!it.boss).concat(l.items.filter(it=>it.boss));
   h+='<section class="kt-sec kt-list"><h2>Упражнения ступени</h2><div class="kt-tasks">'+items.map(it=>'<div class="kt-task lockd'+(it.boss?" boss":"")+'">'+kmbPill(it)+"<span>"+esc(it.t)+"</span></div>").join("")+"</div></section>";
   return h+"</div>";
@@ -3769,7 +3786,7 @@ document.addEventListener("click",e=>{
     k.kmb.on=true;k.kmb.end="";k.kmb.cur=P[P.length-1].id;k.kmb.pin=k.kmb.cur;KT.view=null;saveKid(k.id,true);ktRefresh();toast("Снова на курсе");
   }
 });
-window.addEventListener("resize",()=>{clearTimeout(ktRsT);ktRsT=setTimeout(()=>{if(S.ready&&S.view==="kmb"&&!S.gKids&&!S.open&&S.kmbSeg!=="prog")renderKmb();},200);});
+window.addEventListener("resize",()=>{clearTimeout(ktRsT);ktRsT=setTimeout(()=>{if(S.ready&&S.view==="kmb"&&!S.gKids&&!S.open&&S.kmbSeg!=="prog")renderKmb();const ks=document.getElementById("ktSheet");if(ks&&!ks.hidden&&KT.floor!=null&&!KT.me)ktRenderSheet();},200);});
 
 /* картинки: фон, плиты, знамёна, медальоны. Листы вшиты в код и режутся здесь же.
    У плиты отдельно края, середина и центр с ромбом — плита растягивается на любой этаж без искажений.
