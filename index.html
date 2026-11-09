@@ -587,6 +587,29 @@ h2.foldh.open::after{transform:translateY(1px) rotate(-135deg)}
 .ticks i svg{width:12px;height:12px}
 .ticks i.u{background:var(--ok);border-color:var(--ok)}
 .ticks i.x{background:var(--accent);border-color:var(--accent)}
+.ticks i.d{width:44px;height:30px;font-size:12px;color:var(--muted);font-weight:600}
+.ticks i.d b{color:#fff;font-weight:700;font-size:12px}
+.qpay .btn.wide{width:100%;margin:2px 0 4px}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:2px 0 4px}
+.qb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--ok);background:var(--surface2);color:var(--ink);min-width:0;font:inherit;cursor:pointer}
+.qb b{font-size:15.5px;font-weight:700;line-height:1.2}
+.qb small{font-size:12.5px;color:var(--muted);line-height:1.25}
+.qb.arm{background:var(--accent);border-color:var(--accent)}
+.qb.arm b,.qb.arm small{color:#fff}
+.qb.empty{border:1.5px dashed var(--line);background:transparent}
+.qb.empty b{color:var(--muted)}
+.pform{border-top:1px solid var(--line);margin-top:4px;padding-top:10px}
+.pform h3{margin:0 0 10px;font-size:17px}
+.pform .pmore{margin-top:6px;align-items:center}
+.pform .pmore small{color:var(--muted);font-size:12.5px;margin-right:2px}
+.kmbjoinsm{margin-left:auto;white-space:nowrap;flex:none}
+.pokrow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13px;color:var(--muted);line-height:1.3}
+.pokrow .btn{flex:none;margin:0}
+.pokrow span{flex:1;min-width:0}
+.pokrow .link{flex:none;font-size:13px}
+.pfh{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+.pfsum{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:4px 0 10px;font-size:14.5px}
+.qpay .btn.arm{background:var(--accent);border-color:var(--accent);color:#fff}
 .kinds{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .kind{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface2)}
 .kind .box{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
@@ -1371,6 +1394,10 @@ body.kl-dragging{user-select:none;-webkit-user-select:none}
 .tg-k .pills{flex-wrap:wrap;justify-content:center;gap:3px;max-width:100%;min-height:17px}
 .tg-k .pill{min-width:17px;height:17px;padding:0 5px;border-radius:9px;font-size:10.5px}
 .tg-k .pill.kmb{font-size:10px}
+.tg-avw{position:relative;width:100%;max-width:96px;display:flex;justify-content:center}
+.tg-avw .pills{position:absolute;left:0;right:0;bottom:-3px;min-height:0;display:flex;justify-content:center;pointer-events:none}
+.tg-avw .pills:empty{display:none}
+.tg-avw .pill{pointer-events:auto;box-shadow:0 0 0 2px var(--surface)}
 .tg-how{color:var(--muted);font-size:13px;margin:8px 2px 0}
 /* у каждого своя ячейка: едва заметные линии сетки вместо промежутков (место то же: 14px/6px → поля 7px/3px); пришёл — ячейка подсвечена зелёным вместо галочки */
 .tg-grid{gap:0;clip-path:inset(1px 0 0 1px)}
@@ -1384,7 +1411,7 @@ body.kl-dragging{user-select:none;-webkit-user-select:none}
 .ad-c.on{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 9%,var(--surface))}
 /* кружок отметки виден всегда (пустой / зелёный), чтобы имя не сдвигалось при отметке; карточки одной высоты */
 .ad-c{min-height:60px;padding:0;overflow:hidden}
-.ad-ck{flex:none;align-self:stretch;width:36px;display:grid;place-items:center;border-right:1px solid var(--line);background:color-mix(in srgb,var(--ink) 3%,transparent)}
+.ad-ck{flex:none;align-self:stretch;width:62px;display:grid;place-items:center;border-right:1px solid var(--line);background:color-mix(in srgb,var(--ink) 3%,transparent)}
 .ad-c.on .ad-ck{border-right-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
 .ad-c .ad-ck .tg-ck{width:24px;height:24px}
 .ad-c .ad-ck .tg-ck svg{width:14px;height:14px}
@@ -1418,6 +1445,23 @@ body.kl-dragging{user-select:none;-webkit-user-select:none}
 .ad-c .goal-t{font-size:0}.ad-c .goal-t b{font-size:16px}
 .ad-c .goal-t.none::before{content:"?";font-size:15px;font-weight:600}
 .ad-c .medal{width:20px;height:20px}
+.tg-sub{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;max-width:92px;margin-top:2px;padding:3px 3px 4px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);line-height:1.1;text-align:center;color:var(--ink);cursor:pointer}
+.tg-sub small{font-size:10px;font-weight:500;color:var(--muted);white-space:nowrap}
+.tg-sub b{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+.tg-sub.warn{background:color-mix(in srgb,#E9B949 16%,var(--surface2));border-color:color-mix(in srgb,#E9B949 45%,var(--line))}.tg-sub.warn small{color:#D9B866}
+.tg-sub.bad{background:color-mix(in srgb,#E5352B 16%,var(--surface2));border-color:color-mix(in srgb,#E5352B 45%,var(--line))}.tg-sub.bad small{color:#E8908A}
+.tg-sub.none{background:transparent;border-style:dashed}.tg-sub.none b{font-family:var(--body);font-size:13px;color:var(--muted)}
+.tg-nm b,.tg-nm small{min-height:1.2em}.tg-k .tg-sub+.pills:empty{display:none}
+.pill.tsub{background:var(--surface2);color:var(--ink);border:1px solid var(--line);white-space:nowrap}
+.pill.tsub.warn{background:var(--l-gold);border-color:var(--l-gold);color:#1B1B1B}
+.pill.tsub.bad{background:var(--accent);border-color:var(--accent);color:#fff}
+.pill.tsub.none{color:var(--muted);border-style:dashed}
+.ad-sub{flex:none;align-self:stretch;width:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-left:1px solid var(--line);background:var(--surface2);text-align:center;line-height:1.1}
+.ad-sub small{font-size:10.5px;color:var(--muted)}
+.ad-sub b{font-family:var(--display);font-size:16px;font-weight:700;color:var(--ink)}
+.ad-sub.warn{background:color-mix(in srgb,var(--l-gold) 22%,var(--surface2))}.ad-sub.warn b{color:var(--l-gold)}
+.ad-sub.bad{background:color-mix(in srgb,var(--accent) 20%,var(--surface2))}.ad-sub.bad b{color:var(--accent)}
+.ad-sub.none b{font-size:13px;color:var(--muted)}
 .ad-cols .tg-wl{margin:0 4px}
 .tg-edit{margin-left:auto;align-self:center;display:grid;place-items:center;min-width:38px;height:38px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:14px;font-weight:600}
 .tg-edit svg{width:18px;height:18px}
@@ -2088,7 +2132,7 @@ function schedGroupsOn(d,gs){const wd=(d.getDay()+6)%7+1;return ((S.sched&&S.sch
 function subEnded(k,s,r){
   if(PACKS[s.type])return r.left<=0;
   if(r.days<=0)return true;if(r.days>10)return false;
-  const gs=s.group?[s.group]:kidGroups(k).filter(g=>!isPersonalGroup(g));
+  const gs=s.group?[s.group]:payGroups(k);
   if(!((S.sched&&S.sched.items)||[]).some(it=>gs.indexOf(it.group)>=0))return false;
   const now=new Date(),t=todayISO(),nm=now.getHours()*60+now.getMinutes();
   for(let i=0;i<r.days;i++){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+i);
@@ -2138,9 +2182,9 @@ const KIND_HINT={month:"Платит за месяц, ходит сколько 
 const COUNTS=[4,5,8,10,12];
 function miniGroupId(){const g=groups().find(x=>x.id==="gmini")||groups().find(x=>/мини/i.test(x.name||""));return g?g.id:"";}
 function isMiniGroup(id){return !!id&&id===miniGroupId();}
-function realGroups(k){return kidGroups(k).filter(g=>!isMiniGroup(g)&&!isPersonalGroup(g));}
+function realGroups(k){return kidGroups(k).filter(g=>!isMiniGroup(g)&&!isPersonalGroup(g)&&!isFreeGroup(g));}
 function typeForCount(n){return n===5?"five":n===8?"eight":n===10?"ten":"pack";}
-function laneKind(k,s){if(s.group&&isMiniGroup(s.group))return "mini";if(!s.group&&(s.combo||kidGroups(k).filter(g=>!isPersonalGroup(g)).length>1))return "combo";return PACKS[s.type]?"pack":"month";}
+function laneKind(k,s){if(s.group&&isMiniGroup(s.group))return "mini";if(!s.group&&(s.combo||payGroups(k).length>1))return "combo";return PACKS[s.type]?"pack":"month";}
 const typeBtns=(act,cur)=>'<div class="opts" style="margin-bottom:10px">'+PTYPES.filter(t=>t!=="pack"||cur==="pack").map(t=>'<button class="opt'+(cur===t?" on":"")+'" data-act="'+act+'" data-v="'+t+'">'+SUBT[t]+"</button>").join("")+"</div>";
 const rub=n=>(Number(n)||0).toLocaleString("ru-RU")+" ₽";
 function addMonths(st,n){const d=parseD(st);if(!d)return "";const day=d.getDate();const r=new Date(d.getFullYear(),d.getMonth()+n,1);const last=new Date(r.getFullYear(),r.getMonth()+1,0).getDate();r.setDate(Math.min(day,last));return iso(r);}
@@ -2150,18 +2194,132 @@ function lastSub(k){const a=sortedSubs(k);return a.length?a[a.length-1]:null;}
 /* separate packs per group: the latest pack of each group is a "lane"; a pack without group is combined (counts all groups) */
 function subCmp(a,b){return a.start<b.start?-1:a.start>b.start?1:(a.c||0)-(b.c||0);}
 function lanes(k){const by={};sortedSubs(k).filter(o=>o.type!=="once").forEach(o=>{by[o.group||""]=o;});
-  const un=by[""];delete by[""];const gr=Object.values(by);if(!gr.length)return un?[un]:[];
-  const ng=gr.reduce((a,b)=>subCmp(a,b)>=0?a:b);if(un&&subCmp(un,ng)>0)return [un];
-  const mg=kidGroups(k)[0];return gr.sort((a,b)=>(a.group===mg?-1:b.group===mg?1:0));}
+  const un=by[""];delete by[""];const all=Object.values(by),pers=all.filter(o=>isPersonalGroup(o.group)),gr=all.filter(o=>!isPersonalGroup(o.group));let res;
+  if(!gr.length)res=un?[un]:[];
+  else{const ng=gr.reduce((a,b)=>subCmp(a,b)>=0?a:b);if(un&&subCmp(un,ng)>0)res=[un];else{const mg=kidGroups(k)[0];res=gr.sort((a,b)=>(a.group===mg?-1:b.group===mg?1:0));}}
+  return res.concat(pers);}
 function laneGroups(k){const G={};lanes(k).forEach(o=>{if(o.group)G[o.group]=1;});return G;}
 function mainLaneGroup(k){const G=laneGroups(k),mg=kidGroups(k)[0];return G[mg]?mg:(Object.keys(G)[0]||"");}
-function visitCounts(k,x,sub){if(!sub)return true;const G=laneGroups(k);if(!Object.keys(G).length)return true;const g=x.group||"";
+function visitCounts(k,x,sub){if(isFreeGroup(x.group||""))return false;if(!sub)return true;if(k.onceGroups&&k.onceGroups.indexOf(x.group||"")>=0)return false;const G=laneGroups(k);if(!Object.keys(G).length)return true;const g=x.group||"";
   if(sub.group){if(g===sub.group)return true;return !G[g]&&sub.group===mainLaneGroup(k);}return !G[g];}
-function subLabel(p){return (PACKS[p.type]&&p.count!=null?p.count+" "+plural(p.count,["занятие","занятия","занятий"]):SUBT[p.type]||"Месяц")+(p.combo?" · комбинированный":"")+(p.group&&p.type!=="once"?" · "+groupName(p.group):"");}
-function visitsSince(k,start,sub){const per={};Object.values(S.sessions).forEach(s=>{if(VIS_DONE&&!sessionDone(s))return;if(s.date>=start&&s.present&&s.present.indexOf(k.id)>=0&&visitCounts(k,s,sub))per[s.date]=(per[s.date]||0)+1;});
+function subLabel(p){if(isFix(p))return "Поправка: осталось "+(p.count||0)+(p.group?" · "+groupName(p.group):"");return (PACKS[p.type]&&p.count!=null?p.count+" "+plural(p.count,["занятие","занятия","занятий"]):SUBT[p.type]||"Месяц")+(p.dur?" по "+durName(p.dur):"")+(p.combo?" · комбинированный":"")+(p.fromFirst?" · с первой тренировки":"")+(p.group&&p.type!=="once"?" · "+groupName(p.group):"");}
+function visitsSince(k,start,sub,until){const per={};Object.values(S.sessions).forEach(s=>{if(VIS_DONE&&!sessionDone(s))return;if(s.date>=start&&(!until||s.date<=until)&&s.present&&s.present.indexOf(k.id)>=0&&visitCounts(k,s,sub))per[s.date]=(per[s.date]||0)+1;});
   (k.subs||[]).forEach(o=>{if(o.type==="once"&&per[o.start])per[o.start]--;}); // visit paid separately that day is not taken from the pack
   let n=0;Object.values(per).forEach(v=>{n+=Math.max(0,v);});return n;}
 function dn(n){return n+" "+plural(n,["день","дня","дней"]);}
+/* бесплатные группы (инж): посещения не считаются, оплата не нужна */
+const FREE_GROUPS=["gmuszlebuyycb"];
+function isFreeGroup(g){if(!g)return false;if(FREE_GROUPS.indexOf(g)>=0)return true;const x=groups().find(y=>y.id===g);return !!(x&&/^инж/i.test((x.name||"").trim()));}
+function freeOnly(k){const gs=kidGroups(k);return gs.length>0&&gs.every(isFreeGroup)&&!(k.subs||[]).length;}
+function payGroups(k){return kidGroups(k).filter(g=>!isPersonalGroup(g)&&!isFreeGroup(g)&&!(k.onceGroups||[]).includes(g));}
+/* цены по группам: подставляются, если у ученика ещё не было такой оплаты */
+const PRICE={g58:{eight:7500,month:5000},g913:{eight:7000,month:7000},gmuszk7kmdlwm:{eight:6000,month:6000},gmuszklv50ar7:{eight:6000,month:6000},gmini:{pack4:4800}};
+function groupPrice(g,type,count){const p=PRICE[g];if(!p)return 0;if(type==="month")return p.month||0;if(count===4)return p.pack4||0;if(count===8)return p.eight||0;return 0;}
+/* поправка остатка (бывшие «сверки»): не оплата, а «после этого дня осталось N» */
+function isFix(s){return !!s&&(!!s.fix||(!(Number(s.amount)||0)&&/^Сверка/i.test(s.note||"")));}
+function nextDay(d){const x=parseD(d);x.setDate(x.getDate()+1);return iso(x);}
+function fixBase(k,s){const all=sortedSubs(k).filter(x=>x!==s&&!isFix(x)&&PACKS[x.type]&&subCmp(x,s)<=0);const same=all.filter(x=>(x.group||"")===(s.group||""));return same.pop()||(!s.group?all.pop():null)||null;}
+function packTotal(k,s){if(!isFix(s))return s.count!=null?s.count:PACKS[s.type];const b=fixBase(k,s);if(b)return b.count!=null?b.count:PACKS[b.type];
+  if(isMiniGroup(s.group)){let m=s.count||0;sortedSubs(k).forEach(x=>{if(isFix(x)&&(x.group||"")===(s.group||"")&&subCmp(x,s)<=0)m=Math.max(m,x.count||0);});return Math.max(m,4);}
+  return Math.max(s.count||0,PACKS[s.type]);}
+function visitDates(k,from,sub){const per={};Object.values(S.sessions).forEach(s=>{if(VIS_DONE&&!sessionDone(s))return;if(s.date>=from&&s.present&&s.present.indexOf(k.id)>=0&&visitCounts(k,s,sub))per[s.date]=(per[s.date]||0)+1;});
+  (k.subs||[]).forEach(o=>{if(o.type==="once"&&per[o.start])per[o.start]--;});const out=[];Object.keys(per).sort().forEach(d=>{for(let i=0;i<per[d];i++)out.push(d);});return out;}
+/* быстрая оплата «как в прошлый раз» — по одной кнопке на каждый абонемент */
+function quickPays(k){
+  const L=lanes(k),out=[],today=todayISO();
+  L.forEach(s=>{const r=abStatus(k,s);if(r.wait)return;
+    const fb=isFix(s)?fixBase(k,s):s,pk=!!PACKS[s.type],count=pk?r.total:0,type=pk?typeForCount(count):"month",group=s.group||"";
+    const amount=Number(fb&&fb.amount)||groupPrice(group||payGroups(k)[0]||kidGroups(k)[0],type,count);
+    let start=today,over=0;
+    if(pk){over=r.left<0?-r.left:0;if(over)start=backStart(k,over,{group})||today;}
+    else{const d=daysBetween(today,r.due);if(d>=-14&&d<=14)start=r.due;}
+    out.push({type,count,group,combo:!!(s.combo||(fb&&fb.combo)),amount,start,over,dur:(fb&&fb.dur)||""});});
+  if(!out.length){const P=payDefaults(k);if(P.type!=="once")out.push({type:P.type,count:P.count||0,group:P.group||"",combo:P.kind==="combo",amount:Number(P.amount)||0,start:P.start,over:0});}
+  return out;
+}
+function qLabel(k,q,many){return ((many>1||isPersonalGroup(q.group))&&q.group?groupName(q.group)+": ":"")+(q.count?q.count+" "+plural(q.count,["занятие","занятия","занятий"]):"месяц")+(q.dur?" по "+durName(q.dur):"")+" за "+(q.amount?rub(q.amount):"? ₽")+" · "+(q.start===todayISO()?"сегодня":"с "+fmtShort(q.start))+(q.over?" ("+q.over+" уже отходил)":"");}
+function quickPayHTML(k){
+  const Q=quickPays(k);let h='<div class="qpay">';
+  h+='<div class="qgrid">';
+  Q.forEach((q,i)=>{const arm=S.qArm===k.id+"|"+i,pers=isPersonalGroup(q.group),pg=plainGroups(k);
+    const top=q.group?(pers?"Персоналка":groupName(q.group)):(q.combo||pg.length>1?"Все группы вместе":pg[0]?groupName(pg[0]):"Персоналка");
+    const mid=(q.count?q.count+" "+plural(q.count,["занятие","занятия","занятий"]):"Месяц")+(q.dur?" по "+durName(q.dur):"");
+    const bot=(q.amount?rub(q.amount):"сумма?")+" · "+(q.start===todayISO()?"сегодня":"с "+fmtDM(q.start))+(q.over?" · отходил "+q.over:"");
+    h+='<button class="qb'+(arm?" arm":"")+'" data-act="pquick" data-v="'+i+'">'+(arm?"<small>Нажми ещё раз</small><b>Записать оплату</b><small>"+esc(top+": "+mid+" · "+bot)+"</small>":"<small>"+esc(top)+"</small><b>"+esc(mid)+"</b><small>"+esc(bot)+"</small>")+"</button>";});
+  if(Q.length%2===1)h+='<button class="qb empty" data-act="pfnew"><small>пока нет</small><b>+ Ещё абонемент</b><small>мини, персоналка…</small></button>';
+  h+="</div>";
+  h+='<div class="acts" style="margin-top:8px;flex-wrap:wrap"><button class="btn ghost small" data-act="payopen">Другая сумма или срок</button>';
+  const PL=lanes(k).filter(s=>PACKS[s.type]);
+  if(PL.length)h+='<button class="btn ghost small" data-act="pfixopen">Поправить остаток</button>';
+  h+="</div>";
+  if(S.fixOpen===k.id)h+=PL.map((s,i)=>{const r=abStatus(k,s);return '<div class="fld" style="margin-top:10px"><span>Сколько занятий осталось'+(PL.length>1?" · "+esc(s.group?groupName(s.group):"общий"):"")+'. Сегодняшнее уже вычти. Сейчас в журнале: '+r.left+" из "+r.total+'</span><div style="display:flex;gap:8px"><input id="fixIn'+i+'" inputmode="numeric" value="'+Math.max(0,r.left)+'" style="max-width:90px"><button class="btn small" data-act="pfixsave" data-v="'+i+'">Сохранить</button></div></div>';}).join("");
+  return h+"</div>";
+}
+const DURS=[["30","30 минут"],["60","1 час"],["90","1,5 часа"]],DURN={"30":"30 минут","60":"1 часу","90":"1,5 часа"};
+function durName(d){return DURN[d]||"";}
+function persGroupId(){const g=groups().find(x=>isPersonalGroup(x.id));return g?g.id:"gpers";}
+function plainGroups(k){return kidGroups(k).filter(g=>!isFreeGroup(g)&&!isPersonalGroup(g));}
+function pfGroups(k){const gs=plainGroups(k),out=gs.map(g=>({id:g,name:groupName(g)}));const mg=miniGroupId();if(mg&&gs.indexOf(mg)<0)out.push({id:mg,name:groupName(mg)});if(gs.length>1)out.push({id:"all",name:"Все группы вместе"});out.push({id:persGroupId(),name:"Персоналка"});return out;}
+function pfKey(P){return P.g==="all"?"":P.g;}
+function pfLast(k,P){const one=plainGroups(k).length<=1;
+  return sortedSubs(k).filter(x=>!isFix(x)&&(Number(x.amount)||0)>0).filter(x=>{
+    if(P.w==="once")return x.type==="once";if(x.type==="once")return false;const xg=x.group||"";
+    const gOk=P.g==="all"?!xg:(xg===P.g||(!xg&&(isPersonalGroup(P.g)?!plainGroups(k).length:one&&inGroup(k,P.g))));if(!gOk)return false;
+    if(P.w==="month")return x.type==="month";
+    return !!PACKS[x.type]&&(x.count!=null?x.count:PACKS[x.type])===P.n&&(!x.dur||x.dur===(P.dur||""));}).pop()||null;}
+function pfPrice(k,P){if(P.w==="once")return isMiniGroup(P.g)?1000:0;if(isPersonalGroup(P.g))return 0;const g=P.g==="all"?(payGroups(k)[0]||""):P.g;return groupPrice(g,P.w==="month"?"month":"pack",P.n);}
+function pfLaneOf(k,P){const L=lanes(k),key=pfKey(P);return L.find(x=>(x.group||"")===key)||((isPersonalGroup(P.g)?!plainGroups(k).length:(inGroup(k,P.g)&&plainGroups(k).length<=1))?L.find(x=>!x.group):null)||null;}
+function pfOver(k,P){const s=pfLaneOf(k,P);if(!s)return {n:0};const r=abStatus(k,s);if(r.wait)return {n:0};
+  const n=PACKS[s.type]?(r.left<0?-r.left:0):unpaidVisits(k,s.group||"");return {n,d:n?backStart(k,n,{group:s.group||""}):null,due:PACKS[s.type]?null:r.due};}
+function pfAuto(k,P){if(!P.touched){const l=pfLast(k,P);const a=l?Number(l.amount):pfPrice(k,P);P.amount=a?String(a):"";}
+  const o=pfOver(k,P);if(!P.smTouched)P.sm=(o.n&&o.d&&P.w!=="once")?"back":(P.w==="month"&&o.due&&Math.abs(daysBetween(todayISO(),o.due))<=14)?"due":"today";
+  if(P.sm==="due"&&o.due)P.start=o.due;else if(P.sm==="back"&&o.d)P.start=o.d;else if(P.sm!=="date")P.start=todayISO();}
+function pfLaneDefaults(k,P){const s=pfLaneOf(k,P);if(!s)return;if(PACKS[s.type]){P.w="n";P.n=abStatus(k,s).total;const b=isFix(s)?fixBase(k,s):s;if(b&&b.dur)P.dur=b.dur;}else P.w="month";}
+function pfInit(k){const gs=pfGroups(k),P={kid:k.id,g:gs[0].id,w:"n",n:8,dur:"",amount:"",start:todayISO(),sm:"today",note:""};
+  const s=lanes(k)[0];if(s)P.g=s.group?s.group:(s.combo||plainGroups(k).length>1?"all":plainGroups(k).length?gs[0].id:persGroupId());
+  if(!gs.some(x=>x.id===P.g))P.g=gs[0].id;
+  if(isPersonalGroup(P.g)){P.n=5;P.dur="90";}else if(isMiniGroup(P.g))P.n=4;
+  pfLaneDefaults(k,P);pfAuto(k,P);return P;}
+function pfSetGroup(k,P,g){P.g=g;P.dur="";if(isPersonalGroup(g)){P.w="n";P.n=5;P.dur="90";}else if(isMiniGroup(g)){if(P.w==="month")P.w="n";P.n=4;}else{if(P.w==="n")P.n=8;}
+  pfLaneDefaults(k,P);P.touched=false;P.smTouched=false;pfAuto(k,P);}
+function pfWhat(P){return P.w==="once"?"разовое занятие":P.w==="month"?"месяц":P.n+" "+plural(P.n,["занятие","занятия","занятий"])+(P.dur&&isPersonalGroup(P.g)?" по "+durName(P.dur):"");}
+function pfSummary(k,P){const gs=pfGroups(k),g=gs.find(x=>x.id===P.g);const a=parseInt(String(P.amount||"").replace(/[^0-9]/g,""),10);
+  return (g?g.name:"")+": "+pfWhat(P)+" · "+(isNaN(a)?"сумма не указана":rub(a))+" · "+(P.start===todayISO()?"с сегодня":"с "+fmtDate(P.start));}
+function payFormHTML(k){const P=S.pf,gs=pfGroups(k),pers=isPersonalGroup(P.g),mini=isMiniGroup(P.g);
+  const chip=(act,v,on,txt)=>'<button class="opt'+(on?" on":"")+'" data-act="'+act+'" data-v="'+esc(String(v))+'">'+esc(txt)+"</button>";
+  let h='<div class="pform"><h3>Новая оплата</h3>';
+  h+='<div class="fld"><span>1. За что платит</span><div class="opts">'+gs.map(g=>chip("pfg",g.id,P.g===g.id,g.name)).join("")+"</div></div>";
+  let ws;
+  if(pers)ws=[[1,"1 занятие"],[5,"5 занятий"],[10,"10 занятий"]].map(x=>chip("pfn",x[0],P.w==="n"&&P.n===x[0],x[1]));
+  else if(mini)ws=[chip("pfn",4,P.w==="n"&&P.n===4,"4 занятия"),chip("pfw","once",P.w==="once","Разово")];
+  else ws=[chip("pfn",8,P.w==="n"&&P.n===8,"8 занятий"),chip("pfw","month",P.w==="month","Месяц"),chip("pfw","once",P.w==="once","Разово")];
+  h+='<div class="fld"><span>2. Что купил</span><div class="opts">'+ws.join("")+"</div>";
+  {const main=pers?[1,5,10]:mini?[4]:[8],more=[2,3,4,5,8,10,12].filter(n=>main.indexOf(n)<0);h+='<div class="opts pmore"><small>другое количество:</small>'+more.map(n=>chip("pfn",n,P.w==="n"&&P.n===n,String(n))).join("")+"</div>";}
+  h+="</div>";
+  if(pers)h+='<div class="fld"><span>Длительность занятия</span><div class="opts">'+DURS.map(d=>chip("pfd",d[0],P.dur===d[0],d[1])).join("")+"</div></div>";
+  const l=pfLast(k,P),pr=pfPrice(k,P);
+  const hint=l?"В прошлый раз так платил "+rub(l.amount)+" ("+fmtShort(l.start)+")"+(pr&&pr!==Number(l.amount)?". По прайсу сейчас "+rub(pr):""):pr?"По прайсу "+rub(pr):"Такой оплаты у него ещё не было, впиши сумму";
+  h+='<label class="fld"><span>3. Сумма, ₽</span><input id="pfAmt" inputmode="numeric" value="'+esc(P.amount)+'" placeholder="Сумма"><small class="pfh">'+esc(hint)+"</small></label>";
+  if(P.w!=="once"||true){const o=pfOver(k,P),today=todayISO(),opts=[["today","Сегодня"]];
+    if(P.w==="month"&&o.due&&o.due!==today)opts.push(["due","С "+fmtDM(o.due)+" · день оплаты"]);
+    if(P.w!=="once"&&o.n&&o.d)opts.push(["back","С "+fmtDM(o.d)+" · уже отходил "+o.n+" без оплаты"]);
+    h+='<div class="fld"><span>4. '+(P.w==="once"?"Дата занятия":"С какого дня считать")+'</span><div class="opts">'+opts.map(x=>chip("pfs",x[0],P.sm===x[0],x[1])).join("")+'</div><input type="date" id="pfStart" value="'+esc(P.start)+'" style="margin-top:6px;max-width:200px"></div>';}
+  h+='<label class="fld"><span>Комментарий, если нужно</span><input id="pfNote" value="'+esc(P.note||"")+'" placeholder="Например: брат, скидка, старая цена"></label>';
+  h+='<p class="pfsum">Запишется: <b id="pfSum">'+esc(pfSummary(k,P))+"</b></p>";
+  h+='<div class="acts"><button class="btn small" data-act="pfsave">Записать оплату</button><button class="btn ghost small" data-act="pfcancel">Отмена</button></div>';
+  h+='<p class="pfh" style="margin-top:8px">Дальше кнопка «Оплатил» будет предлагать то же самое.</p></div>';
+  return h;}
+function pfSave(){const k=S.kids[S.open],P=S.pf;if(!k||!P)return;
+  const amt=parseInt(String(P.amount||"").replace(/[^0-9]/g,""),10);if(isNaN(amt)){toast("Впиши сумму");const i=$("#pfAmt");if(i)i.focus();return;}
+  if(!parseD(P.start)){toast("Укажи дату");return;}
+  const rec={id:newId("p"),start:P.start,amount:amt,c:Date.now()};
+  if(P.w==="once")rec.type="once";
+  else{rec.type=P.w==="month"?"month":typeForCount(P.n);if(P.w==="n")rec.count=P.n;if(P.g==="all")rec.combo=true;else rec.group=P.g;if(P.dur&&isPersonalGroup(P.g))rec.dur=P.dur;}
+  const nt=String(P.note||"").trim();if(nt)rec.note=nt;
+  if(P.g!=="all"&&!inGroup(k,P.g)){k.groups=kidGroups(k).concat(P.g);if(!k.group)k.group=k.groups[0];}
+  if(P.w==="once"&&P.g!=="all"&&kidGroups(k).length>1){const og=k.onceGroups||(k.onceGroups=[]);if(og.indexOf(P.g)<0)og.push(P.g);}
+  const msg="Оплата записана: "+pfSummary(k,P);
+  k.subs.push(rec);saveKid(k.id,true);S.pf=null;S.payOpen=null;S.pay=null;renderSheet();toast(msg);}
 function subStatus(k){
   const all=sortedSubs(k);if(!all.length)return null;
   const abs=all.filter(x=>x.type!=="once"),onces=all.filter(x=>x.type==="once");
@@ -2177,40 +2335,52 @@ function subStatus(k){
 function onceStatus(k,lastAb,onces){
   const first=onces.find(o=>!lastAb||o.start>=lastAb.start)||onces[onces.length-1];
   const today=todayISO();let v=0;
-  Object.values(S.sessions).forEach(x=>{if(x.date>=first.start&&x.date<=today&&x.present&&x.present.indexOf(k.id)>=0)v++;});
-  const unpaid=Math.max(0,v-onces.filter(o=>o.start>=first.start).length);
+  const pc=k.payOk||"";
+  Object.values(S.sessions).forEach(x=>{if(x.date>=first.start&&x.date<=today&&(!pc||x.date>pc)&&!isFreeGroup(x.group)&&x.present&&x.present.indexOf(k.id)>=0)v++;});
+  const unpaid=Math.max(0,v-onces.filter(o=>o.start>=first.start&&(!pc||o.start>pc)).length);
   const s=onces[onces.length-1],amt=Number(s.amount)||0;
   const level=unpaid>=2?"bad":unpaid===1?"warn":"ok";
   const zn=n=>n+" "+plural(n,["занятие","занятия","занятий"]);
-  const text="Ходит разово. Последняя оплата "+fmtDate(s.start)+", "+rub(amt)+". "+(unpaid?"Не оплачено: "+zn(unpaid)+".":"Все отмеченные занятия оплачены.");
+  const text="Ходит разово. Последняя оплата "+fmtDate(s.start)+", "+rub(amt)+". "+(unpaid?"Не оплачено: "+zn(unpaid)+".":"Все отмеченные занятия оплачены.")+(pc?" Долги сняты "+fmtDate(pc)+".":"");
   return {s,level,once:true,unpaid,sortKey:-unpaid,expect:unpaid*amt,short:"₽ не опл. "+unpaid,line:"не оплачено "+zn(unpaid),text};
 }
+/* «с первой тренировки»: абонемент начинается с первого прихода после оплаты (заплатил, но болеет) */
+function effStart(k,s){if(!s.fromFirst)return s.start;let f=null;Object.values(S.sessions).forEach(x=>{if(x.date>=s.start&&x.present&&x.present.indexOf(k.id)>=0&&visitCounts(k,x,s)&&(!f||x.date<f))f=x.date;});return f;}
+/* «Долгов нет» (k.payOk = дата): всё, что было до этого дня включительно, считается оплаченным */
 function abStatus(k,s){
+  const st0=effStart(k,s),pc=k.payOk||"";
+  if(!st0)return {s,level:"ok",wait:true,left:null,sortKey:999,short:"₽ ждёт",line:"оплачено, ждём первую тренировку",text:"Оплачено "+fmtDate(s.start)+". Абонемент начнётся с первой тренировки."};
+  const fx=isFix(s)&&!!PACKS[s.type],from=fx?nextDay(st0):st0;
+  const hasPc=!!(pc&&pc>=st0),all=visitsSince(k,from,s),pre=hasPc?visitsSince(k,from,s,pc):0,after=all-pre;
   if(PACKS[s.type]){
-    const total=(s.count!=null?s.count:PACKS[s.type]),used=visitsSince(k,s.start,s),left=total-used;
-    const level=left<=0?"bad":left<=1?"warn":"ok";
-    const text=total+" "+plural(total,["занятие","занятия","занятий"])+" с "+fmtDate(s.start)+". "+(left>0?"Пройдено "+used+", осталось "+left+".":left===0?"Все "+total+" пройдены, пора продлевать.":"Все "+total+" пройдены, сверх абонемента: "+(-left)+".");
-    return {s,level,left,sortKey:left,short:left<=0?"₽ закончился":"₽ ост. "+left,line:left<=0?"абонемент закончился":"осталось "+left+" "+plural(left,["занятие","занятия","занятий"]),text};
+    const base=(s.count!=null?s.count:PACKS[s.type]),total=packTotal(k,s),u0=hasPc?Math.min(base,pre)+after:all,left=base-u0,used=total-left;
+    const fb=fx?fixBase(k,s):null,shown=fb?(effStart(k,fb)||fb.start):st0,amt=Number((fb||s).amount)||0,dates=(fb?visitDates(k,shown,s).filter(d=>d<=st0):[]).concat(visitDates(k,from,s));
+    const cl=hasPc&&!after&&left<=0;
+    const level=cl?"ok":left<=0?"bad":left<=1?"warn":"ok";
+    const text=total+" "+plural(total,["занятие","занятия","занятий"])+" с "+fmtDate(shown)+". "+(left>0?"Пройдено "+used+", осталось "+left+".":left===0?"Все "+total+" пройдены, пора продлевать.":"Все "+total+" пройдены, сверх абонемента: "+(-left)+".")+(hasPc?" Долги сняты "+fmtDate(pc)+".":"");
+    return {s,level,left,total,used,dates,shown,amt,fix:fx,sortKey:left,short:left<=0?"₽ закончился":"₽ ост. "+left,line:left<=0?"абонемент закончился":"осталось "+left+" "+plural(left,["занятие","занятия","занятий"]),text};
   }
-  const due=addMonths(s.start,1),d=daysBetween(todayISO(),due);
-  const level=d<0?"bad":d<=3?"warn":"ok";
-  const text="Месяц с "+fmtDate(s.start)+". Следующая оплата "+fmtDate(due)+(d>0?", через "+dn(d)+".":d===0?", сегодня.":", просрочено на "+dn(-d)+".");
-  return {s,level,due,days:d,sortKey:d,short:d<0?"₽ просрочено":d===0?"₽ сегодня":"₽ "+d+" дн",line:d<0?"оплата просрочена на "+dn(-d):d===0?"оплата сегодня":"оплата через "+dn(d),text};
-}
-function subRowsHTML(k){
+  const due=addMonths(st0,1),d=daysBetween(todayISO(),due);
+  const cleared=d<0&&!!pc&&pc>=due&&!after;
+  const level=cleared?"ok":d<0?"bad":d<=3?"warn":"ok";
+  const text="Месяц с "+fmtDate(st0)+". "+(cleared?"Оплата была до "+fmtDate(due)+", долги сняты "+fmtDate(pc)+". Ждём продления.":"Следующая оплата "+fmtDate(due)+(d>0?", через "+dn(d)+".":d===0?", сегодня.":", просрочено на "+dn(-d)+"."));
+  return {s,level,due,days:d,cleared,sortKey:cleared?500:d,short:cleared?"₽ долгов нет":d<0?"₽ просрочено":d===0?"₽ сегодня":"₽ "+d+" дн",line:cleared?"долгов нет":d<0?"оплата просрочена на "+dn(-d):d===0?"оплата сегодня":"оплата через "+dn(d),text};
+}function subRowsHTML(k){
   const L=lanes(k);if(!L.length)return "";const many=kidGroups(k).length>1;
   return '<div class="subrows">'+L.map(s=>{const r=abStatus(k,s),kind=laneKind(k,s);
-    const sub=(kind==="month"||kind==="pack")&&many&&s.group?groupName(s.group):kind==="combo"?kidGroups(k).filter(g=>!isPersonalGroup(g)).map(groupName).join(" + "):"";
+    if(r.wait)return '<div class="subrow ok"><div class="sr1"><b>'+KINDS[kind]+'</b><small>оплачено '+esc(fmtShort(s.start))+'</small></div><div class="sr2"><span>начнётся с первой тренировки</span></div></div>';
+    const sub=(kind==="month"||kind==="pack")&&many&&s.group?groupName(s.group):kind==="combo"?payGroups(k).map(groupName).join(" + "):"";
     let right,ticks="";
-    if(PACKS[s.type]){const total=(s.count!=null?s.count:PACKS[s.type]),used=Math.max(0,total-r.left);
+    if(PACKS[s.type]){const total=r.total,used=Math.max(0,Math.min(total,r.used)),over=Math.max(0,-r.left),n=used+over;
       right=r.left>0?'осталось <em>'+r.left+'</em> из '+total:r.left===0?'<em>0</em> · пора продлевать':'сверх <em>'+(-r.left)+'</em>';
-      for(let i=0;i<total;i++)ticks+=i<used?'<i class="u">'+CHECK+'</i>':'<i></i>';
-      for(let i=0;i<-r.left;i++)ticks+='<i class="x">'+CHECK+'</i>';
+      const ds=(r.dates||[]).slice(-n),pad=n-ds.length,lab=i=>i<pad?CHECK:"<b>"+esc(fmtDM(ds[i-pad]))+"</b>";
+      for(let i=0;i<total;i++)ticks+=i<used?'<i class="u d">'+lab(i)+'</i>':'<i class="d">'+(i+1)+'</i>';
+      for(let i=0;i<over;i++)ticks+='<i class="x d">'+lab(used+i)+'</i>';
     }else{const v=visitsSince(k,s.start,s);
-      right=r.days<0?'просрочено <em>'+r.days*-1+'</em> дн':r.days===0?'<em>оплата сегодня</em>':'ещё <em>'+r.days+'</em> дн';
+      right=r.cleared?'<em>долгов нет</em>':r.days<0?'просрочено <em>'+r.days*-1+'</em> дн':r.days===0?'<em>оплата сегодня</em>':'ещё <em>'+r.days+'</em> дн';
       for(let i=0;i<Math.min(v,20);i++)ticks+='<i class="u">'+CHECK+'</i>';
       if(!v)ticks='<small class="hint" style="font-size:12.5px">с '+esc(fmtShort(s.start))+' пока не был</small>';}
-    return '<div class="subrow '+r.level+'"><div class="sr1"><b>'+KINDS[kind]+'</b><small>'+esc((sub?sub+" · ":"")+"с "+fmtShort(s.start)+(PACKS[s.type]?"":" до "+fmtShort(r.due)))+'</small></div><div class="sr2"><div class="ticks">'+ticks+'</div><span>'+right+'</span></div></div>';}).join("")+"</div>";
+    return '<div class="subrow '+r.level+'"><div class="sr1"><b>'+KINDS[kind]+'</b><small>'+esc((sub?sub+" · ":"")+"с "+fmtShort(PACKS[s.type]?r.shown:effStart(k,s))+(PACKS[s.type]?"":" до "+fmtShort(r.due))+((PACKS[s.type]?r.amt:Number(s.amount)||0)?" · "+rub(PACKS[s.type]?r.amt:s.amount):""))+'</small></div><div class="sr2"><div class="ticks">'+ticks+'</div><span>'+right+'</span></div></div>';}).join("")+"</div>";
 }
 function kindDefaults(k,P,kind){
   P.kind=kind;const rg=realGroups(k);
@@ -2241,7 +2411,7 @@ function payDefaults(k,type){
   const P={kid:k.id,type,amount:lt&&lt.amount?String(lt.amount):"",start,group};
   if(type==="once"){P.kind="once";return P;}
   const ls=last&&last.type!=="once"?last:null;P.kind=ls?laneKind(k,ls):"month";P.count=ls&&PACKS[ls.type]?(ls.count!=null&&ls.count>0?ls.count:PACKS[ls.type]):0;
-  if(ls)P.group=ls.group||"";return kindDefaults(k,P,P.kind);
+  if(ls)P.group=ls.group||"";kindDefaults(k,P,P.kind);if(!P.amount){const pr=groupPrice(P.group||payGroups(k)[0]||kidGroups(k)[0],P.type,P.count);if(pr)P.amount=String(pr);}return P;
 }
 /* paid late: start the new subscription from the N-th most recent visit in the journal */
 function visitDays(k,sub){const per={};Object.values(S.sessions).forEach(s=>{if(!sessionDone(s))return;if(s.present&&s.present.indexOf(k.id)>=0&&visitCounts(k,s,sub))per[s.date]=(per[s.date]||0)+1;});
@@ -2250,8 +2420,8 @@ function visitDays(k,sub){const per={};Object.values(S.sessions).forEach(s=>{if(
 function backStart(k,n,sub){if(!n)return todayISO();let c=0;for(const x of visitDays(k,sub)){c+=x.n;if(c>=n)return x.d;}return null;}
 function unpaidVisits(k,group){
   const L=lanes(k),s=L.find(x=>(x.group||"")===(group||""))||L[0];if(!s)return 0;
-  if(PACKS[s.type]){const left=((s.count!=null?s.count:PACKS[s.type]))-visitsSince(k,s.start,s);return left<0?-left:0;}
-  const due=addMonths(s.start,1);let n=0;visitDays(k,s).forEach(x=>{if(x.d>=due)n+=x.n;});return n;
+  if(PACKS[s.type]){const r=abStatus(k,s);return r.left!=null&&r.left<0?-r.left:0;}
+  const es=effStart(k,s);if(!es)return 0;const due=addMonths(es,1);let n=0;visitDays(k,s).forEach(x=>{if(x.d>=due&&!(k.payOk&&x.d<=k.payOk))n+=x.n;});return n;
 }
 function backBtnsHTML(k,P){
   if(P.type==="once")return "";
@@ -2260,7 +2430,7 @@ function backBtnsHTML(k,P){
   for(let n=0;n<=3;n++){const d=backStart(k,n,{group:P.group});
     h+='<button class="opt'+(P.back===n?" on":"")+'" data-act="pback" data-v="'+n+'"'+(d?"":" disabled")+(sug===n&&n&&P.back!==n?' style="border-color:var(--accent)"':"")+'>'+n+" · "+(d?(n?esc(fmtShort(d)):"сегодня"):"нет")+"</button>";}
   h+="</div>";
-  h+='<p class="hint" style="font-size:13px">'+(sug?"По журналу после прошлого абонемента не оплачено: "+sug+". ":"")+(P.back>0?"Абонемент начнётся с "+esc(fmtDate(P.start))+(PACKS[P.type]?", эти "+P.back+" "+plural(P.back,["занятие","занятия","занятий"])+" уже спишутся с него.":", следующая оплата "+esc(fmtDate(addMonths(P.start,1)))+"."):"Нажми, сколько занятий он уже прошёл, и дата встанет сама.")+"</p></div>";
+  h+='<p class="hint" style="font-size:13px">'+(sug?"По журналу после прошлого абонемента не оплачено: "+sug+". ":"")+(P.back>0?"Абонемент начнётся с "+esc(fmtDate(P.start))+(PACKS[P.type]?", эти "+P.back+" "+plural(P.back,["занятие","занятия","занятий"])+" уже спишутся с него.":", следующая оплата "+esc(fmtDate(addMonths(P.start,1)))+"."):"Нажми, сколько занятий он уже прошёл, и дата встанет сама.")+"</p></div>"+firstBtnHTML(!!P.fromFirst,"pfirst");
   return h;
 }
 
@@ -4245,13 +4415,31 @@ function rowSub(k){
 const GOALS=[{id:"comp",ic:"🏆",sh:"турниры",name:"Соревнования",c:"#D9473B"},{id:"self",ic:"🥊",sh:"для себя",name:"Для себя",c:"#6A5ACD"},{id:"fit",ic:"💪",sh:"форма",name:"Физкультура",c:"#2E9E6E"}];
 function goalOf(k){return GOALS.find(g=>g.id===k.goal)||null;}
 function medal(k){if(!hasLeague(k)){const g=goalOf(k);return g?'<span class="medal-w goal-t" style="--gc:'+g.c+'" title="Цель: '+esc(g.name)+'"><b>'+g.ic+"</b>"+esc(g.sh)+"</span>":'<span class="medal-w goal-t none" title="Цель не выбрана">цель?</span>';}if(LG_IMG[k.league])return '<span class="medal-w lgw-'+k.league+'" title="'+esc(league(k.league).name)+'"></span>';const L=league(k.league);return '<span class="medal" style="--lc:'+(hasLeague(k)?L.c:"var(--line)")+'" title="'+esc(hasLeague(k)?L.name:"Без лиги")+'"></span>';}
-function pillsHTML(k){
+function pillsHTML(k,mode){
   const o=k.talks.filter(t=>!t.done);const a=o.filter(t=>t.who!=="parent").length,b=o.filter(t=>t.who==="parent").length;
   const st=k.archived?null:subStatus(k);
   const nbp=isNewbie(k)&&!k.archived?'<span class="pill nb" title="Новенький" data-act="jump" data-id="'+k.id+'" data-v="sec-new">'+(newbieDue(k)?"новый!":"новый")+"</span>":"";
   const kmp="";
-  return '<span class="pills">'+kmp+nbp+(st&&st.level!=="ok"?'<span class="pill pay'+(st.level==="bad"?" bad":"")+'" title="Оплата" data-act="jump" data-id="'+k.id+'" data-v="sec-pay">'+esc(st.short)+"</span>":"")+(a?'<span class="pill kid" title="Поговорить с ребёнком" data-act="jump" data-id="'+k.id+'" data-v="sec-talks">'+a+"</span>":"")+(b?'<span class="pill parent" title="Поговорить с родителем" data-act="jump" data-id="'+k.id+'" data-v="sec-talks">'+b+"</span>":"")+"</span>";
+  return '<span class="pills">'+kmp+nbp+(mode?(mode==="train"?subPill(k):""):st&&st.level!=="ok"?'<span class="pill pay'+(st.level==="bad"?" bad":"")+'" title="Оплата" data-act="jump" data-id="'+k.id+'" data-v="sec-pay">'+esc(st.short)+"</span>":"")+(a?'<span class="pill kid" title="Поговорить с ребёнком" data-act="jump" data-id="'+k.id+'" data-v="sec-talks">'+a+"</span>":"")+(b?'<span class="pill parent" title="Поговорить с родителем" data-act="jump" data-id="'+k.id+'" data-v="sec-talks">'+b+"</span>":"")+"</span>";
 }
+/* «Тренировка»: сколько занятий осталось или до какого числа действует абонемент (у инженеров абонемента нет) */
+function fmtDM(s){const d=parseD(s);return d?String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0"):"";}
+function trainSub(k){
+  if(k.archived||noParents(k)||freeOnly(k)||isFreeGroup(S.group))return null;
+  const L=lanes(k);let st=null;
+  if(L.length>1){const s=L.find(x=>x.group===S.group);if(s)st=abStatus(k,s);}
+  if(!st)st=subStatus(k);
+  const zn=n=>n+" зан.";
+  if(!st)return {level:"none",pill:"нет абон.",top:"абонемент",big:"нет",t2:"абонемента",b2:"нет"};
+  if(st.wait)return {level:"ok",pill:"ждёт 1-ю",top:"с 1-й",big:"трен.",t2:"начнётся с",b2:"1-й трен."};
+  if(st.cleared)return {level:"ok",pill:"долгов нет",top:"долгов",big:"нет",t2:"долгов",b2:"нет"};
+  if(st.once)return {level:st.level,pill:st.unpaid?"не опл. "+st.unpaid:"разово",top:st.unpaid?"не оплач.":"разово",big:st.unpaid?String(st.unpaid):"✓",t2:st.unpaid?"не оплачено":"ходит разово",b2:st.unpaid?zn(st.unpaid):"оплачено"};
+  if(st.left!=null)return {level:st.level,pill:st.left>=0?"ост. "+st.left:"долг "+(-st.left),top:st.left>=0?"осталось":"сверх",big:String(Math.abs(st.left)),t2:st.left>=0?"осталось":"сверх абонем.",b2:zn(Math.abs(st.left))};
+  return {level:st.level,pill:"до "+fmtDM(st.due),top:"до",big:fmtDM(st.due),t2:st.days<0?"просрочен с":"оплачен до",b2:fmtDM(st.due)};
+}
+function subPill(k){const r=trainSub(k);if(!r)return "";return '<span class="pill tsub '+r.level+'" title="Абонемент" data-act="jump" data-id="'+k.id+'" data-v="sec-pay">'+esc(r.pill)+"</span>";}
+function subTile(k){const r=trainSub(k);if(!r)return "";return '<span class="tg-sub '+r.level+'" title="Абонемент" data-act="jump" data-id="'+k.id+'" data-v="sec-pay"><small>'+esc(r.t2)+"</small><b>"+esc(r.b2)+"</b></span>";}
+function subBox(k){const r=trainSub(k);if(!r)return "";return '<span class="ad-sub '+r.level+'"><small>'+esc(r.top)+"</small><b>"+esc(r.big)+"</b></span>";}
 function tgGrid(gid){if(["g58","g913","gmini","gmuszklv50ar7"].indexOf(gid)>=0)return true;const g=groups().find(x=>x.id===gid);return !!g&&/5\s*[–-]\s*8|9\s*[–-]\s*13|мини|выходн/i.test(g.name||"");}
 function toggleAtt(id){
   const sid=sessionId();
@@ -4291,7 +4479,7 @@ function renderTrain(){
     const tgTile=k=>{
       const on=isPresent(k.id);const parts=(k.name||"Без имени").replace(/\s*\(.*?\)\s*/g," ").trim().split(/\s+/);
       const lc=hasLeague(k)?"var(--tg-"+k.league+",var(--line))":"var(--line)";
-      return '<div class="tg-k'+(on?" on":"")+'" style="--lc:'+lc+'"><button class="tg-av" data-act="tgatt" data-id="'+k.id+'" style="--lc:'+lc+'" aria-label="'+esc(k.name||"")+(on?": открыть профиль":": отметить")+'"><span class="tg-in" style="background:'+G_COL[gHash(k.id)%G_COL.length]+'">'+(k.photo?'<img src="'+esc(k.photo)+'" alt="">':esc((parts[0]||"?").charAt(0)))+'</span><span class="tg-ck">'+(S.tgEdit?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>':CHECK)+'</span></button><button class="tg-nm" data-act="open" data-id="'+k.id+'"><b>'+esc(parts[0]||"")+"</b><small>"+esc(parts.slice(1).join(" "))+"</small></button>"+pillsHTML(k)+"</div>";
+      return '<div class="tg-k'+(on?" on":"")+'" style="--lc:'+lc+'"><div class="tg-avw"><button class="tg-av" data-act="tgatt" data-id="'+k.id+'" style="--lc:'+lc+'" aria-label="'+esc(k.name||"")+(on?": открыть профиль":": отметить")+'"><span class="tg-in" style="background:'+G_COL[gHash(k.id)%G_COL.length]+'">'+(k.photo?'<img src="'+esc(k.photo)+'" alt="">':esc((parts[0]||"?").charAt(0)))+'</span><span class="tg-ck">'+(S.tgEdit?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>':CHECK)+'</span></button>'+pillsHTML(k,"ad")+'</div><button class="tg-nm" data-act="open" data-id="'+k.id+'"><b>'+esc(parts[0]||"")+"</b><small>"+esc(parts.slice(1).join(" "))+"</small></button>"+subTile(k)+"</div>";
     };
     // пришедшие — наверху; ватерлиния отделяет тех, кто ещё не пришёл
     h+='<section class="tg-hall'+(S.tgEdit?" edit":"")+'"><div class="tg-grid">'+order.map(tgTile).join("")+'</div></section>';
@@ -4301,7 +4489,7 @@ function renderTrain(){
     const adCard=k=>{
       const on=isPresent(k.id);const parts=(k.name||"Без имени").replace(/\s*\(.*?\)\s*/g," ").trim().split(/\s+/);
       /* слева — широкая зона галочки (отметить), остальная карточка — открыть профиль */
-      return '<div class="ad-c'+(on?" on":"")+'"><button class="ad-ck" data-act="adatt" data-id="'+k.id+'" aria-pressed="'+on+'" aria-label="'+(on?"Снять отметку: ":"Отметить: ")+esc(k.name||"")+'"><span class="tg-ck">'+(S.tgEdit?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>':CHECK)+'</span></button><button class="ad-body" data-act="open" data-id="'+k.id+'" aria-label="Профиль: '+esc(k.name||"")+'"><span class="ad-nm"><span class="ad-top"><b>'+esc(parts[0]||"")+"</b>"+pillsHTML(k)+"</span><small>"+esc(parts.slice(1).join(" "))+"</small></span>"+medal(k)+"</button></div>";
+      return '<div class="ad-c'+(on?" on":"")+'"><button class="ad-ck" data-act="adatt" data-id="'+k.id+'" aria-pressed="'+on+'" aria-label="'+(on?"Снять отметку: ":"Отметить: ")+esc(k.name||"")+'"><span class="tg-ck">'+(S.tgEdit?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>':CHECK)+'</span></button><button class="ad-body" data-act="open" data-id="'+k.id+'" aria-label="Профиль: '+esc(k.name||"")+'"><span class="ad-nm"><span class="ad-top"><b>'+esc(parts[0]||"")+"</b>"+pillsHTML(k,"ad")+"</span><small>"+esc(parts.slice(1).join(" "))+"</small></span>"+subBox(k)+"</button></div>";
     };
     h+='<section class="ad-cols'+(S.tgEdit?" edit":"")+'">'+ks.map(adCard).join("")+"</section>";
   }else
@@ -4470,9 +4658,16 @@ function payEditHTML(k,p){
   const E=S.pe;
   return '<div class="pedit">'+typeBtns("petype",E.type)+
     '<div class="two"><label class="fld"><span>Сумма, ₽</span><input id="peAmt" inputmode="numeric" value="'+esc(E.amount)+'"></label><label class="fld"><span>'+(E.type==="once"?"Дата оплаты":"Начало абонемента")+'</span><input type="date" id="peStart" value="'+esc(E.start)+'"></label></div>'+
-    '<label class="fld"><span>Комментарий</span><input id="peNote" value="'+esc(E.note||"")+'" placeholder="Например: старая цена, персоналка"></label>'+
+    (E.type!=="once"?firstBtnHTML(!!E.fromFirst,"pefirst"):"")+'<label class="fld"><span>Комментарий</span><input id="peNote" value="'+esc(E.note||"")+'" placeholder="Например: старая цена, персоналка"></label>'+
     '<div class="acts"><button class="btn small" data-act="pesave">Сохранить</button><button class="btn ghost small" data-act="pecancel">Отмена</button><button class="link" style="margin-left:auto;color:var(--accent)" data-act="pedel">'+(S.pe.arm?"Точно удалить?":"Удалить оплату")+"</button></div></div>";
 }
+function payOkHTML(k,st){let h="";const bad=st&&st.level!=="ok";
+  if(k.payOk)h+='<div class="pokrow"><span>Долги сняты '+esc(fmtShort(k.payOk))+": всё до этого дня оплачено.</span>"+'<button class="link" data-act="payokundo">Отменить</button></div>';
+  else if(bad)h+='<div class="pokrow"><button class="btn ghost small" data-act="payok">Долгов нет</button><span>Заплатил, а ты не записал? Всё до сегодня станет оплаченным.</span></div>';
+  const og=(k.onceGroups||[]).filter(g=>inGroup(k,g));
+  if(og.length)h+='<div class="pokrow"><span>Разово платит: '+og.map(g=>esc(groupName(g))).join(", ")+". Эти занятия не списываются с абонемента.</span>"+og.map(g=>'<button class="link" data-act="ponceg" data-v="'+esc(g)+'">убрать</button>').join("")+"</div>";
+  return h;}
+function firstBtnHTML(on,act){return '<div class="kinds"><button class="kind'+(on?" on":"")+'" data-act="'+act+'"><i class="box">'+CHECK+'</i><span>Считать с первой тренировки<small>Заплатил, но пока не ходит (болеет). Абонемент начнётся, когда придёт.</small></span></button></div>';}
 function payRowHTML(k,p,showName){
   const editing=S.pe&&S.pe.kid===k.id&&S.pe.id===p.id;
   return '<button class="payrow" data-act="pedit" data-id="'+k.id+'" data-v="'+p.id+'"><time>'+esc(fmtShort(p.start))+"</time><span>"+(showName?esc(k.name||"Без имени")+"<small>"+esc(subLabel(p))+"</small>":esc(subLabel(p)))+(p.note?'<small>'+esc(p.note)+"</small>":"")+"</span><b>"+esc(rub(p.amount))+"</b></button>"+(editing?payEditHTML(k,p):"");
@@ -4481,7 +4676,7 @@ function renderMoney(){
   $("#top").innerHTML=accHead("money");
   let h=offlineBanner();
   const kids=Object.values(S.kids);
-  const all=[];kids.forEach(k=>(k.subs||[]).forEach(s=>all.push({k,s})));
+  const all=[];kids.forEach(k=>(k.subs||[]).forEach(s=>{if(!isFix(s))all.push({k,s});}));
   const now=new Date();const ym=d=>iso(d).slice(0,7);
   const cur=ym(now),prev=ym(new Date(now.getFullYear(),now.getMonth()-1,1));
   const inM=m=>all.filter(x=>x.s.start.slice(0,7)===m);
@@ -4490,7 +4685,7 @@ function renderMoney(){
   const sts=active.map(k=>({k,st:subStatus(k)}));
   const due=sts.filter(x=>x.st&&x.st.level!=="ok").sort((a,b)=>{const la=a.st.level==="bad"?0:1,lb=b.st.level==="bad"?0:1;if(la!==lb)return la-lb;return a.st.sortKey-b.st.sortKey;});
   const soon=sts.filter(x=>x.st&&(x.st.level!=="ok"||(x.st.days!=null&&x.st.days<=14)));
-  const expected=soon.reduce((t,x)=>t+(x.st.once?x.st.expect:(Number(x.st.s.amount)||0)),0);
+  const expected=soon.reduce((t,x)=>t+(x.st.once?x.st.expect:(Number(x.st.amt||x.st.s.amount)||0)),0);
   const bad=sts.filter(x=>x.st&&x.st.level==="bad").length;
   const cm=inM(cur),pm=inM(prev);
   h+='<div class="kpis">';
@@ -4500,7 +4695,7 @@ function renderMoney(){
   h+='<div class="kpi'+(bad?" bad":"")+'"><span>Просрочено или закончилось</span><b>'+bad+'</b><span>'+plural(bad,["ученик","ученика","учеников"])+"</span></div>";
   h+="</div>";
   h+='<div class="grouptitle">Скоро оплата</div>';
-  if(due.length)h+='<div class="list">'+due.map(x=>'<div class="row"><button class="kidbtn" data-act="open" data-id="'+x.k.id+'">'+medal(x.k)+'<span class="kname">'+esc(x.k.name||"Без имени")+"<small>"+esc(x.st.line.charAt(0).toUpperCase()+x.st.line.slice(1))+(x.st.s.amount?", "+esc(rub(x.st.s.amount)):"")+"</small></span>"+pillsHTML(x.k)+"</button></div>").join("")+"</div>";
+  if(due.length)h+='<div class="list">'+due.map(x=>'<div class="row"><button class="kidbtn" data-act="open" data-id="'+x.k.id+'">'+medal(x.k)+'<span class="kname">'+esc(x.k.name||"Без имени")+"<small>"+esc(x.st.line.charAt(0).toUpperCase()+x.st.line.slice(1))+((x.st.amt||x.st.s.amount)?", "+esc(rub(x.st.amt||x.st.s.amount)):"")+"</small></span>"+pillsHTML(x.k)+"</button></div>").join("")+"</div>";
   else h+='<p class="small-note" style="margin-top:0">Ни у кого не подходит срок: до оплаты больше трёх дней и больше одного занятия.</p>';
   const months=[];for(let i=5;i>=0;i--)months.push(ym(new Date(now.getFullYear(),now.getMonth()-i,1)));
   const ms=months.map(m=>({m,v:sum(inM(m))}));const mx=Math.max(1,...ms.map(x=>x.v));
@@ -4577,11 +4772,22 @@ function sheetHTML(k){
   const meta=[a!==null?a+" "+plural(a,["год","года","лет"]):"",tenure(k.since),st.n30+" "+plural(st.n30,["тренировка","тренировки","тренировок"])+" за 30 дней"].filter(Boolean).join(" · ");
   let h='<div class="shead"><div class="wrap"><input class="nm" data-f="name" value="'+esc(k.name)+'" placeholder="Имя и фамилия" aria-label="Имя и фамилия"><button class="btn small" data-act="close">Готово</button></div></div><div class="wrap sbody">';
   h+='<div class="meta">'+esc(meta)+(st.last?" · был "+esc(fmtShort(st.last)):"")+"</div>";
-  if(leaguesByGroup(k)&&S.lgOpen!==k.id){const cur=k.league==="none"?{name:"Без лиги",c:"var(--muted)"}:L;h+='<div class="leagues"><button class="lg on" style="--lc:'+cur.c+'" data-act="lgopen"><i></i>'+esc(cur.name)+'</button><button class="link" style="font-size:14px" data-act="lgopen">Сменить лигу</button></div>';}
+  if(leaguesByGroup(k)&&S.lgOpen!==k.id){const cur=k.league==="none"?{name:"Без лиги",c:"var(--muted)"}:L;h+='<div class="leagues"><button class="lg on" style="--lc:'+cur.c+'" data-act="lgopen"><i></i>'+esc(cur.name)+'</button><button class="link" style="font-size:14px" data-act="lgopen">Сменить лигу</button>'+(!k.archived&&!onKmb(k)&&!kmbGrad(k)?'<button class="btn small kmbjoinsm" data-act="kmbjoin">+ Курс молодого бойца</button>':"")+'</div>';}
   else if(leaguesByGroup(k))h+='<div class="leagues">'+LEAGUES.map(l=>'<button class="lg'+(l.id===k.league?" on":"")+'" style="--lc:'+l.c+'" data-act="league" data-v="'+l.id+'"><i></i>'+l.name+"</button>").join("")+'<button class="lg none'+(k.league==="none"?" on":"")+'" data-act="league" data-v="none"><i></i>Без лиги</button></div>';
   else if(!isAdult(k))h+='<p class="meta" style="margin-top:6px">В '+(kidGroups(k).length>1?"его группах":"группе «"+esc(groupName(kidGroups(k)[0]))+"»")+" лиг нет, поэтому нормативов в карточке нет.</p>";
   if(!hasLeague(k)){const g=goalOf(k);h+='<div class="goalrow"><span>Цель</span>'+GOALS.map(x=>'<button class="chip'+(g&&g.id===x.id?" on":"")+'" style="--gc:'+x.c+'" data-act="goal" data-v="'+x.id+'">'+x.ic+" "+esc(x.name)+"</button>").join("")+"</div>";}
-  if(!k.archived&&!onKmb(k)&&!kmbGrad(k))h+='<button class="btn wide kmbjoinbig" data-act="kmbjoin">+ В курс молодого бойца</button>';
+  if(!freeOnly(k)){const st=subStatus(k);
+  if(!S.pay||S.pay.kid!==k.id)S.pay=payDefaults(k);const P=S.pay;
+  h+='<section class="sec" id="sec-pay"><h2>Оплата'+(st&&st.level!=="ok"?'<small class="'+st.level+'">'+esc(st.once?"не оплачено":st.level==="bad"?(st.left!=null&&st.left<=0?"закончился":"просрочен"):"скоро оплата")+"</small>":"")+"</h2>";
+  {const rows=subRowsHTML(k);h+=rows;if(!rows||(st&&st.once))h+='<p class="substat'+(st&&st.level==="bad"?" bad":"")+'">'+(st?esc(st.text):"Оплат пока нет.")+"</p>";}
+  if(S.payOpen===k.id&&S.pf&&S.pf.kid===k.id)h+=payFormHTML(k);
+  else h+=quickPayHTML(k);
+  h+=payOkHTML(k,st);
+  const hist=sortedSubs(k).reverse().slice(0,12);
+  if(hist.length){const ho=S.payHist===k.id||(S.pe&&S.pe.kid===k.id);h+='<button class="link" style="margin-top:12px;display:block" data-act="payhist">'+(ho?"Скрыть историю оплат":"История оплат ("+sortedSubs(k).length+")")+'</button>';
+  if(ho)h+='<p class="hint" style="font-size:14px;margin:6px 0 4px">Нажми на оплату, чтобы исправить.</p>'+hist.map(p=>payRowHTML(k,p,false)).join("");}
+  h+="</section>";}
+  if(!k.archived&&!onKmb(k)&&!kmbGrad(k)&&!leaguesByGroup(k))h+='<button class="btn wide kmbjoinbig" data-act="kmbjoin">+ В курс молодого бойца</button>';
   if(onKmb(k))h+=secFold("kmb",kmbCardHTML(k));
   if((isAdult(k)||k.lifts.length)&&!hasLeague(k))h+=liftsHTML(k);
 
@@ -4602,22 +4808,6 @@ function sheetHTML(k){
   if((k.tasks||"").trim()){k.ptasks=(k.ptasks||[]).concat(k.tasks.split("\n").map(s=>s.trim()).filter(Boolean).map(s=>({id:newId("pt"),text:s,done:false})));k.tasks="";}
   {const pts=k.ptasks||[];h+='<section class="sec" id="sec-work">'+pts.map(x=>'<div class="talk'+(x.done?" done":"")+'"><button class="norm'+(x.done?" done":"")+'" style="width:auto;padding:0;border:0" data-act="ptDone" data-v="'+esc(x.id)+'" aria-label="Отметить"><span class="box">'+CHECK+'</span></button><span class="t">'+esc(x.text)+'</span><button class="x" data-act="ptDel" data-v="'+esc(x.id)+'" aria-label="Удалить">×</button></div>').join("")+'<div class="adder" style="margin-top:8px"><div class="r"><input id="ptIn" placeholder="Новое задание" maxlength="120"><button class="btn small" data-act="ptAdd">Добавить</button></div></div></section>';}
 
-  {const st=subStatus(k);
-  if(!S.pay||S.pay.kid!==k.id)S.pay=payDefaults(k);const P=S.pay;
-  h+='<section class="sec" id="sec-pay"><h2>Оплата'+(st&&st.level!=="ok"?'<small class="'+st.level+'">'+esc(st.once?"не оплачено":st.level==="bad"?(st.left!=null&&st.left<=0?"закончился":"просрочен"):"скоро оплата")+"</small>":"")+"</h2>";
-  {const rows=subRowsHTML(k);h+=rows;if(!rows||(st&&st.once))h+='<p class="substat'+(st&&st.level==="bad"?" bad":"")+'">'+(st?esc(st.text):"Оплат пока нет.")+"</p>";}
-  if(S.payOpen===k.id){
-  h+=kindPickHTML(k,P);
-  {const kg=kidGroups(k);if(false&&kg.length>1&&P.type!=="once")h+='<div class="fld"><span>За какую группу</span><div class="opts" style="margin-bottom:4px">'+kg.map(g=>'<button class="opt'+(P.group===g?" on":"")+'" data-act="pgroup" data-v="'+esc(g)+'">'+esc(groupName(g))+"</button>").join("")+'<button class="opt'+(!P.group?" on":"")+'" data-act="pgroup" data-v="">Совмещённый</button></div><p class="hint" style="font-size:13px">'+(P.group?"Считаются только занятия в этой группе (и в группах, где у него нет своего абонемента).":"Один абонемент на все группы: считаются все занятия.")+"</p></div>";}
-  h+=backBtnsHTML(k,P);
-  h+='<div class="two"><label class="fld"><span>Сумма, ₽</span><input id="payAmt" inputmode="numeric" value="'+esc(P.amount)+'" placeholder="Сумма"></label><label class="fld"><span>'+(P.type==="once"?"Дата оплаты":"Начало абонемента")+'</span><input type="date" id="payStart" value="'+esc(P.start)+'"></label></div>';
-  h+='<label class="fld"><span>Комментарий, если нужно</span><input id="payNote" value="'+esc(P.note||"")+'" placeholder="Например: старая цена, персоналка"></label>';
-  h+='<button class="btn small" data-act="payadd">Записать оплату</button>';
-  }else h+='<button class="btn small" data-act="payopen">Записать оплату</button>';
-  const hist=sortedSubs(k).reverse().slice(0,12);
-  if(hist.length){const ho=S.payHist===k.id||(S.pe&&S.pe.kid===k.id);h+='<button class="link" style="margin-top:12px;display:block" data-act="payhist">'+(ho?"Скрыть историю оплат":"История оплат ("+sortedSubs(k).length+")")+'</button>';
-  if(ho)h+='<p class="hint" style="font-size:14px;margin:6px 0 4px">Нажми на оплату, чтобы исправить.</p>'+hist.map(p=>payRowHTML(k,p,false)).join("");}
-  h+="</section>";}
   if(kmbGrad(k))h+=kmbCardHTML(k);
 
   if(k.newbie&&k.newbie.on){const v=totalVisits(k.id);
@@ -4682,7 +4872,7 @@ function addPay(){
   const amt=parseInt(String(P.amount||"").replace(/[^0-9]/g,""),10);
   if(isNaN(amt)){toast("Укажи сумму");const i=$("#payAmt");if(i)i.focus();return;}
   if(!parseD(P.start)){toast("Укажи дату начала");return;}
-  const rec={id:newId("p"),type:P.type,start:P.start,amount:amt,c:Date.now()};if(P.type!=="once"&&P.group)rec.group=P.group;if(PACKS[P.type])rec.count=P.count||PACKS[P.type];if(P.kind==="combo")rec.combo=true;const nt=String(P.note||"").trim();if(nt)rec.note=nt;
+  const rec={id:newId("p"),type:P.type,start:P.start,amount:amt,c:Date.now()};if(P.type!=="once"&&P.group)rec.group=P.group;if(PACKS[P.type])rec.count=P.count||PACKS[P.type];if(P.kind==="combo")rec.combo=true;if(P.fromFirst&&P.type!=="once")rec.fromFirst=true;const nt=String(P.note||"").trim();if(nt)rec.note=nt;
   k.subs.push(rec);saveKid(k.id,true);S.pay=null;S.payOpen=null;renderSheet();toast("Оплата записана: "+(KINDS[P.kind]||SUBT[rec.type])+", "+rub(amt));
 }
 /* ---------- база в файле: сохранить и загрузить ----------
@@ -5168,18 +5358,41 @@ document.addEventListener("click",e=>{
       if(S.pay.back&&S.pay.type!=="once"){const d=backStart(k,S.pay.back,{group:S.pay.group});if(d)S.pay.start=d;}renderSheet();} break;
     case "pcount": if(k&&S.pay){S.pay.count=+v||0;kindDefaults(k,S.pay,S.pay.kind);renderSheet();} break;
     case "payadd": addPay(); break;
-    case "payopen": S.payOpen=S.open; renderSheet('#payAmt'); break;
+    case "payok": if(k){k.payOk=todayISO();saveKid(k.id,true);toast("Долгов нет: всё до сегодня считается оплаченным");renderSheet();} break;
+    case "payokundo": if(k){delete k.payOk;saveKid(k.id,true);renderSheet();} break;
+    case "ponceg": if(k){const og=k.onceGroups||(k.onceGroups=[]);const i=og.indexOf(v);if(i>=0)og.splice(i,1);else og.push(v);if(!og.length)delete k.onceGroups;saveKid(k.id,true);renderSheet();} break;
+    case "pfirst": if(S.pay){S.pay.fromFirst=!S.pay.fromFirst;renderSheet();} break;
+    case "pefirst": if(S.pe){S.pe.fromFirst=!S.pe.fromFirst;if(S.open)renderSheet();else render();} break;
+    case "pquick": if(k){const key=k.id+"|"+v;if(S.qArm!==key){S.qArm=key;renderSheet();break;}S.qArm=null;const Q=quickPays(k),q=Q[+v];if(!q)break;
+        if(!q.amount){S.payOpen=S.open;S.pf=pfInit(k);renderSheet('#pfAmt');toast("Впиши сумму");break;}
+        const rec={id:newId("p"),type:q.type,start:q.start,amount:q.amount,c:Date.now()};if(q.group)rec.group=q.group;if(PACKS[q.type])rec.count=q.count||PACKS[q.type];if(q.combo)rec.combo=true;if(q.dur)rec.dur=q.dur;
+        k.subs.push(rec);saveKid(k.id,true);S.pay=null;renderSheet();toast("Оплата записана: "+qLabel(k,q,Q.length));} break;
+    case "pfixopen": S.fixOpen=S.fixOpen===S.open?null:S.open; renderSheet(); break;
+    case "pfixsave": if(k){const L=lanes(k).filter(s=>PACKS[s.type]),s=L[+v],el=$("#fixIn"+v),n=parseInt(el&&el.value,10);if(!s||isNaN(n)||n<0){toast("Укажи число");break;}
+        const r=abStatus(k,s),rec={id:newId("p"),type:typeForCount(r.total),start:todayISO(),amount:0,count:n,fix:true,note:"Поправка остатка",c:Date.now()};if(s.group)rec.group=s.group;if(s.combo)rec.combo=true;
+        k.subs.push(rec);S.fixOpen=null;saveKid(k.id,true);renderSheet();toast("Остаток поправлен: "+n+" из "+r.total);} break;
+    case "payopen": if(k){S.payOpen=S.open;S.pf=pfInit(k);renderSheet();} break;
+    case "pfg": if(k&&S.pf){pfSetGroup(k,S.pf,v);renderSheet();} break;
+    case "pfn": if(k&&S.pf){S.pf.w="n";S.pf.n=+v;S.pf.touched=false;S.pf.smTouched=false;pfAuto(k,S.pf);renderSheet();} break;
+    case "pfw": if(k&&S.pf){S.pf.w=v;S.pf.touched=false;S.pf.smTouched=false;pfAuto(k,S.pf);renderSheet();} break;
+    case "pfd": if(k&&S.pf){S.pf.dur=v;S.pf.touched=false;pfAuto(k,S.pf);renderSheet();} break;
+    case "pfs": if(k&&S.pf){S.pf.sm=v;S.pf.smTouched=true;pfAuto(k,S.pf);renderSheet();} break;
+    case "pfsave": pfSave(); break;
+    case "pfnew": if(k){S.payOpen=S.open;S.pf=pfInit(k);const has=lanes(k).map(x=>x.group||""),one=plainGroups(k).length<=1;
+        const c=pfGroups(k).filter(g=>g.id!=="all"&&has.indexOf(g.id)<0&&!(has.indexOf("")>=0&&one&&inGroup(k,g.id)&&!isPersonalGroup(g.id)));
+        const pick=c.find(g=>isMiniGroup(g.id))||c.find(g=>isPersonalGroup(g.id))||c[0];if(pick)pfSetGroup(k,S.pf,pick.id);renderSheet();} break;
+    case "pfcancel": S.pf=null;S.payOpen=null;renderSheet(); break;
     case "payhist": if(S.payHist===S.open||(S.pe&&S.pe.kid===S.open)){S.payHist=null;S.pe=null;}else S.payHist=S.open; renderSheet(); break;
     case "lgopen": S.lgOpen=S.lgOpen===S.open?null:S.open; renderSheet(); break;
     case "pedit": {const kk=S.kids[id];const p=kk&&kk.subs.find(x=>x.id===v);if(!p)break;
-        if(S.pe&&S.pe.kid===id&&S.pe.id===v)S.pe=null;else S.pe={kid:id,id:v,type:p.type||"month",amount:String(p.amount!=null?p.amount:""),start:p.start,note:p.note||"",arm:false};
+        if(S.pe&&S.pe.kid===id&&S.pe.id===v)S.pe=null;else S.pe={kid:id,id:v,type:p.type||"month",amount:String(p.amount!=null?p.amount:""),start:p.start,note:p.note||"",arm:false,fromFirst:!!p.fromFirst};
         if(S.open)renderSheet();else render();} break;
     case "petype": if(S.pe){S.pe.type=v;S.pe.arm=false;if(S.open)renderSheet();else render();} break;
     case "pecancel": S.pe=null; if(S.open)renderSheet();else render(); break;
     case "pesave": {const E=S.pe;if(!E)break;const kk=S.kids[E.kid];const p=kk&&kk.subs.find(x=>x.id===E.id);if(!p)break;
         const amt=parseInt(String(E.amount||"").replace(/[^0-9]/g,""),10);if(isNaN(amt)){toast("Укажи сумму");break;}
         if(!parseD(E.start)){toast("Укажи дату");break;}
-        if(PACKS[E.type]){if(p.type!==E.type)p.count=PACKS[E.type];else p.count=(p.count!=null?p.count:PACKS[E.type]);}else delete p.count;p.type=E.type;p.amount=amt;p.start=E.start;const nt=String(E.note||"").trim();if(nt)p.note=nt;else delete p.note;
+        if(PACKS[E.type]){if(p.type!==E.type)p.count=PACKS[E.type];else p.count=(p.count!=null?p.count:PACKS[E.type]);}else delete p.count;p.type=E.type;p.amount=amt;p.start=E.start;if(E.fromFirst&&E.type!=="once")p.fromFirst=true;else delete p.fromFirst;const nt=String(E.note||"").trim();if(nt)p.note=nt;else delete p.note;
         saveKid(kk.id,true);S.pe=null;toast("Оплата исправлена: "+SUBT[p.type]+", "+rub(amt));if(S.open)renderSheet();else render();} break;
     case "pedel": {const E=S.pe;if(!E)break;if(!E.arm){E.arm=true;if(S.open)renderSheet();else render();break;}
         const kk=S.kids[E.kid];if(kk){kk.subs=kk.subs.filter(x=>x.id!==E.id);saveKid(kk.id,true);}S.pe=null;toast("Оплата удалена");if(S.open)renderSheet();else render();} break;
@@ -5379,7 +5592,7 @@ document.addEventListener("input",e=>{
   }else if(el.id==="peAmt"&&S.pe){S.pe.amount=el.value;
   }else if(el.id==="peNote"&&S.pe){S.pe.note=el.value;
   }else if(el.id==="payNote"&&S.pay){S.pay.note=el.value;
-  }else if(el.id==="payAmt"&&S.pay){S.pay.amount=el.value;
+  }else if(el.id==="pfAmt"&&S.pf){S.pf.amount=el.value;S.pf.touched=true;const kk=S.kids[S.open],sm=$("#pfSum");if(kk&&sm)sm.textContent=pfSummary(kk,S.pf);}else if(el.id==="pfNote"&&S.pf){S.pf.note=el.value;}else if(el.id==="payAmt"&&S.pay){S.pay.amount=el.value;
   }else if(el.id==="sessNote"){
     const sid=sessionId();
     const s=S.sessions[sid]||(S.sessions[sid]={date:S.date,group:S.group,present:[],note:""});
@@ -5394,7 +5607,7 @@ document.addEventListener("change",e=>{
   if(el.id==="kTg"){kLoad();KLS.tg=el.value;kMain();return;}
   if(el.id==="kTk"){kLoad();KLS.tk=el.value||null;kMain();return;}
   if(el.id==="date"){if(el.value){S.date=el.value;render();}return;}
-  if(el.id==="payStart"&&S.pay){S.pay.start=el.value;if(S.pay.back!=null){S.pay.back=null;renderSheet();}return;}
+  if(el.id==="pfStart"&&S.pf){if(el.value){S.pf.start=el.value;S.pf.sm="date";S.pf.smTouched=true;renderSheet();}return;}if(el.id==="payStart"&&S.pay){S.pay.start=el.value;if(S.pay.back!=null){S.pay.back=null;renderSheet();}return;}
   if(el.id==="peStart"&&S.pe){S.pe.start=el.value;return;}
   if(el.dataset.c&&S.open&&S.kids[S.open]){saveKid(S.open,true);if(el.dataset.c==="phone"||el.dataset.c==="tg")renderSheet();return;}
   if(el.dataset.g){const g=S.journal.groups.find(x=>x.id===el.dataset.g);const v=el.value.trim();if(g&&v){g.name=v;saveJournal();}return;}
@@ -5411,7 +5624,7 @@ document.addEventListener("keydown",e=>{
   else if(el.id==="noteIn"){e.preventDefault();addNote();}
   else if(el.id==="gNew"){e.preventDefault();addGroup();}
   else if(el.dataset&&el.dataset.kp){e.preventDefault();el.blur();}
-  else if(el.id==="payAmt"){e.preventDefault();addPay();}
+  else if(el.id==="pfAmt"){e.preventDefault();pfSave();}else if(el.id==="payAmt"){e.preventDefault();addPay();}
   else if(el.id==="kAddIn"){e.preventDefault();kAddSave();}
   else if(el.id==="kEdT"){e.preventDefault();kEdSave();}
   else if(el.id==="gTaskIn"){e.preventDefault();gAddFromInput(el.dataset.id);}
