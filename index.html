@@ -590,7 +590,26 @@ h2.foldh.open::after{transform:translateY(1px) rotate(-135deg)}
 .ticks i.d{width:44px;height:30px;font-size:12px;color:var(--muted);font-weight:600}
 .ticks i.d b{color:#fff;font-weight:700;font-size:12px}
 .qpay .btn.wide{width:100%;margin:2px 0 4px}
-.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:2px 0 4px}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:2px 0 4px}
+.pbls{display:flex;flex-direction:column;gap:10px;margin:0 0 12px}
+.pbll{font-size:12.5px;color:var(--muted);margin:0 0 -6px}
+.pbl{display:grid;grid-template-columns:minmax(0,1fr) 60px;gap:8px;align-items:end}
+.pbrib{display:flex;gap:6px;overflow-x:auto;align-items:flex-end;padding:2px 0;scrollbar-width:none}
+.pbrib::-webkit-scrollbar{display:none}
+.pbf{flex:none;border:1.5px solid var(--line);border-radius:10px;padding:2px 4px 4px}
+.pbf.cur{border-color:var(--ok)}.pbf.pv{border:1.5px dashed var(--accent)}.pbf.pbx{border-color:transparent;padding-left:0;padding-right:0}
+.pbh{font-size:11px;color:var(--muted);padding:0 2px 3px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pbf.cur .pbh{color:var(--ok)}.pbf.pv .pbh{color:#FF7A70}
+.pbcs{display:flex;gap:3px}
+.pbc{width:38px;height:28px;border-radius:5px;display:grid;place-items:center;font-size:12px;font-style:normal;font-variant-numeric:tabular-nums;color:var(--ink);background:#3A3A44}
+.pbf.cur .pbc.u{background:var(--ok);color:#0B0B0E;font-weight:600}.pbf.pv .pbc.u{background:var(--accent);color:#fff;font-weight:600}
+.pbc.e{background:transparent;border:1px dashed var(--ok);color:var(--ok)}.pbf.pv .pbc.e{border-color:var(--accent);color:#FF7A70}
+.pbc.o{background:transparent;border:1px solid var(--line)}
+.pbc.x{background:transparent;border:1.5px solid var(--accent);color:#FF7A70;font-weight:600}
+.pbc.due{width:auto;padding:0 7px;background:transparent;border:1px solid var(--ok);color:var(--ok)}.pbf.pv .pbc.due{border-color:var(--accent);color:#FF7A70}
+.pbn{font-family:var(--display);font-weight:700;font-size:21px;text-align:center;line-height:1.1;padding-bottom:7px;font-variant-numeric:tabular-nums}
+.pbn.d{font-size:14px}.pbn.ok{color:var(--ok)}.pbn.warn{color:var(--l-gold)}.pbn.bad{color:var(--accent)}
+.pb3{display:flex;gap:6px;margin-top:8px}.pb3 .btn{flex:1;min-width:0;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:6px;padding-right:6px}
 .qb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--ok);background:var(--surface2);color:var(--ink);min-width:0;font:inherit;cursor:pointer}
 .qb b{font-size:15.5px;font-weight:700;line-height:1.2}
 .qb small{font-size:12.5px;color:var(--muted);line-height:1.25}
@@ -1561,6 +1580,7 @@ textarea.kin{resize:none;line-height:1.3;display:block;overflow:hidden}
 .accsec{margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}
 .acch{font-family:var(--display);font-weight:700;font-size:20px;margin:0 2px 2px;line-height:1.15}
 
+.mhrow{padding:7px 0 7px 10px;border-left:3px solid var(--line);margin-top:6px;font-size:14.5px;line-height:1.35}.mhrow small{display:block;color:var(--muted);font-size:12.5px}
 summary.fsum{cursor:pointer;font-weight:600;font-size:17px;padding:4px 0;list-style:none}summary.fsum small{margin-left:8px;color:#888;font-weight:400}details.sec>summary.fsum::-webkit-details-marker{display:none}
 /* game: тематический фон страницы заданий (Алмаз, Мифическая, Легендарная) */
 .g-page.g-th{color:#fff;background-color:#0B0B14}
@@ -1620,6 +1640,14 @@ summary.fsum{cursor:pointer;font-weight:600;font-size:17px;padding:4px 0;list-st
 .jpaneL .kt-sheet .kt-home{left:12px!important;right:auto!important}
 .jpaneR .kt-sheet .kt-home{right:12px!important;left:auto!important}
 .jpane .kt-sheet .kt-sw{padding-top:68px}
+/* 16.11.2026 половины 32-дюймового экрана: сверху место под кнопку возврата (снаружи) и плашку таймера на стыке (внутри), чтобы фото и задания под них не заезжали */
+.jpane .kt-sheet .kt-sw{padding-top:112px}
+.jpane .g-over .g-side{padding-top:112px}
+.jpane .g-over .g-mainp{padding-top:112px}
+.jpane .g-kidp .g-mainp>.g-plq{margin-top:0}
+/* зажатие пальцем на сенсорном экране: без выделения текста и без меню */
+.jpane body,.g-over,.kt-sheet{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.jpane input,.jpane textarea,.g-over input,.g-over textarea,.kt-sheet input,.kt-sheet textarea{-webkit-user-select:text;user-select:text}
 /* экран «Тренировка» 15.11.2026: таблица — № и имя | галочка | дни группы слева направо | абонемент */
 .jt{--jt-bad:#F0544A;--jt-warn:#D9A520;--jt-tint:#132A20;margin-top:8px;overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);max-width:100%;width:fit-content}
 .jt table{border-collapse:separate;border-spacing:0;font-size:13px;font-variant-numeric:tabular-nums}
@@ -1665,7 +1693,7 @@ summary.fsum{cursor:pointer;font-weight:600;font-size:17px;padding:4px 0;list-st
 .jt .mk svg{width:14px;height:14px}
 .jt .mk.on{background:var(--ok);border-color:var(--ok);color:#0B0B0E}
 .jt .mk.on.debt{background:var(--jt-bad);border-color:var(--jt-bad)}
-.jt .cl{width:24px;height:24px;margin:auto;display:grid;place-items:center;border:0;background:transparent;cursor:pointer;border-radius:7px;padding:0;position:relative;z-index:1}
+.jt .cl{width:24px;height:24px;margin:auto;display:grid;place-items:center;border:0;background:transparent;cursor:default;pointer-events:none;border-radius:7px;padding:0;position:relative;z-index:1}
 .jt .dt{width:10px;height:10px;border-radius:50%;background:var(--ink)}
 .jt .dt.u{background:var(--jt-bad)} .jt .dt.t{background:var(--ok)}
 .jt .dt.pop{animation:jtpop .45s ease-out}
@@ -2415,12 +2443,10 @@ function quickPayHTML(k){
     const mid=(q.count?q.count+" "+plural(q.count,["занятие","занятия","занятий"]):"Месяц")+(q.dur?" по "+durName(q.dur):"");
     const bot=(q.amount?rub(q.amount):"сумма?")+" · "+(q.start===todayISO()?"сегодня":"с "+fmtDM(q.start))+(q.over?" · отходил "+q.over:"");
     h+='<button class="qb'+(arm?" arm":"")+'" data-act="pquick" data-v="'+i+'">'+(arm?"<small>Нажми ещё раз</small><b>Записать оплату</b><small>"+esc(top+": "+mid+" · "+bot)+"</small>":"<small>"+esc(top)+"</small><b>"+esc(mid)+"</b><small>"+esc(bot)+"</small>")+"</button>";});
-  if(Q.length%2===1)h+='<button class="qb empty" data-act="pfnew"><small>пока нет</small><b>+ Ещё абонемент</b><small>мини, персоналка…</small></button>';
+  h+='<button class="qb empty" data-act="pfnew"><small>новый</small><b>+ Абонемент</b><small>мини, персоналка</small></button>';
   h+="</div>";
-  h+='<div class="acts" style="margin-top:8px;flex-wrap:wrap"><button class="btn ghost small" data-act="payopen">Другая сумма или срок</button>';
   const PL=lanes(k).filter(s=>PACKS[s.type]);
-  if(PL.length)h+='<button class="btn ghost small" data-act="pfixopen">Поправить остаток</button>';
-  h+="</div>";
+  h+='<div class="pb3"><button class="btn ghost small" data-act="payopen">Другая сумма</button>'+(PL.length?'<button class="btn ghost small" data-act="pfixopen">Поправить остаток</button>':"")+(k.payOk?"":'<button class="btn ghost small" data-act="payok">Долгов нет</button>')+"</div>";
   if(S.fixOpen===k.id)h+=PL.map((s,i)=>{const r=abStatus(k,s);return '<div class="fld" style="margin-top:10px"><span>Сколько занятий осталось'+(PL.length>1?" · "+esc(s.group?groupName(s.group):"общий"):"")+'. Сегодняшнее уже вычти. Сейчас в журнале: '+r.left+" из "+r.total+'</span><div style="display:flex;gap:8px"><input id="fixIn'+i+'" inputmode="numeric" value="'+Math.max(0,r.left)+'" style="max-width:90px"><button class="btn small" data-act="pfixsave" data-v="'+i+'">Сохранить</button></div></div>';}).join("");
   return h+"</div>";
 }
@@ -2472,6 +2498,43 @@ function pfStripHTML(k,P){
   const still=days.filter(d=>U[d]&&use.indexOf(d)<0&&d<P.start);
   if(still.length)res+=' <span class="bad">Без оплаты останется: '+still.map(fmtDM).join(", ")+".</span>";
   return h+'<p class="pres">'+res+"</p>";
+}
+/* 16.11.2026: полоска оплат в анкете (образец А) — как в бумажном журнале: рамка на каждую оплату с датами занятий,
+   старые серые, текущая зелёная, пустые пунктирные клеточки — сколько осталось, красные — пришёл без оплаты. Справа одно число. */
+function pqRec(q){const rec={id:newId("p"),type:q.type,start:q.start,amount:q.amount,c:Date.now()};if(q.group)rec.group=q.group;if(PACKS[q.type])rec.count=q.count||PACKS[q.type];if(q.combo)rec.combo=true;if(q.dur)rec.dur=q.dur;return rec;}
+function pbLaneHTML(k,r){
+  const kind=r.kind||"group",pc=k.payOk||"",t=todayISO(),kv=jtKindVisits(k,kind,"");
+  const cell=(c,txt)=>'<i class="pbc '+c+'">'+esc(String(txt))+"</i>";
+  const fr=(c,head,body)=>'<div class="pbf '+c+'"><div class="pbh">'+esc(head)+'</div><div class="pbcs">'+body+"</div></div>";
+  const xs=ds=>ds.length?'<div class="pbf pbx"><div class="pbh">&nbsp;</div><div class="pbcs">'+ds.map(d=>cell("x",d)).join("")+"</div></div>":"";
+  const amt=a=>(Number(a)||0)?" · "+(Number(a)).toLocaleString("ru-RU"):"";
+  const pv=r.s&&r.s._pv?" pv":"";
+  let cur="",curA=null,num="",nc=r.level==="bad"?"bad":r.level==="warn"?"warn":"ok";
+  if(r.once){
+    const onces=sortedSubs(k).filter(x=>x.type==="once"&&!isFix(x)&&onceKind(k,x)===kind).slice(-6);
+    onces.forEach(o=>{cur+=fr("past"+(o._pv?" pv":""),fmtDM(o.start)+amt(o.amount),cell("u",fmtDM(o.start)));});
+    cur+=xs(r.unpaid?kv.filter(d=>!pc||d>pc).slice(-r.unpaid).map(fmtDM):[]);
+    curA=onces.length?onces[0].start:"0000";num=r.unpaid?"−"+r.unpaid:"✓";
+  }else if(r.wait){curA=r.s.start;const n=PACKS[r.s.type]?(r.s.count!=null?r.s.count:PACKS[r.s.type]):0;let b="";for(let i=1;i<=n;i++)b+=cell("e",i);if(!n)b=cell("due","с 1-й");
+    cur=fr("cur"+pv,fmtDM(r.s.start)+amt(r.s.amount),b);num="ждёт";nc="ok";
+  }else if(r.left!=null){curA=r.shown;const total=r.total,used=Math.max(0,Math.min(total,r.used)),over=Math.max(0,-r.left),n=used+over,ds=(r.dates||[]).slice(-n),pad=n-ds.length;
+    const lab=i=>i<pad?"✓":fmtDM(ds[i-pad]);let b="";for(let i=0;i<used;i++)b+=cell("u",lab(i));for(let i=used;i<total;i++)b+=cell("e",i+1);
+    const X=[];for(let i=0;i<over;i++)X.push(lab(used+i));
+    cur=fr("cur"+pv,fmtDM(r.shown)+amt(r.amt),b)+xs(X);num=r.left<0?"−"+(-r.left):String(r.left);
+  }else if(r.due){const es=effStart(k,r.s)||r.s.start;curA=es;const v=visitDates(k,es,r.s),pd=v.filter(d=>d<r.due),X=v.filter(d=>d>=r.due&&!(pc&&d<=pc));
+    cur=fr("cur"+pv,fmtDM(es)+amt(r.s.amount),pd.map(d=>cell("u",fmtDM(d))).join("")+cell("due",fmtDM(r.due)))+xs(X.map(fmtDM));num=r.cleared?"✓":fmtDM(r.due);}
+  let h="";const subs=sortedSubs(k).filter(s=>!isFix(s)&&s.type!=="once"&&subCovers(k,s,kind)); // оплата-предпросмотр тоже здесь: на ней кончается прошлая рамка (сама она — текущая, в прошлые не попадёт)
+  subs.forEach((s,i)=>{const a=effStart(k,s)||s.start;if(!a||(curA&&a>=curA))return;const nx=subs[i+1],nxs=nx?(effStart(k,nx)||nx.start):"9999";
+    const v=kv.filter(d=>d>=a&&d<nxs&&d<=t);let b="",X=[];
+    if(PACKS[s.type]){const n=s.count!=null?s.count:PACKS[s.type];v.slice(0,n).forEach(d=>{b+=cell("u",fmtDM(d));});for(let j=v.length;j<n;j++)b+=cell("o","");X=v.slice(n);}
+    else{const due=addMonths(a,1);v.filter(d=>d<due).forEach(d=>{b+=cell("u",fmtDM(d));});X=v.filter(d=>d>=due);}
+    h+=fr("past",fmtDM(a)+amt(s.amount),b)+xs(X.filter(d=>!(pc&&d<=pc)).map(fmtDM));});
+  return '<div class="pbl"><div class="pbrib">'+h+cur+'</div><div class="pbn '+nc+(num.length>3?" d":"")+'">'+esc(num)+"</div></div>";
+}
+function payStripHTML(k,st){
+  if(!st)return '<p class="substat">Оплат пока нет.</p>';
+  const ord={group:0,mini:1,pers:2},L=(st.lanes||[st]).slice().sort((a,b)=>(ord[a.kind]||0)-(ord[b.kind]||0)),many=L.length>1;
+  return '<div class="pbls">'+L.map(r=>(many?'<div class="pbll">'+esc(r.s&&r.s.combo?"Группа + мини":KNAME[r.kind]||"")+"</div>":"")+pbLaneHTML(k,r)).join("")+"</div>";
 }
 /* три числа сверху блока «Оплата»: когда и сколько заплатил, сколько прошёл, сколько осталось */
 function payNumsHTML(k,st){
@@ -2686,6 +2749,34 @@ function mergeMarks(sid,s){
 function setMark(sid,id,on,base){
   const s=S.sessions[sid]||(S.sessions[sid]=base);const mk={on:!!on,t:Date.now()};
   s.marks=Object.assign({},s.marks||{});s.marks[id]=mk;(LM[sid]=LM[sid]||{})[id]=mk;applyMarks(s);saveSession(sid,true,true);
+  logMark(sid,s,id,!!on,mk.t);
+}
+/* история отметок: каждое нажатие — отдельная запись (когда, за какое число, где нажато, с какого устройства). Ничего не перезаписывается */
+let MARK_SRC="";S.mlog=S.mlog||[];
+function devName(){const u=navigator.userAgent||"";return /iPad|Macintosh/.test(u)&&navigator.maxTouchPoints>1?"iPad":/iPhone/.test(u)?"iPhone":/Android/.test(u)?"Android":"компьютер";}
+function logMark(sid,s,id,on,t){
+  const did=t+"_"+id+"_"+Math.random().toString(36).slice(2,7);
+  const e={lid:did,kid:id,sid:sid,date:s.date||sid.split("_")[0],group:s.group||"",on:on,t:t,src:MARK_SRC||"",dev:devName()};
+  S.mlog=[e].concat(S.mlog);
+  if(!S.live)return;
+  enqueue("ml"+did,()=>jRef().collection("marklog").doc(did).set(e)).catch(()=>{});
+}
+document.addEventListener("toggle",e=>{if(e.target&&e.target.id==="mhist")S.mhOpen=e.target.open;},true);
+const MSRC={att:"галочка у имени",tgatt:"аватарка на тренировке",adatt:"галочка у имени",jtatt:"галочка в таблице журнала",attS:"карточка ученика",aimark:"подсказка Claude",jtcell:"клетка с датой"};
+function markHistHTML(k){
+  const L=S.mlog.filter(x=>x.kid===k.id).sort((a,b)=>b.t-a.t);
+  const seen=new Set(L.map(x=>x.sid));
+  // старые отметки, сделанные до появления истории: известно только последнее изменение
+  const old=[];Object.keys(S.sessions).forEach(sid=>{const m=S.sessions[sid].marks&&S.sessions[sid].marks[k.id];if(m&&m.t&&!seen.has(sid))old.push({sid,date:S.sessions[sid].date,group:S.sessions[sid].group,on:!!m.on,t:m.t,src:"",dev:"",old:1});});
+  const all=L.concat(old).sort((a,b)=>b.t-a.t).slice(0,60);
+  let h='<details class="sec" id="mhist"'+(S.mhOpen?" open":"")+'><summary class="fsum">История отметок<small>'+all.length+'</small></summary>';
+  if(!all.length)return h+'<p class="hint" style="margin-top:8px">Пока нет записей. Каждая отметка будет сохраняться сюда: когда поставлена или снята, за какое число и где.</p></details>';
+  h+='<p class="hint" style="font-size:13px;margin:8px 0 4px">Каждое нажатие записывается и не стирается. Жёлтым — отметка за другой день, не в день нажатия. Красным — поставил и снял за пару минут.</p>';
+  h+=all.map((x,i)=>{const d=new Date(x.t),day=iso(d),back=x.date&&x.date!==day;
+    const flip=all.find(y=>y!==x&&y.sid===x.sid&&Math.abs(y.t-x.t)<180000&&y.on!==x.on);
+    const col=flip?"var(--accent)":back?"var(--l-gold)":"var(--line)";
+    return '<div class="mhrow" style="border-left-color:'+col+'"><div><b style="color:'+(x.on?"var(--ok)":"var(--accent)")+'">'+(x.on?"✓ поставил":"✕ снял")+'</b> за '+esc(fmtDM(x.date))+' · '+esc(groupName(x.group))+'</div><small>'+esc(fmtDT(d))+(x.src?" · "+esc(MSRC[x.src]||x.src):"")+(x.dev?" · "+esc(x.dev):"")+(back?" · задним числом":"")+(x.old?" · последнее изменение (до истории)":"")+"</small></div>";}).join("");
+  return h+"</details>";
 }
 function flipMark(sid,id,base){const s=S.sessions[sid]||base;setMark(sid,id,!(s.present&&s.present.indexOf(id)>=0),base);}
 function saveSession(sid,now,att){
@@ -3511,6 +3602,8 @@ async function init(){
     jRef().collection("schedule").onSnapshot(snap=>{let w=null;snap.docs.forEach(d=>{const v=d.data()||{};if(d.id==="week"&&Array.isArray(v.items))w=v;});S.sched=w;if(S.ready&&S.view==="sched")render();},()=>{});
     jRef().collection("library").onSnapshot(snap=>{const n={};snap.docs.forEach(d=>{const v=d.data()||{};if(Array.isArray(v.sections))n[d.id]=v;});S.libs=n;if(S.ready&&S.view==="lib")render();},()=>{});
     jRef().collection("templates").onSnapshot(snap=>{const n={};snap.docs.forEach(d=>{const v=d.data()||{};if(Array.isArray(v.lessons)||Array.isArray(v.blocks))n[d.id]=v;});S.tpls=n;if(S.ready)softRender();if(S.plan)renderPlan();},()=>{});
+    jRef().collection("marklog").orderBy("t","desc").limit(3000).onSnapshot(snap=>{const n=[];snap.docs.forEach(d=>{const v=d.data()||{};if(v.kid&&v.t){v.lid=d.id;n.push(v);}});
+      const ids=new Set(n.map(x=>x.lid));S.mlog=n.concat((S.mlog||[]).filter(x=>!ids.has(x.lid)));if(S.open&&S.mhOpen)renderSheet();},()=>{});
     jRef().collection("sessions").orderBy("date","desc").limit(600).onSnapshot(snap=>{
       const next={};
       snap.docs.forEach(d=>{const v=d.data()||{};next[d.id]={date:v.date||"",group:v.group||"",present:Array.isArray(v.present)?v.present.slice():[],note:v.note||""};if(v.marks&&typeof v.marks==="object")next[d.id].marks=Object.assign({},v.marks);if(v.ai&&typeof v.ai==="object")next[d.id].ai=v.ai;if(v.lesson)next[d.id].lesson=v.lesson;if(v.lessonTpl)next[d.id].lessonTpl=v.lessonTpl;if(v.build&&typeof v.build==="object")next[d.id].build=v.build;if(v.builds&&typeof v.builds==="object")next[d.id].builds=v.builds;SX.add(d.id);});
@@ -3523,6 +3616,8 @@ async function init(){
   }catch(e){goOffline();}
 }
 function onSnapErr(e){if(e&&(e.code==="revoked"||e.code==="not_granted")){S.live=false;}onErr(e);}
+/* 16.11.2026: на сенсорном мониторе с Windows долгое нажатие = правая кнопка мыши. Меню не показываем нигде, кроме полей ввода */
+document.addEventListener("contextmenu",e=>{const t=e.target;if(t&&t.closest&&t.closest("input,textarea,select,[contenteditable]"))return;e.preventDefault();});
 function paneStart(){document.documentElement.classList.add("jpane","jpane"+PANE);gOpenKids("young");}
 /* вкладка «Экран»: две половины с детским режимом и разделительная полоса-канаты посередине. Выход: держать эмблему на полосе 3 секунды */
 const SCR_EMB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h7a4 4 0 0 1 4 4v5a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2z"/><path d="M5 10h6"/><path d="M8 16v4h7v-4"/></svg>';
@@ -5134,7 +5229,7 @@ function jtRow(k,dates,gid,kind,free){
     const cls=[td?"tdy":"",f?(f.cur?"fr cur":"fr"):"",f&&f.m?"frm":"",f&&f.soon?"soon":"",f&&f.s?"frs":"",f&&f.e?"fre":""].filter(Boolean).join(" ");
     if(fu){h+='<td class="'+cls+'">'+(f&&f.cur&&!f.m?'<span class="pj"></span>':"")+"</td>";return;} // месяц — без кружков: важна дата, а не число занятий // будущее: кружок — оплаченное занятие впереди
     const dot=c?'<span class="dt'+(u?" u":td?" t":"")+(td&&S.jtPop===k.id?" pop":"")+'"></span>':'<span class="vd"></span>';
-    h+='<td class="'+cls+'"><button class="cl" data-act="jtcell" data-id="'+k.id+'" data-v="'+d+'" aria-label="'+esc(nm[0]||"")+", "+fmtDM(d)+(c?": снять отметку":": отметить")+'">'+dot+"</button></td>";});
+    h+='<td class="'+cls+'"><span class="cl" aria-label="'+esc(nm[0]||"")+", "+fmtDM(d)+(c?": был":": не был")+'">'+dot+"</span></td>";});
   if(free)h+='<td class="ab"><small>—</small></td>';
   else{const t=trainSub(k,r),soon=r&&r.due&&!r.cleared&&r.days>=0&&r.days<=7; // месяц: за неделю до оплаты — жёлтым
     // две строки: сверху мелко «до / ост. / долг», снизу число или дата
@@ -5380,8 +5475,7 @@ function payEditHTML(k,p){
     '<div class="acts"><button class="btn small" data-act="pesave">Сохранить</button><button class="btn ghost small" data-act="pecancel">Отмена</button><button class="link" style="margin-left:auto;color:var(--accent)" data-act="pedel">'+(S.pe.arm?"Точно удалить?":"Удалить оплату")+"</button></div></div>";
 }
 function payOkHTML(k,st){let h="";const bad=st&&st.level!=="ok";
-  if(k.payOk)h+='<div class="pokrow"><span>Долги сняты '+esc(fmtShort(k.payOk))+": всё до этого дня оплачено.</span>"+'<button class="link" data-act="payokundo">Отменить</button></div>';
-  else if(bad)h+='<div class="pokrow"><button class="btn ghost small" data-act="payok">Долгов нет</button><span>Заплатил, а ты не записал? Всё до сегодня станет оплаченным.</span></div>';
+  if(k.payOk)h+='<div class="pokrow"><span>Долги сняты '+esc(fmtShort(k.payOk))+"</span>"+'<button class="link" data-act="payokundo">Отменить</button></div>';
   const og=(k.onceGroups||[]).filter(g=>inGroup(k,g));
   if(og.length)h+='<div class="pokrow"><span>Разово платит: '+og.map(g=>esc(groupName(g))).join(", ")+". Эти занятия не списываются с абонемента.</span>"+og.map(g=>'<button class="link" data-act="ponceg" data-v="'+esc(g)+'">убрать</button>').join("")+"</div>";
   return h;}
@@ -5497,7 +5591,9 @@ function sheetHTML(k){
   if(!freeOnly(k)){const st=subStatus(k);
   if(!S.pay||S.pay.kid!==k.id)S.pay=payDefaults(k);const P=S.pay;
   h+='<section class="sec" id="sec-pay"><h2>Оплата'+(st&&st.level!=="ok"?'<small class="'+st.level+'">'+esc(st.once?"не оплачено":st.level==="bad"?(st.left!=null&&st.left<=0?"закончился":"просрочен"):"скоро оплата")+"</small>":"")+"</h2>";
-  {const rows=subRowsHTML(k);h+=payNumsHTML(k,st)+rows;if(!rows||(st&&st.once))h+='<p class="substat'+(st&&st.level==="bad"?" bad":"")+'">'+(st?esc(st.text):"Оплат пока нет.")+"</p>";}
+  {let sst=st,tmp=null; // первое нажатие на плитку оплаты: на полоске сразу видно, что спишется (оплата подставляется на время отрисовки и сразу убирается)
+   if(S.qArm&&S.qArm.indexOf(k.id+"|")===0){const q=quickPays(k)[+S.qArm.split("|")[1]];if(q&&q.amount){tmp=pqRec(q);tmp._pv=true;k.subs.push(tmp);sst=subStatus(k);}}
+   try{h+=payStripHTML(k,sst);}finally{if(tmp){const i=k.subs.indexOf(tmp);if(i>=0)k.subs.splice(i,1);}}}
   if(S.payOpen===k.id&&S.pf&&S.pf.kid===k.id)h+=payFormHTML(k);
   else h+=quickPayHTML(k);
   h+=payOkHTML(k,st);
@@ -5533,6 +5629,7 @@ function sheetHTML(k){
     h+=[3].map(st=>{const d=k.newbie["s"+st];return '<button class="norm'+(d?" done":"")+'" data-act="nbstep" data-v="'+st+'"><span class="box">'+CHECK+'</span><span class="t">Написал родителю после '+st+"-го занятия</span>"+(d?"<small>"+esc(fmtShort(d))+"</small>":"")+"</button>";}).join("");
     h+='<p class="hint" style="font-size:14px;margin-top:8px">Журнал напомнит на экране тренировки, когда пройдёт 3-е занятие.</p>'+(kmbEligible(k)?kmbJoinHTML(k):"")+'</section>';}
 
+  h+=markHistHTML(k);
   h+='<details class="sec"><summary class="fsum">Заметки с тренировок<small>'+k.notes.length+'</small></summary><div class="adder" style="margin-top:8px;margin-bottom:6px"><div class="r"><input id="noteIn" placeholder="Что заметил сегодня"><button class="btn small" data-act="noteadd">Записать</button></div></div>';
   if(SAMPLE&&k.notes.length&&!k.ai&&!S.ai["k:"+k.id])h+='<button class="aibtn" data-act="aikid">Разобрать заметки с Claude</button>';
   h+=aiBoxHTML("k:"+k.id);
@@ -5566,7 +5663,7 @@ function sheetHTML(k){
 }
 function renderSheet(focusSel){
   const sh=$("#sheet");const k=S.kids[S.open];if(!k)return;
-  const st=sh.scrollTop;sh.innerHTML=sheetHTML(k);sh.scrollTop=st;
+  const st=sh.scrollTop;sh.innerHTML=sheetHTML(k);sh.scrollTop=st;sh.querySelectorAll(".pbrib").forEach(e=>{e.scrollLeft=e.scrollWidth;});
   sh.querySelectorAll("textarea").forEach(autosize);
   if(focusSel){const el=sh.querySelector(focusSel);if(el)el.focus({preventScroll:true});}
 }
@@ -5937,7 +6034,7 @@ function saveBarHTML(){
   const d=lastExport(),old=!d||Date.now()-d>20*3600000;
   const empty=!Object.keys(S.kids).length;
   const when=d?pad(d.getDate())+"."+pad(d.getMonth()+1)+", "+pad(d.getHours())+":"+pad(d.getMinutes()):"ещё не было";
-  const two=empty||window.JOURNAL_OFFLINE;
+  const two=true; /* «Загрузить» на Главной всегда */
   const auto=AUTO.state==="run"?' <i class="sba">· сохраняю на Диск…</i>':AUTO.state==="err"?' <i class="sba bad">· автосохранение не прошло</i>':(d&&lsGet("journal-last-export-auto")==="1"?' <i class="sba">· авто</i>':"");
   let h='<div class="savewrap"><div class="savebar'+(old&&AUTO.state!=="run"?" old":"")+(two?" two":"")+'"><span>'+(window.JOURNAL_OFFLINE?'<i class="sbo">Офлайн · </i>':"")+'<i class="sbw">Сохранено<i class="sbo"> в файл</i>: </i><b>'+when+"</b>"+auto+"</span>";
   h+='<button class="sbb" data-act="backup">Сохранить</button>';
@@ -6013,6 +6110,7 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("[data-act]");if(!t)return;
   const a=t.dataset.act,id=t.dataset.id,v=t.dataset.v;
   const k=S.open?S.kids[S.open]:null;
+  MARK_SRC=a;setTimeout(()=>{MARK_SRC="";},0);
   switch(a){
     case "view": {if(S.open)closeKid(); if(v!=="game")S.gOpen=null; const acc=v==="stats"||v==="money"||v==="hall",stay=acc&&S.view==="sched"; S.view=v; if(!stay)window.scrollTo(0,0); render(); if(acc&&!stay)accScroll();} break;
     case "gGroup": {if(gsLong){gsLong=false;break;} if(S.open)closeKid(); const now=Date.now(),dbl=gTap&&gTap.v===v&&now-gTap.t<450; gTap=dbl?null:{v,t:now};
@@ -6090,7 +6188,7 @@ document.addEventListener("click",e=>{
     case "pefirst": if(S.pe){S.pe.fromFirst=!S.pe.fromFirst;if(S.open)renderSheet();else render();} break;
     case "pquick": if(k){const key=k.id+"|"+v;if(S.qArm!==key){S.qArm=key;renderSheet();break;}S.qArm=null;const Q=quickPays(k),q=Q[+v];if(!q)break;
         if(!q.amount){S.payOpen=S.open;S.pf=pfInit(k);renderSheet('#pfAmt');toast("Впиши сумму");break;}
-        const rec={id:newId("p"),type:q.type,start:q.start,amount:q.amount,c:Date.now()};if(q.group)rec.group=q.group;if(PACKS[q.type])rec.count=q.count||PACKS[q.type];if(q.combo)rec.combo=true;if(q.dur)rec.dur=q.dur;
+        const rec=pqRec(q);
         k.subs.push(rec);saveKid(k.id,true);S.pay=null;renderSheet();toast("Оплата записана: "+qLabel(k,q,Q.length));} break;
     case "pfixopen": S.fixOpen=S.fixOpen===S.open?null:S.open; renderSheet(); break;
     case "pfixsave": if(k){const L=lanes(k).filter(s=>PACKS[s.type]),s=L[+v],el=$("#fixIn"+v),n=parseInt(el&&el.value,10);if(!s||isNaN(n)||n<0){toast("Укажи число");break;}
