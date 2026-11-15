@@ -1620,6 +1620,91 @@ summary.fsum{cursor:pointer;font-weight:600;font-size:17px;padding:4px 0;list-st
 .jpaneL .kt-sheet .kt-home{left:12px!important;right:auto!important}
 .jpaneR .kt-sheet .kt-home{right:12px!important;left:auto!important}
 .jpane .kt-sheet .kt-sw{padding-top:68px}
+/* экран «Тренировка» 15.11.2026: таблица — № и имя | галочка | дни группы слева направо | абонемент */
+.jt{--jt-bad:#F0544A;--jt-warn:#D9A520;--jt-tint:#132A20;margin-top:8px;overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);max-width:100%;width:fit-content}
+.jt table{border-collapse:separate;border-spacing:0;font-size:13px;font-variant-numeric:tabular-nums}
+.jt th,.jt td{padding:0;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap;height:40px;position:relative}
+.jt tbody tr:last-child td{border-bottom:0}
+.jt thead th{height:auto;padding:5px 0;width:27px;min-width:27px;color:var(--muted);font-weight:500;font-size:11px;line-height:1.25}
+.jt{scrollbar-width:none}.jt::-webkit-scrollbar{display:none}
+/* своя «стопка» слоёв: закреплённые имена не вылезают поверх шапки страницы при прокрутке */
+.jt{position:relative;z-index:0;isolation:isolate}
+/* строки и столбцы фиксированного размера: галочка или исчезнувшая надпись «пропустил» ничего не сдвигают */
+.jt table{table-layout:fixed}
+.jt tbody td{height:44px}
+.jt th.ab,.jt td.ab{width:44px;min-width:44px;max-width:44px;overflow:hidden;padding:0 1px;text-align:center;font-size:12.5px;letter-spacing:-.2px;line-height:1.1}
+.jt td.ab small{display:block;font-size:10px;font-weight:500;color:var(--muted);line-height:1.1;margin-bottom:1px;white-space:nowrap}
+.jt td.ab.warn small,.jt td.ab.bad small{color:inherit;opacity:.8}
+.jt th.kc,.jt td.kc{width:40px;max-width:40px}
+/* таблица на всю ширину, как остальные блоки: имя, галочка и абонемент — постоянной ширины, дни делят остальное поровну */
+.jt{width:100%}
+.jt table{width:100%}
+.jt thead th:not(.nc):not(.kc):not(.ab){width:auto}
+.jt .nc{position:sticky;left:0;z-index:6;background:var(--surface);width:136px;min-width:136px;max-width:136px;text-align:left;padding-left:4px}
+.jt th.fu{opacity:.55}
+/* рамка абонемента: зелёная — текущий, серая — прошлые */
+.jt td.fr::after{content:"";position:absolute;top:6px;bottom:6px;left:0;right:0;border-top:1.5px solid var(--fc);border-bottom:1.5px solid var(--fc);pointer-events:none;z-index:0}
+.jt td.fr{--fc:#5E5C6A} .jt td.fr.cur{--fc:rgba(61,190,122,.75)}
+.jt td.frs::after{left:2px;border-left:1.5px solid var(--fc);border-radius:9px 0 0 9px}
+.jt td.fre::after{right:2px;border-right:1.5px solid var(--fc);border-radius:0 9px 9px 0}
+.jt td.frs.fre::after{border-radius:9px}
+/* месячный абонемент — мягкая залитая полоса до дня оплаты; за неделю до оплаты — жёлтая */
+.jt td.frm::after{border:0!important;background:var(--fb);top:7px;bottom:7px}
+.jt td.frm{--fb:rgba(255,255,255,.05)} .jt td.frm.cur{--fb:rgba(61,190,122,.16)} .jt td.frm.cur.soon{--fb:rgba(217,165,32,.28)}
+.jt .pj{display:block;width:9px;height:9px;margin:auto;border-radius:50%;border:1.5px solid rgba(61,190,122,.8)}
+.jt .nw{display:flex;align-items:center;min-width:0}
+.jt .nw>i{flex:none;width:22px;text-align:right;font-style:normal;font-size:11px;color:var(--muted)}
+.jt .nx{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+.jt .nb{width:100%;text-align:left;background:none;border:0;color:var(--ink);font:inherit;font-size:14px;padding:4px 4px 4px 6px;border-radius:8px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jt .nb b{font-weight:600}
+.jt .nb .td{display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:4px;vertical-align:2px}
+.jt .wb{font:500 11px var(--body);color:var(--jt-warn);background:none;border:0;padding:0 6px 4px;margin-top:-3px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;white-space:nowrap}
+.jt .wb.snz{color:var(--muted)}
+.jt .kc{position:sticky;left:136px;z-index:6;background:var(--surface);width:40px;min-width:40px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.jt .mk{width:26px;height:26px;border-radius:50%;border:2px solid #4A4954;background:transparent;display:grid;place-items:center;cursor:pointer;color:transparent;padding:0;margin:auto}
+.jt .mk svg{width:14px;height:14px}
+.jt .mk.on{background:var(--ok);border-color:var(--ok);color:#0B0B0E}
+.jt .mk.on.debt{background:var(--jt-bad);border-color:var(--jt-bad)}
+.jt .cl{width:24px;height:24px;margin:auto;display:grid;place-items:center;border:0;background:transparent;cursor:pointer;border-radius:7px;padding:0;position:relative;z-index:1}
+.jt .dt{width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.jt .dt.u{background:var(--jt-bad)} .jt .dt.t{background:var(--ok)}
+.jt .dt.pop{animation:jtpop .45s ease-out}
+@keyframes jtpop{0%{transform:scale(0)}60%{transform:scale(1.5);box-shadow:0 0 0 6px rgba(61,190,122,.25)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.jt .dt.pop{animation:none}}
+.jt .vd{width:5px;height:5px;border-radius:50%;background:var(--line)}
+.jt .tdy{background:var(--jt-tint)} .jt th.tdy{color:var(--ok);font-weight:600}
+.jt td.cg::before,.jt td.cr::before{content:"";position:absolute;left:-1px;top:9px;bottom:7px;width:2px;border-radius:1px;z-index:2}
+.jt td.cg::before{background:var(--ok)}
+.jt td.cr::before{background:repeating-linear-gradient(var(--jt-bad) 0 3px,transparent 3px 6px)}
+.jt td.cg.cr::before{background:linear-gradient(var(--jt-bad) 0 50%,var(--ok) 50%)}
+.jt .rb{position:absolute;left:-5px;top:1px;z-index:3;width:10px;height:10px;border-radius:50%;background:var(--ok);color:#0B0B0E;font:700 7px/10px var(--body);text-align:center}
+.jt .ab{border-left:1px solid var(--line);padding:0 8px;text-align:right;font-weight:600;min-width:66px;font-size:12.5px}
+.jt th.ab{font-weight:500}
+.jt .ab small{display:block;font-weight:400;font-size:11px;color:var(--muted);line-height:1.2}
+.jt .ab.warn{color:var(--jt-warn)} .jt .ab.bad{color:var(--jt-bad)}
+.pnums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:6px 0 8px}
+.pnums div{background:var(--surface2);border-radius:12px;padding:8px 10px;min-width:0}
+.pnums small{display:block;font-size:11px;color:var(--muted);line-height:1.2}
+.pnums b{display:block;font-family:var(--display);font-size:16px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnums .bad b{color:#F0544A} .pnums .warn b{color:#D9A520} .pnums .ok b{color:var(--ok)}
+.pnl{font-size:12px;color:var(--muted);margin-top:6px}
+.pstrip{display:flex;overflow-x:auto;background:var(--surface2);border-radius:12px;padding:6px 4px;margin-top:8px}
+.pstrip button{flex:none;width:40px;background:none;border:0;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:2px 0;position:relative;border-radius:8px;font-family:var(--body)}
+.pstrip button.st::before{content:"";position:absolute;left:-1px;top:2px;bottom:2px;width:2px;border-radius:1px;background:var(--ok)}
+.pstrip .l{font-size:9px;font-weight:700;color:var(--ok);height:11px;line-height:11px}
+.pstrip .w{height:12px;display:grid;place-items:center}
+.pstrip .dt{width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.pstrip .dt.n{background:var(--ok)} .pstrip .dt.u{background:#F0544A}
+.pstrip .vd{width:5px;height:5px;border-radius:50%;background:var(--line)}
+.pstrip .nn{font-size:10px;color:var(--ok);height:12px;line-height:12px;font-weight:600}
+.pstrip .dd{font-size:10px;color:var(--muted)}
+.pres{background:#132A20;border-radius:12px;padding:10px 12px;font-size:14px;margin:8px 0}
+.pres .bad{color:#F0544A}
+.jt-snz{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(420px,calc(100% - 32px));background:var(--surface2);border:1px solid var(--line);border-radius:18px;padding:16px;z-index:60;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.jt-snz p{color:var(--muted);font-size:14px;margin:0}
+.jt-snz .o{display:flex;flex-wrap:wrap;gap:6px}
+.jt-snz .o button{font:600 14px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}
+.jt-snz .x{align-self:flex-end;background:none;border:0;color:var(--muted);font:14px var(--body);cursor:pointer;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -2370,6 +2455,35 @@ function pfSetGroup(k,P,g){P.g=g;P.dur="";if(isPersonalGroup(g)){P.w="n";P.n=5;P
 function pfWhat(P){return P.w==="once"?"разовое занятие":P.w==="month"?"месяц":P.n+" "+plural(P.n,["занятие","занятия","занятий"])+(P.dur&&isPersonalGroup(P.g)?" по "+durName(P.dur):"");}
 function pfSummary(k,P){const gs=pfGroups(k),g=gs.find(x=>x.id===P.g);const a=parseInt(String(P.amount||"").replace(/[^0-9]/g,""),10);
   return (g?g.name:"")+": "+pfWhat(P)+" · "+(isNaN(a)?"сумма не указана":rub(a))+" · "+(P.start===todayISO()?"с сегодня":"с "+fmtDate(P.start));}
+/* 15.11.2026: «с какого занятия считать» — нажатием на точку; ниже словами, что спишется сразу и сколько останется */
+function pfStripHTML(k,P){
+  const kind=P.g==="all"?"group":gKind(P.g),sub={group:pfKey(P)||undefined,combo:P.g==="all"},t=todayISO();
+  const V={};visitDays(k,sub).forEach(x=>{if(x.d<=t)V[x.d]=1;});
+  let days=Object.keys(V).sort().slice(-10);if(days.indexOf(P.start)<0&&P.start<=t)days.push(P.start);if(days.indexOf(t)<0)days.push(t);days=days.sort();
+  const r=jtStatus(k,kind),U=jtUnpaid(k,kind,r);
+  const end=P.w==="month"?addMonths(P.start,1):"9999";
+  const cov=days.filter(d=>V[d]&&d>=P.start&&d<end);const cap=P.w==="once"?1:P.w==="month"?99:P.n;const use=cov.slice(0,cap);
+  let h='<div class="pstrip">'+days.map(d=>{const x=parseD(d),c=!!V[d],i=use.indexOf(d),st=d===P.start;
+    return '<button class="'+(st?"st":"")+'" data-act="pfpick" data-v="'+d+'" aria-label="Считать с '+fmtDM(d)+'"><span class="l">'+(st?"старт":"")+'</span><span class="w">'+(c?'<span class="dt'+(i>=0?" n":U[d]?" u":"")+'"></span>':'<span class="vd"></span>')+'</span><span class="nn">'+(i>=0?(P.w==="month"?"✓":i+1):"")+'</span><span class="dd">'+(d===t?"сег.":x.getDate()+"."+String(x.getMonth()+1).padStart(2,"0"))+"</span></button>";}).join("")+"</div>";
+  const zn=n=>n+" "+plural(n,["занятие","занятия","занятий"]);let res="";
+  if(P.w==="month")res="Месяц <b>с "+fmtDM(P.start)+" до "+fmtDM(end)+"</b>."+(use.length?" Уже покрывает: "+use.map(fmtDM).join(", ")+".":"");
+  else if(P.w==="once")res=use.length?"Оплачено занятие <b>"+fmtDM(use[0])+"</b>.":"Оплата за следующее занятие.";
+  else res=(use.length?"Сразу "+(use.length===1?"спишется":"спишутся")+" <b>"+zn(use.length)+"</b>: "+use.map(fmtDM).join(", ")+". ":"Первое занятие — следующая тренировка. ")+"Останется <b>"+Math.max(0,P.n-use.length)+" из "+P.n+"</b>.";
+  const still=days.filter(d=>U[d]&&use.indexOf(d)<0&&d<P.start);
+  if(still.length)res+=' <span class="bad">Без оплаты останется: '+still.map(fmtDM).join(", ")+".</span>";
+  return h+'<p class="pres">'+res+"</p>";
+}
+/* три числа сверху блока «Оплата»: когда и сколько заплатил, сколько прошёл, сколько осталось */
+function payNumsHTML(k,st){
+  if(!st)return "";const L=st.lanes||[st];
+  return L.map(r=>{const many=L.length>1,lab=many?'<div class="pnl">'+esc(r.s&&r.s.combo?"Группа + мини":KNAME[r.kind]||"")+"</div>":"";let a,b,c;
+    if(r.once){const s=r.s||{};a=["оплата "+(s.start&&s.amount?fmtDM(s.start):"—"),s.amount?rub(s.amount):"разово",""];b=["ходит","разово",""];c=[r.unpaid?"не оплачено":"долгов",r.unpaid?zn2(r.unpaid):"нет",r.unpaid?"bad":"ok"];}
+    else if(r.wait){a=["оплата "+fmtDM(r.s.start),r.s.amount?rub(r.s.amount):"",""];b=["прошёл","0",""];c=["начнётся","с 1-й трен.","ok"];}
+    else if(r.left!=null){a=["оплата "+fmtDM(r.shown),r.amt?rub(r.amt):"—",""];b=["прошёл",Math.min(r.used,r.total)+" из "+r.total,""];c=r.left<0?["сверх оплаты",zn2(-r.left),"bad"]:["осталось",zn2(r.left),r.left<=1?"warn":"ok"];}
+    else{const es=effStart(k,r.s)||r.s.start;a=["оплата "+fmtDM(es),r.s.amount?rub(r.s.amount):"—",""];b=["был с "+fmtDM(es),visitsSince(k,es,r.s)+" раз",""];c=r.cleared?["долгов","нет","ok"]:r.days<0?["просрочено",dn(-r.days),"bad"]:["оплачено до",fmtDM(r.due),r.days<=3?"warn":"ok"];}
+    return lab+'<div class="pnums">'+[a,b,c].map(x=>'<div class="'+(x[2]||"")+'"><small>'+esc(x[0])+"</small><b>"+esc(String(x[1]))+"</b></div>").join("")+"</div>";}).join("");
+}
+function zn2(n){return n+" "+plural(n,["занятие","занятия","занятий"]);}
 function payFormHTML(k){const P=S.pf,gs=pfGroups(k),pers=isPersonalGroup(P.g),mini=isMiniGroup(P.g);
   const chip=(act,v,on,txt)=>'<button class="opt'+(on?" on":"")+'" data-act="'+act+'" data-v="'+esc(String(v))+'">'+esc(txt)+"</button>";
   let h='<div class="pform"><h3>Новая оплата</h3>';
@@ -2388,7 +2502,7 @@ function payFormHTML(k){const P=S.pf,gs=pfGroups(k),pers=isPersonalGroup(P.g),mi
   if(P.w!=="once"||true){const o=pfOver(k,P),today=todayISO(),opts=[["today","Сегодня"]];
     if(P.w==="month"&&o.due&&o.due!==today)opts.push(["due","С "+fmtDM(o.due)+" · день оплаты"]);
     if(P.w!=="once"&&o.n&&o.d)opts.push(["back","С "+fmtDM(o.d)+" · уже отходил "+o.n+" без оплаты"]);
-    h+='<div class="fld"><span>4. '+(P.w==="once"?"Дата занятия":"С какого дня считать")+'</span><div class="opts">'+opts.map(x=>chip("pfs",x[0],P.sm===x[0],x[1])).join("")+'</div><input type="date" id="pfStart" value="'+esc(P.start)+'" style="margin-top:6px;max-width:200px"></div>';}
+    h+='<div class="fld"><span>4. '+(P.w==="once"?"Дата занятия":"С какого дня считать")+'</span><div class="opts">'+opts.map(x=>chip("pfs",x[0],P.sm===x[0],x[1])).join("")+'</div>'+pfStripHTML(k,P)+'<input type="date" id="pfStart" value="'+esc(P.start)+'" style="margin-top:6px;max-width:200px"></div>';}
   h+='<label class="fld"><span>Комментарий, если нужно</span><input id="pfNote" value="'+esc(P.note||"")+'" placeholder="Например: брат, скидка, старая цена"></label>';
   h+='<p class="pfsum">Запишется: <b id="pfSum">'+esc(pfSummary(k,P))+"</b></p>";
   h+='<div class="acts"><button class="btn small" data-act="pfsave">Записать оплату</button><button class="btn ghost small" data-act="pfcancel">Отмена</button></div>';
@@ -4938,10 +5052,10 @@ function pillsHTML(k,mode){
 }
 /* «Тренировка»: сколько занятий осталось или до какого числа действует абонемент (у инженеров абонемента нет) */
 function fmtDM(s){const d=parseD(s);return d?String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0"):"";}
-function trainSub(k){
+function trainSub(k,stIn){
   if(k.archived||noParents(k)||freeOnly(k)||isFreeGroup(S.group))return null;
-  const L=lanes(k);let st=null;
-  if(L.length>1){const s=L.find(x=>x.group===S.group);if(s)st=abStatus(k,s);}
+  const L=lanes(k);let st=stIn||null; // stIn — статус абонемента именно этого вида занятий (таблица группы)
+  if(!st&&L.length>1){const s=L.find(x=>x.group===S.group);if(s)st=abStatus(k,s);}
   if(!st)st=subStatus(k);
   const zn=n=>n+" зан.";
   if(!st)return {level:"none",pill:"нет абон.",top:"абонемент",big:"нет",t2:"абонемента",b2:"нет"};
@@ -4955,6 +5069,98 @@ function subPill(k){const r=trainSub(k);if(!r)return "";return '<span class="pil
 function subTile(k){const r=trainSub(k);if(!r)return "";return '<span class="tg-sub '+r.level+'" title="Абонемент" data-act="jump" data-id="'+k.id+'" data-v="sec-pay"><small>'+esc(r.t2)+"</small><b>"+esc(r.b2)+"</b></span>";}
 function subBox(k){const r=trainSub(k);if(!r)return "";return '<span class="ad-sub '+r.level+'"><small>'+esc(r.top)+"</small><b>"+esc(r.big)+"</b></span>";}
 function tgGrid(gid){if(["g58","g913","gmini","gmuszklv50ar7"].indexOf(gid)>=0)return true;const g=groups().find(x=>x.id===gid);return !!g&&/5\s*[–-]\s*8|9\s*[–-]\s*13|мини|выходн/i.test(g.name||"");}
+/* ---------- экран «Тренировка»: таблица посещений и оплат (15.11.2026) ----------
+   Дни — тренировки этой группы, где кто-то был, последние JT_DAYS, плюс выбранный день последним.
+   Зелёная черта с ₽ — начало оплаченного абонемента; красный пунктир — с этого занятия не оплачено; красная точка — занятие без оплаты.
+   В первом столбце черту не рисуем: дата оплаты есть в блоке абонемента. */
+const JT_SIDE=6,JT_MISS=3,JT_CK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+/* дни группы — по расписанию (вкладка «Расписание»); если расписания нет, по дням недели прошлых тренировок. Плюс внеплановые тренировки с отметками.
+   Выбранный день посередине: JT_SIDE прошлых тренировок слева, JT_SIDE будущих справа */
+function jtGroupDays(gid){const s=new Set();((S.sched&&S.sched.items)||[]).forEach(it=>{if(it.group===gid&&it.day)s.add(+it.day);});
+  if(!s.size){const lim=iso(new Date(Date.now()-60*864e5));Object.values(S.sessions).forEach(x=>{if(x.group===gid&&x.date>=lim&&x.present&&x.present.length){const d=parseD(x.date);s.add((d.getDay()+6)%7+1);}});}
+  return s;}
+function jtHeld(d,gid){const s=S.sessions[d+"_"+gid];return !!(s&&s.present&&s.present.length);}
+function jtDates(gid){
+  const W=jtGroupDays(gid),wd=d=>(d.getDay()+6)%7+1,base=parseD(S.date),past=[],fut=[];
+  for(let i=1;i<=90&&past.length<JT_SIDE;i++){const d=new Date(base);d.setDate(d.getDate()-i);const s=iso(d);if(W.has(wd(d))||jtHeld(s,gid))past.unshift(s);}
+  for(let i=1;i<=60&&fut.length<JT_SIDE;i++){const d=new Date(base);d.setDate(d.getDate()+i);if(W.has(wd(d)))fut.push(iso(d));}
+  return past.concat([S.date],fut);} // выбранный день есть всегда: галочка ставится в него, и таблица не раздвигается при отметке
+function prevISO(d){const x=parseD(d);x.setDate(x.getDate()-1);return iso(x);}
+/* рамки оплаченных абонементов, как в бумажном журнале: от оплаты до последнего оплаченного занятия.
+   У текущего пакета остаток занятий раскладывается на будущие дни группы — видно, где абонемент кончится */
+function jtFrames(k,kind,dates,gid,r){
+  const F=[],t=S.date,kv=jtKindVisits(k,kind,"");
+  const fut=dates.filter(d=>d>t||(d===t&&!jtOn(d,gid,k.id)));
+  const subs=sortedSubs(k).filter(s=>!isFix(s)&&s.type!=="once"&&subCovers(k,s,kind));
+  let curA=null;
+  if(r&&!r.once&&r.s){
+    if(r.wait){const n=PACKS[r.s.type]?(r.s.count!=null?r.s.count:PACKS[r.s.type]):0;if(n&&fut.length){curA=fut[0];F.push({a:fut[0],b:fut[n-1]||"9999",cur:1});}else curA=r.s.start;}
+    else if(r.left!=null){curA=r.shown;const over=Math.max(0,-r.left);let b;
+      if(r.left>0)b=fut[r.left-1]||"9999";else{const paid=(r.dates||[]).slice(0,(r.dates||[]).length-over);b=paid[paid.length-1]||curA;}
+      F.push({a:curA,b,cur:1});}
+    else if(r.due){curA=effStart(k,r.s)||r.s.start;F.push({a:curA,b:prevISO(r.due),cur:1,m:1,soon:r.days>=0&&r.days<=7});}
+  }
+  subs.forEach((s,i)=>{const a=effStart(k,s)||s.start;if(!a||(curA&&a>=curA))return;const nx=subs[i+1],nxs=nx?(effStart(k,nx)||nx.start):"9999";
+    let b;if(PACKS[s.type]){const n=s.count!=null?s.count:PACKS[s.type],v=kv.filter(d=>d>=a&&d<nxs);b=v.length?v[Math.min(n,v.length)-1]:a;}
+    else{b=prevISO(addMonths(a,1));if(nxs!=="9999"&&b>=nxs)b=prevISO(nxs);}
+    F.push({a,b,cur:0,m:PACKS[s.type]?0:1});});
+  return F;}
+function jtOn(date,gid,id){const s=S.sessions[date+"_"+gid];return !!(s&&s.present&&s.present.indexOf(id)>=0);}
+function jtStatus(k,kind){const st=subStatus(k);if(!st)return null;if(st.lanes)return st.lanes.find(r=>r.kind===kind)||null;return st.kind===kind?st:null;}
+function jtKindVisits(k,kind,from){const out=[],t=todayISO();Object.values(S.sessions).forEach(x=>{if(x.date>=from&&x.date<=t&&gKind(x.group||"")===kind&&x.present&&x.present.indexOf(k.id)>=0)out.push(x.date);});return out.sort();}
+function jtUnpaid(k,kind,r){
+  const U={};if(!r||r.level==="ok")return U;const pc=k.payOk||"";
+  if(r.once){if(r.unpaid)jtKindVisits(k,kind,"").filter(d=>!pc||d>pc).slice(-r.unpaid).forEach(d=>{U[d]=1;});}
+  else if(r.left!=null){if(r.left<0)(r.dates||[]).slice(r.left).forEach(d=>{U[d]=1;});}
+  else if(r.due&&r.days<0&&!r.cleared)jtKindVisits(k,kind,r.due).filter(d=>!pc||d>pc).forEach(d=>{U[d]=1;});
+  return U;}
+/* сколько прошедших тренировок группы подряд пропустил (считаются только тренировки, где кто-то был) */
+function jtMiss(k,dates,gid){if(jtOn(S.date,gid,k.id))return 0;let n=0;const past=dates.filter(d=>d<S.date&&jtHeld(d,gid));for(let i=past.length-1;i>=0&&!jtOn(past[i],gid,k.id);i--)n++;return n;}
+function jtSnoozed(k){const m=k.missOk;if(!m||!m.why)return null;const lv=lastVisit(k.id);return lv&&lv>m.since?null:m.why;}
+function jtRow(k,dates,gid,kind,free){
+  const r=free?null:jtStatus(k,kind),U=free?{}:jtUnpaid(k,kind,r);
+  // для каждой клетки — в какой рамке она и есть ли у рамки здесь левый/правый край
+  const FR=dates.map(()=>null),last=dates.length-1;
+  if(!free)jtFrames(k,kind,dates,gid,r).forEach(f=>{const idx=[];dates.forEach((d,i)=>{if(d>=f.a&&d<=f.b)idx.push(i);});if(!idx.length)return;
+    const i0=idx[0],i1=idx[idx.length-1];idx.forEach(i=>{FR[i]={cur:f.cur,m:f.m,soon:f.soon,s:i===i0&&(i0>0||f.a>=dates[0]),e:i===i1&&(i1<last||f.b<=dates[last])};});});
+  const o=k.talks.filter(t=>!t.done),ta=o.filter(t=>t.who!=="parent").length,tb=o.length-ta;
+  const nm=(k.name||"Без имени").replace(/\s*\(.*?\)\s*/g," ").trim().split(/\s+/);
+  let note="";const miss=jtMiss(k,dates,gid);
+  if(miss>=JT_MISS&&!noParents(k)){const z=jtSnoozed(k);note='<button class="wb'+(z?" snz":"")+'" data-act="jtmiss" data-id="'+k.id+'" data-v="'+miss+'">'+(z?esc(z):"пропустил "+miss+" подряд")+"</button>";}
+  const on=isPresent(k.id);
+  let h='<tr><td class="nc"><div class="nw"><div class="nx"><button class="nb" data-act="open" data-id="'+k.id+'"><b>'+esc(nm[0]||"")+"</b> "+esc(nm.slice(1).join(" "))+(ta?'<span class="td" style="background:var(--kid)" title="Поговорить с ребёнком"></span>':"")+(tb?'<span class="td" style="background:var(--parent)" title="Поговорить с родителем"></span>':"")+"</button>"+note+"</div></div></td>";
+  h+='<td class="kc"><button class="mk'+(on?" on":"")+(on&&U[S.date]?" debt":"")+'" data-act="jtatt" data-id="'+k.id+'" aria-pressed="'+on+'" aria-label="'+(on?"Снять отметку: ":"Отметить: ")+esc(k.name||"")+'">'+JT_CK+"</button></td>";
+  dates.forEach((d,i)=>{const c=jtOn(d,gid,k.id),u=!!U[d],td=d===S.date,fu=d>S.date,f=FR[i];
+    const cls=[td?"tdy":"",f?(f.cur?"fr cur":"fr"):"",f&&f.m?"frm":"",f&&f.soon?"soon":"",f&&f.s?"frs":"",f&&f.e?"fre":""].filter(Boolean).join(" ");
+    if(fu){h+='<td class="'+cls+'">'+(f&&f.cur&&!f.m?'<span class="pj"></span>':"")+"</td>";return;} // месяц — без кружков: важна дата, а не число занятий // будущее: кружок — оплаченное занятие впереди
+    const dot=c?'<span class="dt'+(u?" u":td?" t":"")+(td&&S.jtPop===k.id?" pop":"")+'"></span>':'<span class="vd"></span>';
+    h+='<td class="'+cls+'"><button class="cl" data-act="jtcell" data-id="'+k.id+'" data-v="'+d+'" aria-label="'+esc(nm[0]||"")+", "+fmtDM(d)+(c?": снять отметку":": отметить")+'">'+dot+"</button></td>";});
+  if(free)h+='<td class="ab"><small>—</small></td>';
+  else{const t=trainSub(k,r),soon=r&&r.due&&!r.cleared&&r.days>=0&&r.days<=7; // месяц: за неделю до оплаты — жёлтым
+    // две строки: сверху мелко «до / ост. / долг», снизу число или дата
+    // «ост.» и «до» не пишем — и так понятно по числу/дате; подпись остаётся только у долга и особых случаев
+    const sp=t?t.pill.lastIndexOf(" "):-1,top0=sp>0?t.pill.slice(0,sp):"",top=top0==="ост."||top0==="до"?"":top0,big=t?t.pill.slice(sp+1):"";
+    h+=t?'<td class="ab '+(t.level==="bad"?"bad":t.level==="warn"||soon?"warn":"")+'">'+(top?"<small>"+esc(top)+"</small>":"")+esc(big)+"</td>":'<td class="ab"><small>—</small></td>';}
+  return h+"</tr>";
+}
+/* порядок строк: сначала все, кого надо считать по занятиям (пакеты, разовые, без абонемента), внизу — у кого месячный абонемент; внутри — по алфавиту */
+function jtOrder(ks,kind,free){if(free)return ks;
+  const isMonth=k=>{const r=jtStatus(k,kind);return !!(r&&!r.once&&!r.wait&&r.left==null&&r.due);};
+  const top=[],bottom=[];ks.forEach(k=>(isMonth(k)?bottom:top).push(k));return top.concat(bottom);}
+function jtTable(ks){
+  const gid=S.group,kind=gKind(gid),free=isFreeGroup(gid),dates=jtDates(gid),wd=["вс","пн","вт","ср","чт","пт","сб"];
+  let h='<div class="jt"><table style="min-width:'+(136+40+dates.length*24+44)+'px"><thead><tr><th class="nc"></th><th class="kc">✓</th>';
+  dates.forEach(d=>{const x=parseD(d),td=d===S.date;h+='<th class="'+(td?"tdy":d>S.date?"fu":"")+'">'+x.getDate()+"<br>"+(td&&d===todayISO()?"сег.":wd[x.getDay()])+"</th>";});
+  h+='<th class="ab"></th></tr></thead><tbody>'+jtOrder(ks,kind,free).map(k=>jtRow(k,dates,gid,kind,free)).join("")+"</tbody></table></div>";
+  return h;
+}
+function jtSnzOpen(id,miss){
+  let el=$("#jtSnz");if(!el){el=document.createElement("div");el.id="jtSnz";el.className="jt-snz";el.setAttribute("role","dialog");document.body.appendChild(el);}
+  if(!id){el.hidden=true;el.innerHTML="";return;}
+  const k=S.kids[id];if(!k)return;const z=jtSnoozed(k);
+  el.innerHTML="<b>"+esc(k.name||"")+"</b><p>"+(z?"Сейчас стоит «"+esc(z)+"». Напоминание вернётся, если снять пометку.":"Пропустил "+miss+" "+plural(+miss,["тренировку","тренировки","тренировок"])+" подряд. Если знаешь почему, отметь — напоминание спрячется, пока он не придёт.")+'</p><div class="o">'+(z?'<button data-act="jtmissv" data-id="'+id+'" data-v="">Снять пометку</button>':["болеет","уехал","каникулы","знаю, всё в порядке"].map(x=>'<button data-act="jtmissv" data-id="'+id+'" data-v="'+x+'">'+x.charAt(0).toUpperCase()+x.slice(1)+"</button>").join(""))+'</div><button class="x" data-act="jtmissv" data-v="__x">Закрыть</button>';
+  el.hidden=false;
+}
 function toggleAtt(id){
   const sid=sessionId();
   flipMark(sid,id,{date:S.date,group:S.group,present:[],note:""});
@@ -4982,7 +5188,7 @@ function renderTrain(){
     $("#main").innerHTML=h;return;
   }
   const pres=ks.filter(k=>isPresent(k.id)).length;
-  const tgOn=tgGrid(S.group),adOn=!tgOn;
+  const tgOn=false,adOn=false; // 15.11.2026: плитки с фото и карточки заменены таблицей jtTable (старый код ниже не выполняется)
   h+='<div class="count"><b>'+pres+'</b> из '+ks.length+" на тренировке"+(tgOn||adOn?'<button class="tg-edit tg-add" data-act="addkid" aria-label="Добавить ученика в группу" title="Добавить ученика в группу"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M19 8v6M16 11h6"/></svg></button><button class="tg-edit'+(S.tgEdit?" on":"")+'" data-act="tgedit" aria-pressed="'+!!S.tgEdit+'" aria-label="'+(S.tgEdit?"Готово":"Снять отметки")+'" title="'+(S.tgEdit?"Готово":"Снять отметки")+'">'+(S.tgEdit?"Готово":'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>')+"</button>":"")+"</div>";
   if(tgOn){
     const lo=k=>{const i=LEAGUES.findIndex(l=>l.id===k.league);return hasLeague(k)&&i>=0?-i:1;};
@@ -5004,8 +5210,8 @@ function renderTrain(){
       return '<div class="ad-c'+(on?" on":"")+'"><button class="ad-ck" data-act="adatt" data-id="'+k.id+'" aria-pressed="'+on+'" aria-label="'+(on?"Снять отметку: ":"Отметить: ")+esc(k.name||"")+'"><span class="tg-ck">'+(S.tgEdit?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>':CHECK)+'</span></button><button class="ad-body" data-act="open" data-id="'+k.id+'" aria-label="Профиль: '+esc(k.name||"")+'"><span class="ad-nm"><span class="ad-top"><b>'+esc(parts[0]||"")+"</b>"+pillsHTML(k,"ad")+"</span><small>"+esc(parts.slice(1).join(" "))+"</small></span>"+subBox(k)+"</button></div>";
     };
     h+='<section class="ad-cols'+(S.tgEdit?" edit":"")+'">'+ks.map(adCard).join("")+"</section>";
-  }else
-  h+='<div class="list">'+ks.map(k=>{
+  }else h+=jtTable(ks);
+  if(false)h+='<div class="list">'+ks.map(k=>{
     const on=isPresent(k.id);const L=league(k.league);
     return '<div class="row'+(on?" on":"")+'"><button class="att" data-act="att" data-id="'+k.id+'" aria-pressed="'+on+'" aria-label="Отметить '+esc(k.name)+'"><span class="ring">'+CHECK+'</span></button><button class="kidbtn" data-act="open" data-id="'+k.id+'">'+medal(k)+'<span class="kname">'+esc(k.name||"Без имени")+"<small>"+esc(rowSub(k))+"</small></span>"+pillsHTML(k)+"</button></div>";
   }).join("")+"</div>";
@@ -5291,7 +5497,7 @@ function sheetHTML(k){
   if(!freeOnly(k)){const st=subStatus(k);
   if(!S.pay||S.pay.kid!==k.id)S.pay=payDefaults(k);const P=S.pay;
   h+='<section class="sec" id="sec-pay"><h2>Оплата'+(st&&st.level!=="ok"?'<small class="'+st.level+'">'+esc(st.once?"не оплачено":st.level==="bad"?(st.left!=null&&st.left<=0?"закончился":"просрочен"):"скоро оплата")+"</small>":"")+"</h2>";
-  {const rows=subRowsHTML(k);h+=rows;if(!rows||(st&&st.once))h+='<p class="substat'+(st&&st.level==="bad"?" bad":"")+'">'+(st?esc(st.text):"Оплат пока нет.")+"</p>";}
+  {const rows=subRowsHTML(k);h+=payNumsHTML(k,st)+rows;if(!rows||(st&&st.once))h+='<p class="substat'+(st&&st.level==="bad"?" bad":"")+'">'+(st?esc(st.text):"Оплат пока нет.")+"</p>";}
   if(S.payOpen===k.id&&S.pf&&S.pf.kid===k.id)h+=payFormHTML(k);
   else h+=quickPayHTML(k);
   h+=payOkHTML(k,st);
@@ -5838,6 +6044,12 @@ document.addEventListener("click",e=>{
     case "tgatt": if(tgLong){tgLong=false;break;} if(isPresent(id)&&!S.tgEdit)openKid(id); else{toggleAtt(id);render();} break;
     case "tgedit": S.tgEdit=!S.tgEdit; render(); break;
     case "adatt": toggleAtt(id);render(); break;
+    case "jtatt": toggleAtt(id); S.jtPop=isPresent(id)?id:null; render(); S.jtPop=null; break;
+    case "jtcell": {if(v===S.date){toggleAtt(id);S.jtPop=isPresent(id)?id:null;render();S.jtPop=null;break;}
+      const sid=v+"_"+S.group;flipMark(sid,id,{date:v,group:S.group,present:[],note:""});
+      const kk=S.kids[id];toast((jtOn(v,S.group,id)?"Отмечен":"Снята отметка")+": "+(kk?firstName(kk):"")+", "+fmtDM(v));render();} break;
+    case "jtmiss": jtSnzOpen(id,v); break;
+    case "jtmissv": {if(v!=="__x"&&S.kids[id]){const kk=S.kids[id];kk.missOk=v?{why:v,since:todayISO()}:null;saveKid(id,true);toast(v?"Не напоминать, пока не придёт":"Напоминание вернулось");}jtSnzOpen(null);render();} break;
     case "attS": toggleAtt(id); render(); renderSheet(); break;
     case "open": openKid(id); break;
     case "jump": {e.stopPropagation();if(S.open!==id)openKid(id);{const fk=v==="sec-kmb"?"kmb":v==="sec-norms"?"norms":"";if(fk&&!secOpen[fk]){secOpen[fk]=true;renderSheet();}}const sh=$("#sheet");const el=sh.querySelector("#"+v);
@@ -5889,6 +6101,7 @@ document.addEventListener("click",e=>{
     case "pfn": if(k&&S.pf){S.pf.w="n";S.pf.n=+v;S.pf.touched=false;S.pf.smTouched=false;pfAuto(k,S.pf);renderSheet();} break;
     case "pfw": if(k&&S.pf){S.pf.w=v;S.pf.touched=false;S.pf.smTouched=false;pfAuto(k,S.pf);renderSheet();} break;
     case "pfd": if(k&&S.pf){S.pf.dur=v;S.pf.touched=false;pfAuto(k,S.pf);renderSheet();} break;
+    case "pfpick": if(k&&S.pf){S.pf.start=v;S.pf.sm="date";S.pf.smTouched=true;renderSheet();} break;
     case "pfs": if(k&&S.pf){S.pf.sm=v;S.pf.smTouched=true;pfAuto(k,S.pf);renderSheet();} break;
     case "pfsave": pfSave(); break;
     case "pfnew": if(k){S.payOpen=S.open;S.pf=pfInit(k);const has=lanes(k).map(x=>x.group||""),one=plainGroups(k).length<=1;
