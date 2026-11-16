@@ -1710,6 +1710,11 @@ summary.fsum{cursor:pointer;font-weight:600;font-size:17px;padding:4px 0;list-st
 .jt th.ab{font-weight:500}
 .jt .ab small{display:block;font-weight:400;font-size:11px;color:var(--muted);line-height:1.2}
 .jt .ab.warn{color:var(--jt-warn)} .jt .ab.bad{color:var(--jt-bad)}
+.jt tbody tr.jtsep td{height:24px;text-align:left;background:var(--surface2);border-bottom:1px solid var(--line);padding:0}
+.jt tr.jtsep span{position:sticky;left:0;display:inline-block;padding:0 10px;font-size:11.5px;font-weight:600;letter-spacing:.03em;color:var(--muted)}
+.sec h2 .pyonce{margin-left:auto;font:500 12.5px var(--body);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:transparent}
+.sec h2 .pyonce.on{color:#0B0B0E;background:var(--l-gold);border-color:var(--l-gold)}
+#sec-pay h2 small{margin-left:auto}.sec h2 small+.pyonce{margin-left:8px}
 .pnums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:6px 0 8px}
 .pnums div{background:var(--surface2);border-radius:12px;padding:8px 10px;min-width:0}
 .pnums small{display:block;font-size:11px;color:var(--muted);line-height:1.2}
@@ -2431,16 +2436,18 @@ function quickPays(k){
     if(pk){over=r.left<0?-r.left:0;if(over)start=backStart(k,over,{group})||today;}
     else{const d=daysBetween(today,r.due);if(d>=-14&&d<=14)start=r.due;}
     out.push({type,count,group,combo:!!(s.combo||(fb&&fb.combo)),amount,start,over,dur:(fb&&fb.dur)||""});});
-  if(!out.length){const P=payDefaults(k);if(P.type!=="once")out.push({type:P.type,count:P.count||0,group:P.group||"",combo:P.kind==="combo",amount:Number(P.amount)||0,start:P.start,over:0});}
+  if(!out.length&&!k.payOnce){const P=payDefaults(k);if(P.type!=="once")out.push({type:P.type,count:P.count||0,group:P.group||"",combo:P.kind==="combo",amount:Number(P.amount)||0,start:P.start,over:0});}
+  if(k.payOnce){const lo=sortedSubs(k).filter(x=>x.type==="once"&&!isFix(x)&&(Number(x.amount)||0)>0).pop(); // 16.11.2026: помечен «разово» — первая плитка «Разово, как в прошлый раз»
+    out.unshift({type:"once",count:0,group:(lo&&lo.group)||plainGroups(k)[0]||"",combo:false,amount:Number(lo&&lo.amount)||0,start:today,over:0,dur:""});}
   return out;
 }
-function qLabel(k,q,many){return ((many>1||isPersonalGroup(q.group))&&q.group?groupName(q.group)+": ":"")+(q.count?q.count+" "+plural(q.count,["занятие","занятия","занятий"]):"месяц")+(q.dur?" по "+durName(q.dur):"")+" за "+(q.amount?rub(q.amount):"? ₽")+" · "+(q.start===todayISO()?"сегодня":"с "+fmtShort(q.start))+(q.over?" ("+q.over+" уже отходил)":"");}
+function qLabel(k,q,many){return ((many>1||isPersonalGroup(q.group))&&q.group?groupName(q.group)+": ":"")+(q.type==="once"?"разово":q.count?q.count+" "+plural(q.count,["занятие","занятия","занятий"]):"месяц")+(q.dur?" по "+durName(q.dur):"")+" за "+(q.amount?rub(q.amount):"? ₽")+" · "+(q.start===todayISO()?"сегодня":"с "+fmtShort(q.start))+(q.over?" ("+q.over+" уже отходил)":"");}
 function quickPayHTML(k){
   const Q=quickPays(k);let h='<div class="qpay">';
   h+='<div class="qgrid">';
   Q.forEach((q,i)=>{const arm=S.qArm===k.id+"|"+i,pers=isPersonalGroup(q.group),pg=plainGroups(k);
     const top=q.group?(pers?"Персоналка":groupName(q.group)):(q.combo||pg.length>1?"Все группы вместе":pg[0]?groupName(pg[0]):"Персоналка");
-    const mid=(q.count?q.count+" "+plural(q.count,["занятие","занятия","занятий"]):"Месяц")+(q.dur?" по "+durName(q.dur):"");
+    const mid=(q.type==="once"?"Разово":q.count?q.count+" "+plural(q.count,["занятие","занятия","занятий"]):"Месяц")+(q.dur?" по "+durName(q.dur):"");
     const bot=(q.amount?rub(q.amount):"сумма?")+" · "+(q.start===todayISO()?"сегодня":"с "+fmtDM(q.start))+(q.over?" · отходил "+q.over:"");
     h+='<button class="qb'+(arm?" arm":"")+'" data-act="pquick" data-v="'+i+'">'+(arm?"<small>Нажми ещё раз</small><b>Записать оплату</b><small>"+esc(top+": "+mid+" · "+bot)+"</small>":"<small>"+esc(top)+"</small><b>"+esc(mid)+"</b><small>"+esc(bot)+"</small>")+"</button>";});
   h+='<button class="qb empty" data-act="pfnew"><small>новый</small><b>+ Абонемент</b><small>мини, персоналка</small></button>';
@@ -2581,6 +2588,7 @@ function pfSave(){const k=S.kids[S.open],P=S.pf;if(!k||!P)return;
   if(P.g!=="all"&&!inGroup(k,P.g)){k.groups=kidGroups(k).concat(P.g);if(!k.group)k.group=k.groups[0];}
   if(P.w==="once"&&P.g!=="all"&&kidGroups(k).length>1){const og=k.onceGroups||(k.onceGroups=[]);if(og.indexOf(P.g)<0)og.push(P.g);}
   const msg="Оплата записана: "+pfSummary(k,P);
+  if(rec.type!=="once")delete k.payOnce;
   k.subs.push(rec);saveKid(k.id,true);S.pf=null;S.payOpen=null;S.pay=null;renderSheet();toast(msg);}
 /* новая схема учёта действует с этого дня: посещения вида занятий, за который ни разу не платили, считаются долгом только начиная с него */
 const PAY_V2="2026-11-11";
@@ -4149,7 +4157,8 @@ function ktMeHTML(k){
     return d?'<div class="kt-task'+bs+' ok'+(KT.just===it.id?" just":"")+'" data-v="'+esc(it.id)+'">'+em+"<span>"+esc(it.t)+"</span>"+ds+"</div>":'<div class="kt-task'+bs+'" data-khold="1" data-id="'+esc(k.id)+'" data-v="'+esc(it.id)+'">'+em+"<span>"+esc(it.t)+"</span></div>";}).join("");
   h+="</div>";
   const gb=ci<P.length-1?kmbGateBlock(P,done,ci+1):0;
-  let side=gb&&!other?'<p class="kt-gate">Блок '+(gb+1)+" откроется после экзамена блока "+gb+".</p>":"";
+  /* 16.11.2026 подпись «Блок N откроется после экзамена…» убрана: она сдвигала полосы «Ступень» и «Путь бойца» влево */
+  let side="";
   if(coach&&!other){
     let mv="";
     if(ci>0)mv+='<button class="kt-back" data-kt="move" data-id="'+esc(k.id)+'" data-i="'+(ci-1)+'">↓ На ступень '+ci+"</button>";
@@ -5238,15 +5247,20 @@ function jtRow(k,dates,gid,kind,free){
     h+=t?'<td class="ab '+(t.level==="bad"?"bad":t.level==="warn"||soon?"warn":"")+'">'+(top?"<small>"+esc(top)+"</small>":"")+esc(big)+"</td>":'<td class="ab"><small>—</small></td>';}
   return h+"</tr>";
 }
-/* порядок строк: сначала все, кого надо считать по занятиям (пакеты, разовые, без абонемента), внизу — у кого месячный абонемент; внутри — по алфавиту */
-function jtOrder(ks,kind,free){if(free)return ks;
-  const isMonth=k=>{const r=jtStatus(k,kind);return !!(r&&!r.once&&!r.wait&&r.left==null&&r.due);};
-  const top=[],bottom=[];ks.forEach(k=>(isMonth(k)?bottom:top).push(k));return top.concat(bottom);}
+/* 16.11.2026 порядок строк по группам: по занятиям (8 и др.) → месяц → без оплат → разово (последние). Внутри — как пришли (по алфавиту).
+   «Разово» — пометка в анкете (k.payOnce) или платит только разовыми оплатами. */
+const JT_CATS=["по занятиям","месяц","без оплат","разово"],JT_CORD=[0,1,2,3];
+function jtCat(k,kind,free){if(free)return 0;if(k.payOnce)return 3;const r=jtStatus(k,kind);if(!r)return 2;
+  if(r.once)return r.s&&r.s.id?3:2;if(r.left!=null)return 0;if(r.due)return 1;if(r.wait)return r.s&&PACKS[r.s.type]?0:1;return 2;}
+function jtOrder(ks,kind,free){if(free)return ks;const c=new Map(ks.map(k=>[k,jtCat(k,kind,free)]));
+  return ks.map((k,i)=>({k,i})).sort((a,b)=>(JT_CORD[c.get(a.k)]-JT_CORD[c.get(b.k)])||a.i-b.i).map(x=>x.k);}
 function jtTable(ks){
   const gid=S.group,kind=gKind(gid),free=isFreeGroup(gid),dates=jtDates(gid),wd=["вс","пн","вт","ср","чт","пт","сб"];
   let h='<div class="jt"><table style="min-width:'+(136+40+dates.length*24+44)+'px"><thead><tr><th class="nc"></th><th class="kc">✓</th>';
   dates.forEach(d=>{const x=parseD(d),td=d===S.date;h+='<th class="'+(td?"tdy":d>S.date?"fu":"")+'">'+x.getDate()+"<br>"+(td&&d===todayISO()?"сег.":wd[x.getDay()])+"</th>";});
-  h+='<th class="ab"></th></tr></thead><tbody>'+jtOrder(ks,kind,free).map(k=>jtRow(k,dates,gid,kind,free)).join("")+"</tbody></table></div>";
+  const ord=jtOrder(ks,kind,free),cats=ord.map(k=>jtCat(k,kind,free)),multi=!free&&new Set(cats).size>1;let body="",pc=-1;
+  ord.forEach((k,i)=>{if(multi&&cats[i]!==pc){pc=cats[i];body+='<tr class="jtsep"><td colspan="'+(dates.length+3)+'"><span>'+JT_CATS[pc]+" · "+cats.filter(x=>x===pc).length+"</span></td></tr>";}body+=jtRow(k,dates,gid,kind,free);});
+  h+='<th class="ab"></th></tr></thead><tbody>'+body+"</tbody></table></div>";
   return h;
 }
 function jtSnzOpen(id,miss){
@@ -5590,7 +5604,7 @@ function sheetHTML(k){
   if(!hasLeague(k)){const g=goalOf(k);h+='<div class="goalrow"><span>Цель</span>'+GOALS.map(x=>'<button class="chip'+(g&&g.id===x.id?" on":"")+'" style="--gc:'+x.c+'" data-act="goal" data-v="'+x.id+'">'+x.ic+" "+esc(x.name)+"</button>").join("")+"</div>";}
   if(!freeOnly(k)){const st=subStatus(k);
   if(!S.pay||S.pay.kid!==k.id)S.pay=payDefaults(k);const P=S.pay;
-  h+='<section class="sec" id="sec-pay"><h2>Оплата'+(st&&st.level!=="ok"?'<small class="'+st.level+'">'+esc(st.once?"не оплачено":st.level==="bad"?(st.left!=null&&st.left<=0?"закончился":"просрочен"):"скоро оплата")+"</small>":"")+"</h2>";
+  h+='<section class="sec" id="sec-pay"><h2>Оплата'+(st&&st.level!=="ok"?'<small class="'+st.level+'">'+esc(st.once?"не оплачено":st.level==="bad"?(st.left!=null&&st.left<=0?"закончился":"просрочен"):"скоро оплата")+"</small>":"")+'<button class="pyonce'+(k.payOnce?" on":"")+'" data-act="payonce" aria-pressed="'+!!k.payOnce+'">разово</button></h2>';
   {let sst=st,tmp=null; // первое нажатие на плитку оплаты: на полоске сразу видно, что спишется (оплата подставляется на время отрисовки и сразу убирается)
    if(S.qArm&&S.qArm.indexOf(k.id+"|")===0){const q=quickPays(k)[+S.qArm.split("|")[1]];if(q&&q.amount){tmp=pqRec(q);tmp._pv=true;k.subs.push(tmp);sst=subStatus(k);}}
    try{h+=payStripHTML(k,sst);}finally{if(tmp){const i=k.subs.indexOf(tmp);if(i>=0)k.subs.splice(i,1);}}}
@@ -6182,13 +6196,14 @@ document.addEventListener("click",e=>{
     case "pcount": if(k&&S.pay){S.pay.count=+v||0;kindDefaults(k,S.pay,S.pay.kind);renderSheet();} break;
     case "payadd": addPay(); break;
     case "payok": if(k){k.payOk=todayISO();saveKid(k.id,true);toast("Долгов нет: всё до сегодня считается оплаченным");renderSheet();} break;
+    case "payonce": if(k){if(k.payOnce)delete k.payOnce;else k.payOnce=true;S.qArm=null;saveKid(k.id,true);renderSheet();toast(k.payOnce?"Помечен: ходит разово":"Пометка «разово» снята");} break;
     case "payokundo": if(k){delete k.payOk;saveKid(k.id,true);renderSheet();} break;
     case "ponceg": if(k){const og=k.onceGroups||(k.onceGroups=[]);const i=og.indexOf(v);if(i>=0)og.splice(i,1);else og.push(v);if(!og.length)delete k.onceGroups;saveKid(k.id,true);renderSheet();} break;
     case "pfirst": if(S.pay){S.pay.fromFirst=!S.pay.fromFirst;renderSheet();} break;
     case "pefirst": if(S.pe){S.pe.fromFirst=!S.pe.fromFirst;if(S.open)renderSheet();else render();} break;
     case "pquick": if(k){const key=k.id+"|"+v;if(S.qArm!==key){S.qArm=key;renderSheet();break;}S.qArm=null;const Q=quickPays(k),q=Q[+v];if(!q)break;
-        if(!q.amount){S.payOpen=S.open;S.pf=pfInit(k);renderSheet('#pfAmt');toast("Впиши сумму");break;}
-        const rec=pqRec(q);
+        if(!q.amount){S.payOpen=S.open;S.pf=pfInit(k);if(q.type==="once"){S.pf.w="once";S.pf.touched=false;pfAuto(k,S.pf);}renderSheet('#pfAmt');toast("Впиши сумму");break;}
+        const rec=pqRec(q);if(rec.type!=="once")delete k.payOnce;
         k.subs.push(rec);saveKid(k.id,true);S.pay=null;renderSheet();toast("Оплата записана: "+qLabel(k,q,Q.length));} break;
     case "pfixopen": S.fixOpen=S.fixOpen===S.open?null:S.open; renderSheet(); break;
     case "pfixsave": if(k){const L=lanes(k).filter(s=>PACKS[s.type]),s=L[+v],el=$("#fixIn"+v),n=parseInt(el&&el.value,10);if(!s||isNaN(n)||n<0){toast("Укажи число");break;}
@@ -6532,7 +6547,34 @@ const CSS=`
 .jt-ph{font-family:Oswald,"Arial Narrow",sans-serif;font-size:clamp(28px,6vh,54px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;line-height:1;text-align:center}
 .jt-bar{width:min(760px,80%);height:12px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:12px}
 .jt-bar b{display:block;height:100%;background:currentColor;opacity:.85;width:0}
+/* 16.11.2026 полоса толще и поделена на три части тонкими чертами (поверх заливки) */
+.jt-bar{position:relative;height:26px;border-radius:13px}
+/* 16.11.2026 кнопки сверху справа двумя рядами одной ширины: «Половина · ⇄ · Свернуть», под ними «Минуты · Круговая · Пары»; все кнопки одной высоты */
+#jtFull .jt-top{flex-direction:column;align-items:flex-end;justify-content:flex-start;flex-wrap:nowrap;gap:8px}
+#jtFull .jt-fb{order:1;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;width:min(450px,100%)}
+#jtFull .jt-tabs{order:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(450px,100%);background:none;padding:0;border-radius:0}
+#jtFull .jt-tabs button,#jtFull .jt-c{height:52px;min-height:0;padding:0 8px;border-radius:12px;font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+#jtFull .jt-tabs button{background:rgba(255,255,255,.08);opacity:.8}
+#jtFull .jt-tabs button[aria-selected="true"]{background:rgba(255,255,255,.92);color:#101411;opacity:1}
+#jtFull .jt-tabs button:disabled{opacity:.35}
+#jtFull[data-half="left"] .jt-fb,#jtFull[data-half="right"] .jt-fb,#jtFull[data-half="left"] .jt-tabs,#jtFull[data-half="right"] .jt-tabs{width:min(390px,100%)}
+#jtFull[data-half="left"] .jt-tabs button,#jtFull[data-half="right"] .jt-tabs button,#jtFull[data-half="left"] .jt-c,#jtFull[data-half="right"] .jt-c{height:46px;padding:0 6px;font-size:15px}
+.jt-bar::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent calc(33.333% - 1.5px),#0b0f0c calc(33.333% - 1.5px),#0b0f0c calc(33.333% + 1.5px),transparent calc(33.333% + 1.5px),transparent calc(66.667% - 1.5px),#0b0f0c calc(66.667% - 1.5px),#0b0f0c calc(66.667% + 1.5px),transparent calc(66.667% + 1.5px))}
 .jt-set{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:10px}
+/* 16.11.2026 общее время серии (работа + смены): под настройками и во время работы */
+.jt-tot{margin-top:12px;font-size:17px;color:#9aa49d;text-align:center;font-variant-numeric:tabular-nums;line-height:1.35}
+.jt-tot b{color:#f2f5f1;font-size:22px;font-weight:700;margin:0 2px}
+.jt-tot[hidden]{display:none}
+/* 16.11.2026 полоса всей серии: тоньше полосы раунда, нейтрального цвета, надписи внутри */
+.jt-tot.run{width:min(760px,80%);margin-top:10px}
+.jt-tbar b{font-size:inherit;font-weight:600;margin:0;color:inherit}
+.jt-tbar{position:relative;height:22px;border-radius:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);overflow:hidden}
+.jt-tbar>i{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.24)}
+.jt-tbar>span{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 12px;font-size:13.5px;color:#f2f5f1;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.jt-tbar em{font-style:normal;font-weight:700;font-size:15px;margin:0 2px}
+.jt-tbar small{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.8;margin-right:6px}
+#jtFull[data-half="left"] .jt-tbar>span,#jtFull[data-half="right"] .jt-tbar>span{font-size:12.5px;padding:0 10px}
+#jtFull[data-half="left"] .jt-tbar em,#jtFull[data-half="right"] .jt-tbar em{font-size:14px}
 .jt-st{display:flex;flex-direction:column;align-items:center;gap:6px;background:rgba(255,255,255,.07);border-radius:14px;padding:10px 12px;min-width:190px}
 .jt-sl{font-size:13px;color:#9aa49d;text-transform:uppercase;letter-spacing:.06em}
 .jt-sv{display:flex;align-items:center;gap:8px}
@@ -6624,6 +6666,10 @@ function build(){
   return p;
 }
 const cur=()=>run.phases[run.idx];
+/* общее время серии: работа и смены по отдельности (по тем же фазам, что и сам таймер) */
+function totals(ph){ let w=0,r=0; (ph||build()).forEach(x=>{ if(isWork(x.k)) w+=x.dur; else r+=x.dur; }); return {all:w+r,work:w,rest:r}; }
+function leftAll(){ let s=Math.max(0,run.left); for(let i=run.idx+1;i<run.phases.length;i++) s+=run.phases[i].dur; return s; }
+const fmtTot=s=>{ s=Math.max(0,Math.ceil(s-1e-6)); if(s<3600) return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); const h=Math.floor(s/3600),m=Math.floor(s%3600/60),c=s%60; return h+" ч "+m+" мин"+(c?" "+c+" с":""); };
 const rounds=()=>mode==="circuit"?cfg.circuit.rounds:mode==="pairs"?cfg.pairs.rounds:1;
 const isWork=k=>k==="work"||k==="workA"||k==="workB";
 function reset(){ run.state="idle"; run.phases=build(); run.idx=0; run.left=run.phases[0].dur; releaseWake(); drawSettings(); render(); }
@@ -6690,7 +6736,7 @@ function mount(){
       '<button type="button" role="tab" data-jtm="minutes">Минуты</button><button type="button" role="tab" data-jtm="circuit">Круговая</button><button type="button" role="tab" data-jtm="pairs">Пары</button></div>'+
       '<div class="jt-fb"><button class="jt-c" id="jtMode" type="button"></button><button class="jt-c" id="jtSide" type="button" aria-label="На другую половину">⇄</button><button class="jt-c" id="jtClose" type="button">✕ Свернуть</button></div></div>'+
     '<div class="jt-mid"><div class="jt-round" id="jtRound"><span id="jtRoundT"></span><span class="jt-dots" id="jtDots"></span></div>'+
-      '<div class="jt-dg" id="jtTime"></div><div class="jt-ph" id="jtPhase"></div><div class="jt-bar" id="jtBar"><b id="jtBarB"></b></div><div class="jt-set" id="jtSet"></div></div>'+
+      '<div class="jt-dg" id="jtTime"></div><div class="jt-ph" id="jtPhase"></div><div class="jt-bar" id="jtBar"><b id="jtBarB"></b></div><div class="jt-set" id="jtSet"></div><div class="jt-tot" id="jtTot"></div></div>'+
     '<div class="jt-bot"><button class="jt-cb" id="jtReset" type="button">Сброс</button><button class="jt-cb jt-go" id="jtGo" type="button">Старт</button><button class="jt-cb" id="jtNext" type="button">Дальше</button></div>';
   document.body.append(pill,full);
   $j("jtPlay").onclick=toggle;
@@ -6714,7 +6760,7 @@ function render(){
   if(!pill) return;
   const v=visual(), ph=cur(), N=rounds(), paused=run.state==="paused";
   pill.className=run.state==="idle"?"":"ph-"+v.cls;
-  if(run.state==="idle"){ $j("jtLab").textContent=mode==="circuit"?"Круговая × "+cfg.circuit.rounds:mode==="pairs"?"Пары × "+cfg.pairs.rounds:"Минуты"; $j("jtPTime").textContent=fmtSet(run.phases[0].dur); }
+  if(run.state==="idle"){ $j("jtLab").textContent=mode==="circuit"?"Круговая × "+cfg.circuit.rounds+" · всего "+fmtTot(totals().all):mode==="pairs"?"Пары × "+cfg.pairs.rounds+" · всего "+fmtTot(totals().all):"Минуты"; $j("jtPTime").textContent=fmtSet(run.phases[0].dur); }
   else if(run.state==="done"){ $j("jtLab").textContent="Готово"; $j("jtPTime").textContent="0:00"; }
   else { $j("jtLab").textContent=(mode==="minutes"?"Таймер":(mode==="pairs"?"Пара ":"Круг ")+ph.round+"/"+N)+" · "+v.word+(paused?" · пауза":""); $j("jtPTime").textContent=fmt(run.left); }
   pill.classList.toggle("jt-flash",run.state==="running"&&isWork(ph.k)&&run.left<=10);
@@ -6727,6 +6773,13 @@ function render(){
     let d=""; for(let i=1;i<=N;i++) d+='<i class="'+(run.state==="done"||i<r?"d":(i===r&&run.state!=="idle"?"c":""))+'"></i>'; $j("jtDots").innerHTML=d; }
   const frac=run.state==="idle"?0:run.state==="done"?1:1-run.left/ph.dur; $j("jtBarB").style.width=(frac*100).toFixed(1)+"%";
   const idle=run.state==="idle"; $j("jtSet").hidden=!idle; $j("jtBar").hidden=idle;
+  const tt=$j("jtTot"); tt.hidden=mode==="minutes"||run.state==="done";
+  if(!tt.hidden){ const T=totals(run.phases), rw="смены";
+    tt.classList.toggle("run",!idle);
+    if(idle) tt.innerHTML="Всего <b>"+fmtTot(T.all)+"</b><br>работа "+fmtTot(T.work)+(T.rest?" + "+rw+" "+fmtTot(T.rest):"");
+    else { if(!tt.querySelector(".jt-tbar")) tt.innerHTML='<div class="jt-tbar"><i></i><span><span><small>Вся серия</small><em></em></span><span>осталось <em></em> из <b></b></span></span></div>';
+      const L=leftAll(), pc=T.all?Math.min(100,Math.max(0,(1-L/T.all)*100)):0, em=tt.querySelectorAll("em");
+      tt.querySelector(".jt-tbar>i").style.width=pc.toFixed(1)+"%"; em[0].textContent=Math.floor(pc)+"%"; em[1].textContent=fmt(L); tt.querySelector(".jt-tbar b").textContent=fmtTot(T.all); } }
   $j("jtGo").textContent=run.state==="running"?"Пауза":paused?"Продолжить":run.state==="done"?"Ещё раз":"Старт";
   $j("jtNext").disabled=idle||run.state==="done";
   full.querySelectorAll("[data-jtm]").forEach(b=>{ b.setAttribute("aria-selected",b.dataset.jtm===mode); b.disabled=!idle&&b.dataset.jtm!==mode; });
