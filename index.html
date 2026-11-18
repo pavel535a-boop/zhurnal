@@ -4057,7 +4057,8 @@ function slIsRun(pt){return pt.id==="legs"||/челночн/i.test((pt.title||""
 function slRange(pt){const h=pt.hint||"";if(!/\d+\s*[–-]\s*\d+/.test(h))return "";return h.replace(/\s*сек\.?/," с").replace(/\s*раз\.?/," повт.");}
 /* порядок блоков силовой (Павел, 18.11): день 1 — тяга, пресс, ноги; день 2 — болгарский, жим, пресс. Держим его в коде, даже если шаблон сохранён в другом порядке */
 const SL_ORDER={d1:["pull","abs","legs"],d2:["bulg","push","abs"]};
-function slOrderTpls(n){Object.values(n||{}).forEach(t=>(t.blocks||[]).forEach(b=>{if(b.mode!=="strength")return;(b.days||[]).forEach(d=>{const o=SL_ORDER[d.id];if(!o||!Array.isArray(d.parts))return;const r=p=>{const i=o.indexOf(p.id);return i<0?99:i;};d.parts=d.parts.map((p,i)=>[p,i]).sort((a,b)=>r(a[0])-r(b[0])||a[1]-b[1]).map(x=>x[0]);});}));return n;}
+/* данные из хранилища Claude заморожены — порядок наводим на копии, исходник не трогаем; при любой ошибке шаблоны грузятся как есть (18.11: из-за этого пропадал конструктор) */
+function slOrderTpls(n){try{const out={};Object.keys(n||{}).forEach(id=>{const t=n[id];if(!t||!(t.blocks||[]).some(b=>b&&b.mode==="strength")){out[id]=t;return;}out[id]=Object.assign({},t,{blocks:t.blocks.map(b=>b.mode!=="strength"?b:Object.assign({},b,{days:(b.days||[]).map(d=>{const o=SL_ORDER[d.id];if(!o||!Array.isArray(d.parts))return d;const r=p=>{const i=o.indexOf(p.id);return i<0?99:i;};return Object.assign({},d,{parts:d.parts.map((p,i)=>[p,i]).sort((a,c)=>r(a[0])-r(c[0])||a[1]-c[1]).map(x=>x[0])});})}))});});return out;}catch(e){return n||{};}}
 function slDay(gid){const bl=slBlock(gid),P=slPlan(gid),ds=(bl&&bl.days)||[];return ds.find(d=>d.id===P.day)||ds[0]||null;}
 const slRv=(P,m,si)=>P.reps[m+"|"+si]||SL_M[m].def[si];
 const slWt=(P,m,si)=>{if(!SL_M[m].w)return false;const k=m+"|"+si;return k in P.wt?!!P.wt[k]:false;};
