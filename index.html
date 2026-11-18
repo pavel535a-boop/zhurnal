@@ -2423,6 +2423,28 @@ body #jtPill .jt-pb,body #jtPill.ph-work .jt-pb,body #jtPill.ph-prep .jt-pb,body
 .sm-c.rs{color:#C9C7CF}
 .sm-idle{color:#A09DA8;font-size:.8em;line-height:1.35;padding:.1em .2em .3em;break-inside:avoid}
 .sm-empty{color:#A09DA8;font-size:20px;text-align:center;padding:40px 0}
+/* 18.11 (5): план силовой компактнее — дни и подходы плотной строкой, кнопки ниже, меньше пустоты (Павел: «чтобы всё основное влезало на первый экран») */
+.sl-b{gap:10px;margin-top:8px;container-type:inline-size;container-name:slb}
+.sl-row1{gap:8px 10px}
+.sl-row1 .sl-setsbar{flex:0 1 auto;padding:4px 6px 4px 12px;gap:4px}
+.sl-setsbar b{margin-right:4px;font-size:15px}
+.sl-setsbar small{margin-left:4px}
+.sl-day{padding:6px 14px;min-height:40px;font-size:15px;border-radius:12px}
+.sl-prt{gap:6px}
+.sl-prt h3{font-size:12px}
+.sl-opt{min-height:38px;padding:6px 10px;font-size:14px}
+.sl-chip{min-height:38px;min-width:40px;padding:0 7px}
+.sl-chip.nope{min-width:34px}
+.sl-wt{min-height:38px}
+.sl-rset{padding:6px 8px;gap:4px}
+.sl-rrow{gap:4px}
+.sl-rrow>b{width:70px}
+.sl-q{min-height:42px}
+.sl-ein{padding-top:10px}
+.sl-bt{margin-bottom:0}
+@container slb (min-width:880px){.sl-pg>.sl-pl>.sl-opt{min-height:38px}}
+/* узкая колонка (журнал на телефоне или планшете) — блок в один столбец, повторы под упражнениями, а не узкой полосой справа */
+@container slb (max-width:879px){.sl-pg{grid-template-columns:1fr}.sl-pg>.sl-pl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.sl-pg>.sl-pl>.sl-opt{width:100%}.sl-runk{grid-column:1/-1;display:flex;align-items:center;gap:6px}.sl-runk .sl-lab{margin-left:0}}
 </style>
 
 <div class="g-over" id="game" hidden></div>
@@ -3931,7 +3953,7 @@ async function init(){
     },onSnapErr);
     jRef().collection("schedule").onSnapshot(snap=>{let w=null;snap.docs.forEach(d=>{const v=d.data()||{};if(d.id==="week"&&Array.isArray(v.items))w=v;});S.sched=w;if(S.ready&&S.view==="sched")render();},()=>{});
     jRef().collection("library").onSnapshot(snap=>{const n={};snap.docs.forEach(d=>{const v=d.data()||{};if(Array.isArray(v.sections))n[d.id]=v;});S.libs=n;if(S.ready&&S.view==="lib")render();},()=>{});
-    jRef().collection("templates").onSnapshot(snap=>{const n={};snap.docs.forEach(d=>{const v=d.data()||{};if(Array.isArray(v.lessons)||Array.isArray(v.blocks))n[d.id]=v;});S.tpls=n;if(S.ready)softRender();if(S.plan)renderPlan();},()=>{});
+    jRef().collection("templates").onSnapshot(snap=>{const n={};snap.docs.forEach(d=>{const v=d.data()||{};if(Array.isArray(v.lessons)||Array.isArray(v.blocks))n[d.id]=v;});S.tpls=slOrderTpls(n);if(S.ready)softRender();if(S.plan)renderPlan();},()=>{});
     jRef().collection("strength").onSnapshot(snap=>{const n={};snap.docs.forEach(d=>{n[d.id]=d.data()||{};});S.slPlans=n;if(S.ready&&(S.view==="sil"||(S.gKids&&S.gGroup==="sil")))slRedraw();},()=>{});
     jRef().collection("marklog").orderBy("t","desc").limit(3000).onSnapshot(snap=>{const n=[];snap.docs.forEach(d=>{const v=d.data()||{};if(v.kid&&v.t){v.lid=d.id;n.push(v);}});
       const ids=new Set(n.map(x=>x.lid));S.mlog=n.concat((S.mlog||[]).filter(x=>!ids.has(x.lid)));if(S.open&&S.mhOpen)renderSheet();},()=>{});
@@ -4033,6 +4055,9 @@ const SL_TM=["20","30","40","60"];
 const slTm=(P,k)=>P.tm[k]||"30";
 function slIsRun(pt){return pt.id==="legs"||/челночн/i.test((pt.title||"")+" "+(pt.hint||""));}
 function slRange(pt){const h=pt.hint||"";if(!/\d+\s*[–-]\s*\d+/.test(h))return "";return h.replace(/\s*сек\.?/," с").replace(/\s*раз\.?/," повт.");}
+/* порядок блоков силовой (Павел, 18.11): день 1 — тяга, пресс, ноги; день 2 — болгарский, жим, пресс. Держим его в коде, даже если шаблон сохранён в другом порядке */
+const SL_ORDER={d1:["pull","abs","legs"],d2:["bulg","push","abs"]};
+function slOrderTpls(n){Object.values(n||{}).forEach(t=>(t.blocks||[]).forEach(b=>{if(b.mode!=="strength")return;(b.days||[]).forEach(d=>{const o=SL_ORDER[d.id];if(!o||!Array.isArray(d.parts))return;const r=p=>{const i=o.indexOf(p.id);return i<0?99:i;};d.parts=d.parts.map((p,i)=>[p,i]).sort((a,b)=>r(a[0])-r(b[0])||a[1]-b[1]).map(x=>x[0]);});}));return n;}
 function slDay(gid){const bl=slBlock(gid),P=slPlan(gid),ds=(bl&&bl.days)||[];return ds.find(d=>d.id===P.day)||ds[0]||null;}
 const slRv=(P,m,si)=>P.reps[m+"|"+si]||SL_M[m].def[si];
 const slWt=(P,m,si)=>{if(!SL_M[m].w)return false;const k=m+"|"+si;return k in P.wt?!!P.wt[k]:false;};
