@@ -7386,8 +7386,10 @@ const AU=(()=>{
   function b64(s){ const bin=atob(s); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return u.buffer; }
   function loadAll(){ if(loading) return; loading=true; ctx();
     [["bell",BELL_B64],["gong",GONG_B64]].concat(Object.entries(CUE_B64)).forEach(([n,s])=>{ try{ C.decodeAudioData(b64(s),d=>{BUF[n]=d;},()=>{}); }catch(e){} }); }
-  function sample(n,t,cut){ const b=BUF[n]; if(!b) return false; const len=Math.min(cut||b.duration,b.duration); const s=C.createBufferSource(); s.buffer=b; const g=C.createGain();
-    g.gain.setValueAtTime(1,t); g.gain.setValueAtTime(1,t+Math.max(0,len-0.6)); g.gain.exponentialRampToValueAtTime(0.0001,t+len); s.connect(g); g.connect(master); s.start(t,0,len); LIVE.push(s); s.onended=()=>{ LIVE=LIVE.filter(x=>x!==s); }; return true; }
+  /* 18.11.2026: писки по громкости как гонг (Павел: «очень слабые»). Записи писков намного тише гонга, а компрессор ещё и съедает их начало. Поднимаем почти до потолка без хрипа: по громкости как гонг */
+  const SVOL={beepS:4.6,beepE:3.2};
+  function sample(n,t,cut){ const b=BUF[n]; if(!b) return false; const len=Math.min(cut||b.duration,b.duration); const s=C.createBufferSource(); s.buffer=b; const g=C.createGain(); const v=SVOL[n]||1;
+    g.gain.setValueAtTime(v,t); g.gain.setValueAtTime(v,t+Math.max(0,len-0.6)); g.gain.exponentialRampToValueAtTime(0.0001,t+len); s.connect(g); g.connect(master); s.start(t,0,len); LIVE.push(s); s.onended=()=>{ LIVE=LIVE.filter(x=>x!==s); }; return true; }
   /* 18.11.2026 записи Павла (вариант 2): три писка через секунду, гонг на четвёртый счёт — ровно в момент начала/конца раунда.
      cueStart/cueEnd запускаются за 3 с до смены, start/end — только гонг (когда отсчёта не было: первый старт, «Дальше») */
   function cue(t,beep,gong){ for(let i=0;i<3;i++) sample(beep,t+i); if(!sample(gong,t+3)) bell(t+3); }
