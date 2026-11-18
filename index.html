@@ -4083,7 +4083,7 @@ function slToday(gid){
 const slSt=k=>Math.min(2,Math.max(0,((k.sil&&k.sil.st)|0)));
 function slW(k){const s=k.sil||{};if(s.dn&&s.dn.d===todayISO())return s.dn.w|0;return s.w==null?1:s.w|0;}
 const slDone=k=>!!(k.sil&&k.sil.dn&&k.sil.dn.d===todayISO());
-function slKids(){const all=slAllKids(),pr=new Set(),gset=new Set();all.forEach(k=>kidGroups(k).forEach(g=>gset.add(g)));[{groups:Array.from(gset)}].forEach(t=>(t.groups||[]).forEach(g=>{const s=S.sessions[S.date+"_"+g];if(s&&Array.isArray(s.present))s.present.forEach(id=>pr.add(id));}));const f=all.filter(k=>pr.has(k.id));return f.length?f:all;}
+/* на экране силовой — всегда все ребята, кто ходит на силовую, а не только отмеченные сегодня (Павел, 18.11): профиль открыть можно в любой момент */ function slKids(){return slAllKids();}
 /* имя + первая буква фамилии, если она записана (Павел, 18.11: «фиг там найдёшь кого») */
 function slNames(list){const m={};list.forEach(k=>{const p=(k.name||"").replace(/\s*\(.*?\)\s*/g," ").trim().split(/\s+/);m[k.id]=p[1]?p[0]+" "+p[1][0].toUpperCase()+".":(p[0]||"");});return m;}
 function slFace(k,cls){return k.photo?'<img class="sl-face '+(cls||"")+'" src="'+esc(k.photo)+'" alt="">':'<span class="sl-face '+(cls||"")+'" style="--hue:'+(gHash(k.id)%360)+'" aria-hidden="true">'+esc((firstName(k)||"?")[0])+"</span>";}
